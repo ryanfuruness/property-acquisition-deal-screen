@@ -43,6 +43,8 @@ EXEMPT_RES = [
     re.compile(r"\b(?:Phase|District|Cluster|Barsha|Plot)\s\d+\b"),   # place names (JVC District 11, Al Barsha 1)
     re.compile(r"\b[Yy]ears?\s\d{1,2}\s?(?:to|-|–|and)\s?\d{1,2}\b"),  # "Years 1 to 5"
     re.compile(r"\b(?:3|12)-month\b"),
+    re.compile(r"\b(?:within|over|in|for)\s(?:the\s)?(?:next\s)?12\smonths\b"),          # "within 12 months"
+    re.compile(r"\b(?:in|through|during|by|until|across|from)\s20[23]\d\b(?![-/])"),    # calendar references
     re.compile(r"\b\dM\s(?:EIBOR|Eibor)\b"),
 ]
 DATE_RES = [
@@ -64,7 +66,13 @@ _SCALES = {"k": 1e3, "m": 1e6, "mn": 1e6, "million": 1e6, "bn": 1e9, "billion": 
 # Labels for engine metrics whose names carry digits or jargon a writer would copy into prose.
 METRIC_WORDS = {
     "breakeven_occupancy_dscr_1": "occupancy at which Year-1 NOI just covers debt service",
-    "dscr_year1": "Year-1 debt service cover (DSCR)",
+    "dscr_year1": "Year-1 debt service cover (DSCR), secondary",
+    "unlevered_irr_pre_tax": "unlevered IRR, pre-tax (the decision metric)",
+    "unlevered_equity_multiple_pre_tax": "unlevered equity multiple, pre-tax",
+    "levered_irr_pre_tax": "levered IRR, pre-tax (secondary)",
+    "levered_equity_multiple_pre_tax": "levered equity multiple, pre-tax (secondary)",
+    "exit_yield": "exit yield (house view: max of area yield and entry yield, plus expansion and age premium)",
+    "walk_away_price_aed": "walk-away price: highest price meeting the unlevered IRR target (house view)",
     "icr_year1": "Year-1 interest cover",
     "noi_year1": "Year-1 NOI",
     "debt_yield_year1": "Year-1 debt yield",
@@ -73,12 +81,41 @@ METRIC_WORDS = {
 }
 
 
+def _val(x: Any) -> Any:
+    """An engine value that may be wrapped as a metric ``{"value": ...}``."""
+    return x.get("value") if isinstance(x, dict) else x
+
+
 def _fact(value: Any, unit: str, label: str, source: dict | None = None) -> dict:
     return {"value": value, "unit": unit, "label": label, "source": source}
 
 
+DISCREPANCY_WORDS = {
+    "occupancy_mismatch": "OM occupancy vs rent roll", "potential_rent_as_income": "OM income includes potential rent",
+    "gross_yield_as_net": "gross yield called net", "yield_excludes_acquisition_costs": "yield before acquisition costs",
+    "over_rented_vs_market": "units let above the screen reference", "upside_exceeds_rera_cap": "uplift claim beyond RERA bands",
+    "missing_opex_items": "costs missing from the statement", "area_basis_confusion": "area basis",
+    "rent_roll_does_not_foot": "rent roll totals do not add up", "unit_mix_mismatch": "unit mix differs",
+    "expired_lease_counted_occupied": "expired or unregistered leases shown occupied", "collections_gap": "collections gap",
+    "annualised_partial_period": "part-year statement presented as annual",
+    "master_lease_related_party": "master lease", "expiry_concentration": "lease expiry concentration",
+    "title_check": "title check", "other_om_claim": "other OM claim"}
+RELIED_ON_WORDS = {"rent_roll": "the rent roll", "rent_roll_rows": "the rent roll's unit rows", "engine": "the engine",
+                   "mandate_defaults": "mandate defaults", "operating_statement": "the operating statement",
+                   "master_lease_then_sub_leases": "the master-lease rent to its expiry, then the sub-tenancies, "
+                                                   "which novate to the owner",
+                   "documents": "the documents",
+                   "none": "nothing: legal must confirm"}
+
+# OM fields that are cosmetic: an unverified one is not a diligence item.
+COSMETIC_FIELDS = {"building_name", "floors", "plot_number", "parking_spaces", "area"}
+HOUSE_VIEW_NOTE = ("The walk-away price and the returns rest on the firm's house view (screen reference rent path, "
+                   "exit yield, vacancy and downtime), not on market evidence for this building.")
+
+
 def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | None, fit: dict | None,
-                     discrepancies: list[dict], mandate: dict, notes: list[str]) -> dict[str, dict]:
+                     discrepancies: list[dict], mandate: dict, notes: list[str], notices: list[dict] = (),
+                     diligence: list[dict] = (), bridge: dict | None = None) -> dict[str, dict]:
     """Flat fact sheet; only verified or computed values."""
     F: dict[str, dict] = {}
 
@@ -118,12 +155,14 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
     for i, c in enumerate(c for c in om.get("upside_claims", []) if c["status"] in TRUSTED):
         F[f"om.upside_claim_{i + 1}"] = _fact(c["quote"], "text", "OM upside claim (verbatim)",
                                               {"kind": "document", **c["source"], "quote": c["quote"]})
-    unverified = [k for k, v in om.items() if isinstance(v, dict) and v.get("status") == "unverified"]
+    unverified = [k.replace("_", " ") for k, v in om.items() if isinstance(v, dict) and v.get("status") == "unverified"
+                  and k not in COSMETIC_FIELDS]
     F["screen.unverified_om_fields"] = _fact(", ".join(unverified) or "none", "text",
-                                             "OM fields whose quote or value failed verification (not used)")
+                                             "material OM figures whose quote or value failed verification (not used)")
     F["screen.not_stated_om_fields"] = _fact(
         ", ".join(k for k, v in om.items() if isinstance(v, dict) and v.get("status") == "not_stated") or "none",
         "text", "OM fields the OM does not state")
+    F["screen.house_view"] = _fact(HOUSE_VIEW_NOTE, "text", "what the walk-away price and returns rest on")
 
     if rr:
         s = rr["summary"]
@@ -175,10 +214,20 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
                                         {"kind": "engine", "metric": name, "note": m.get("note")})
         wa = uw.get("walk_away") or {}
         disc_ = wa.get("discount_to_asking")
-        F["uw.walk_away_discount_to_asking"] = _fact(disc_.get("value") if isinstance(disc_, dict) else disc_, "ratio",
-                                                     "walk-away price discount to asking", {"kind": "engine"})
-        F["uw.walk_away_binding_constraint"] = _fact(wa.get("binding_constraint"), "text",
-                                                     "constraint that sets the walk-away price", {"kind": "engine"})
+        disc_v = _val(disc_)
+        if disc_v is not None:
+            F["uw.walk_away_vs_asking"] = _fact(f"{disc_v:.0%} below asking" if disc_v > 0.005 else
+                                                "asking is within our value", "text",
+                                                "walk-away price against the asking price", {"kind": "engine"})
+        sens_wa = wa.get("sensitivity") or {}
+        label = _val(wa.get("most_sensitive_label") or sens_wa.get("most_sensitive_label"))
+        if label:
+            F["uw.walk_away_most_sensitive"] = _fact(label, "text", "the assumption that most moves the walk-away price",
+                                                     {"kind": "engine"})
+            swing = _val(wa.get("largest_swing_aed") or sens_wa.get("largest_swing_aed"))
+            if swing:
+                F["uw.walk_away_largest_swing_aed"] = _fact(abs(swing), "AED", "how far that assumption moves the "
+                                                            "walk-away price", {"kind": "engine"})
         F["uw.analysis_start"] = _fact(uw["analysis_start"], "date", "analysis start", {"kind": "engine"})
         F["uw.hold_years"] = _fact(uw["hold_years"], "years", "hold period", {"kind": "engine"})
         if uw.get("om_yield_check"):
@@ -189,7 +238,8 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
                       "stated_income_on_total_cost": "the OM's own income figure / (price + acquisition costs)",
                       "buyer_net_on_price": "buyer's net yield: Year-1 NOI / asking price",
                       "buyer_net_on_total_cost": "buyer's net yield: Year-1 NOI / (price + acquisition costs)",
-                      "gap_vs_stated": "buyer's net yield on total cost minus the OM's stated yield"}
+                      "gap_vs_stated": "buyer's net yield on total cost minus the OM's stated yield, in percentage "
+                                       "points (write it as points, e.g. 1.3 points)"}
             for k, label in labels.items():
                 if (yc.get(k) or {}).get("value") is not None:
                     F[f"uw.om_yield.{k}"] = _fact(yc[k]["value"], "ratio", label, {"kind": "engine"})
@@ -207,7 +257,8 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
                 (r > 0) - (r < 0)]
             exit_w = {1: "exit yield one step wider", -1: "exit yield one step tighter", 0: "base exit yield"}[
                 (e > 0) - (e < 0)]
-            for k, what in (("levered_irr_pre_tax", "levered IRR (pre-tax)"), ("dscr_year1", "Year-1 DSCR")):
+            for k, what in (("unlevered_irr_pre_tax", "unlevered IRR (pre-tax)"),
+                            ("levered_irr_pre_tax", "levered IRR (pre-tax, secondary)"), ("dscr_year1", "Year-1 DSCR")):
                 F[f"{key}.{k}"] = _fact(cell[k], "x" if k == "dscr_year1" else "ratio",
                                         f"sensitivity, {rent_w} and {exit_w}: {what}", {"kind": "engine"})
         windows = (uw.get("expiry_windows") or {}).get("windows") or []
@@ -231,7 +282,8 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
         mv = mandate["underwriting"]["market_view"]
         debt = mandate["underwriting"]["debt"]
         for key, val, unit, label in (
-                ("ltv", debt["ltv"], "ratio", "loan to value"),
+                ("max_ltv", debt["max_ltv"], "ratio", "maximum loan to value"),
+                ("sizing_dscr", debt["sizing_dscr"], "x", "debt sized to cover Year-1 NOI at this DSCR"),
                 ("eibor", debt["base_rate_3m_eibor"], "ratio", "3M EIBOR"),
                 ("margin", debt["margin"], "ratio", "loan margin"),
                 ("amortisation_years", debt["amortisation_years"], "years", "amortisation"),
@@ -250,16 +302,14 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
         F["mandate.verdict"] = _fact(fit["verdict"], "text", "mandate verdict", {"kind": "mandate_fit"})
         F["mandate.headline"] = _fact(fit["headline"], "text", "verdict in plain words", {"kind": "mandate_fit"})
         F["mandate.reason"] = _fact(fit["plain_reason"], "text", "why, in plain words", {"kind": "mandate_fit"})
-        for b in fit.get("blocked_on", []):
-            F["mandate.blocked_on_title"] = _fact(b["statement"], "text",
-                                                  "BLOCKING: lead the verdict and the open items with this",
-                                                  {"kind": "mandate_fit"})
         for t in fit["tests"]:
             k = f"mandate.{t['name']}"
             name = fit.get("tests_in_words", {}).get(t["name"], t["name"].replace("_", " "))
             result = {"pass": "passes", "fail": "fails", "unknown": "not known"}[t["status"]]
+            decisive = "" if t.get("decisive", True) else " (not decisive: the deal is declined on a hard filter)"
             F[k] = _fact(f"{name}: {result}. {t['reason']}", "text",
-                         f"{'hard' if t['kind'] == 'hard' else 'soft'} mandate test: {name}", {"kind": "mandate_fit"})
+                         f"{'hard' if t['kind'] == 'hard' else 'soft'} mandate test: {name}{decisive}",
+                         {"kind": "mandate_fit"})
             if isinstance(t["threshold"], (int, float)) and not isinstance(t["threshold"], bool):
                 tunit = ("ratio" if abs(t["threshold"]) < 1 else "x" if "dscr" in t["name"] or "multiple" in t["name"]
                          else "year" if "completion_year" in t["name"] else "number")
@@ -268,42 +318,84 @@ def build_fact_sheet(om: dict, rr: dict | None, opex: dict | None, uw: dict | No
 
     for d in discrepancies:
         k = f"disc.{d['id']}"
-        F[f"{k}.severity"] = _fact(d["severity"], "text", "severity", {"kind": "discrepancy", "id": d["id"]})
-        F[f"{k}.title"] = _fact(d["title"], "text", "discrepancy", {"kind": "discrepancy", "id": d["id"]})
-        F[f"{k}.why"] = _fact(d["why"], "text", "why, and what the screen relied on", {"kind": "discrepancy", "id": d["id"]})
-        F[f"{k}.relied_on"] = _fact(d["relied_on"], "text", "source the screen relied on", {"kind": "discrepancy", "id": d["id"]})
-        F[f"{k}.analyst_action"] = _fact(d["analyst_action"], "text", "analyst action", {"kind": "discrepancy", "id": d["id"]})
+        src = {"kind": "discrepancy", "id": d["id"]}
+        name = DISCREPANCY_WORDS.get(d["id"], d["id"].replace("_", " "))
+        F[f"{k}.severity"] = _fact(d["severity"], "text", f"severity of: {name}", src)
+        F[f"{k}.title"] = _fact(d["title"], "text", f"discrepancy: {name}", src)
+        F[f"{k}.why"] = _fact(d["why"], "text", f"why it matters and what the screen relied on: {name}", src)
+        F[f"{k}.relied_on"] = _fact(RELIED_ON_WORDS.get(d["relied_on"], d["relied_on"].replace("_", " ")), "text",
+                                    f"source the screen relied on: {name}", src)
+        F[f"{k}.analyst_action"] = _fact(d["analyst_action"], "text", f"analyst action: {name}", src)
+        if d.get("same_gap_as"):
+            F[f"{k}.same_gap_as"] = _fact(DISCREPANCY_WORDS.get(d["same_gap_as"], d["same_gap_as"]), "text",
+                                          f"{name} is the same gap as this item; its impact is counted there", src)
         imp = d.get("impact") or {}
-        for ik in ("delta_aed", "walk_away_delta_aed", "delta", "value"):
-            if isinstance(imp.get(ik), (int, float)):
-                F[f"{k}.impact_{ik}"] = _fact(imp[ik], "ratio" if ik == "delta" else "AED",
-                                              f"impact ({imp.get('metric')}): {imp.get('basis', ik)}",
-                                              {"kind": "discrepancy", "id": d["id"]})
-    F["screen.notes"] = _fact("; ".join(notes) or "none", "text", "screen notes on data handling")
+        if imp.get("counted_in"):
+            continue
+        if isinstance(imp.get("amount_aed"), (int, float)):
+            F[f"{k}.impact_aed"] = _fact(imp["amount_aed"], "AED", f"impact of {name} ({imp.get('direction', '')}): "
+                                         f"{imp.get('basis', '')}", src)
+        if isinstance(imp.get("delta"), (int, float)):
+            F[f"{k}.impact_ratio"] = _fact(abs(imp["delta"]), "ratio", f"impact of {name}, in percentage points (write it "
+                                           f"as points): {imp.get('basis', '')}", src)
+        if isinstance(imp.get("value"), (int, float)):
+            F[f"{k}.impact_value"] = _fact(imp["value"], "AED/sqft" if "sqft" in str(imp.get("metric")) else "AED",
+                                           f"{name}: {imp.get('metric', '').replace('_', ' ')}", src)
+        if isinstance(imp.get("observed_gap"), (int, float)):
+            F[f"{k}.observed_gap"] = _fact(imp["observed_gap"], "ratio", "collection loss underwritten (observed gap)", src)
+    if fit:
+        if fit.get("stop_reason_plain"):
+            F["mandate.stop_reason"] = _fact(fit["stop_reason_plain"], "text",
+                                             "DECLINED on a hard filter: state this and stop; returns are context only",
+                                             {"kind": "mandate_fit"})
+        for b in fit.get("blocked_on_statements", []):
+            F[f"mandate.blocked_on.{b['test']}"] = _fact(b["statement"], "text",
+                                                          "BLOCKING: lead the verdict and the open items with this",
+                                                          {"kind": "mandate_fit"})
+    for i, n in enumerate(notices, start=1):
+        F[f"notice.{n['id']}" + (f".{i}" if n["id"] == "tenant_concentration" else "")] = _fact(
+            n["text"], "text", f"notice ({n['severity']}): put it in the checks section", {"kind": "notice"})
+    for it in diligence:
+        F[f"diligence.{it['id']}"] = _fact(it["text"], "text", "standard first-pass diligence item", {"kind": "checklist"})
+    if bridge:
+        F["bridge.statement_noi_aed"] = _fact(bridge["statement_noi_aed"], "AED/yr", "NOI as the statement shows it",
+                                              {"kind": "engine"})
+        F["bridge.screen_noi_year1_aed"] = _fact(bridge["screen_noi_year1_aed"], "AED/yr", "the screen's Year-1 NOI",
+                                                 {"kind": "engine"})
+        for i, st in enumerate(bridge["steps"], start=1):
+            F[f"bridge.step{i}"] = _fact(abs(st["aed"]), "AED/yr",
+                                         f"NOI bridge, {'adds' if st['aed'] >= 0 else 'takes off'}: {st['label']}",
+                                         {"kind": "engine"})
     return {k: v for k, v in F.items() if v["value"] is not None}
 
 
 def display(fact: dict) -> str:
-    """The value as the memo should write it (the writer may round further, never add precision)."""
+    """The value rounded as a memo should write it (54.94% -> 55%, AED 2,896,431 -> AED 2.9m). Negative amounts
+    are shown as a size with "(lower)", so prose says "below" rather than printing a minus sign."""
     v, unit = fact["value"], fact["unit"]
     if not isinstance(v, (int, float)) or isinstance(v, bool):
         if unit == "date":
             d = parse_date(v)
             return d.strftime("%-d %B %Y") if d else str(v)
         return str(v)
+    tail = " (negative)" if v < 0 else ""
+    a = abs(v)
     if unit in ("ratio", "ratio/yr"):
-        return f"{v * 100:.2f}%"
+        return (f"{a * 100:.0f}%" if a >= 0.10 else f"{a * 100:.1f}%") + tail
     if unit in ("AED", "AED/yr"):
-        short = f" (AED {v / 1e6:.2f}m)" if abs(v) >= 1e6 else f" (AED {v / 1e3:.0f}k)" if abs(v) >= 1e4 else ""
-        return f"AED {v:,.0f}{short}"
+        if a >= 1e6:
+            return f"AED {a / 1e6:.1f}m{tail}"
+        if a >= 1e4:
+            return f"AED {a / 1e3:.0f}k{tail}"
+        return f"AED {a:,.0f}{tail}"
     if unit == "AED/sqft":
-        return f"AED {v:,.0f} per sq ft"
+        return f"AED {a:,.0f} per sq ft"
     if unit == "x":
         return f"{v:.2f}x"
     if unit == "bps":
         return f"{v:.0f} bps"
     if unit == "sqft":
-        return f"{v:,.0f} sq ft"
+        return f"{a:,.0f} sq ft"
     if unit == "year":
         return f"{v:.0f}"
     return f"{v:,.0f}" if float(v).is_integer() else f"{v:,.2f}"
@@ -439,9 +531,28 @@ def check_memo(markdown: str, facts: dict[str, dict]) -> list[str]:
         if fact is None:
             continue
         why = _compare(t, fact)
+        if why is None and _is_negative(fact) and not _reads_negative(markdown, t):
+            why = f"{t.raw} is written as a positive figure but {fact['label']} is negative; say so"
         if why:
             errors.append(f"[[{anchor[2]}]]: {why} (…{ctx}…)")
     return errors
+
+
+NEGATIVE_CUES = re.compile(r"negative|loss|los(?:e|ing)|minus|below zero|fall|falls|fell|down|lower|declin|drop|"
+                           r"reduc|less|short|cut|shrink|decrease", re.I)
+
+
+def _is_negative(fact: dict) -> bool:
+    v = fact["value"]
+    return isinstance(v, (int, float)) and not isinstance(v, bool) and v < 0
+
+
+def _reads_negative(markdown: str, tok: "Token") -> bool:
+    """A negative fact must read as negative: a minus sign, or a negative word just before or after it."""
+    if tok.raw.startswith(("-", "−")) or markdown[max(0, tok.start - 1):tok.start] in ("-", "−"):
+        return True
+    after = ANCHOR_RE.sub("", markdown[tok.end:tok.end + 80])[:25]      # the words after the anchor
+    return bool(NEGATIVE_CUES.search(markdown[max(0, tok.start - 45):tok.start] + " " + after))
 
 
 # ---------------------------------------------------------------------------- generation

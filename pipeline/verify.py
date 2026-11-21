@@ -274,8 +274,14 @@ AREA_ALIASES: dict[str, tuple[str, ...]] = {
     "JVC": ("jvc", "jumeirah village circle"),
     "Dubai Silicon Oasis": ("silicon oasis", "dso"),
     "International City": ("international city", "warsan"),
-    "Al Barsha": ("al barsha", "barsha"),
+    "Al Barsha South": ("al barsha south", "barsha south"),
     "Business Bay": ("business bay",),
+}
+
+# Sub-areas that share a name with a mandate area but are not in it.
+NOT_IN_AREA: dict[str, tuple[str, ...]] = {
+    "Al Barsha South": ("al barsha 1", "al barsha 2", "al barsha 3", "al barsha first", "al barsha second",
+                        "al barsha third", "barsha heights", "tecom", "al thanyah"),
 }
 
 NUMERIC_UNITS = {
@@ -324,6 +330,9 @@ def _check_value(name: str, raw: dict) -> tuple[bool, str, Any]:
     if name == "market_area":
         if value == "none_of_these":
             return True, "model found no listed market area", value
+        other = contains_any(quote, NOT_IN_AREA.get(value, ()))
+        if other:
+            return False, f"quote names {other!r}, which is not {value}", value
         hit = contains_any(quote, (value.lower(),) + AREA_ALIASES.get(value, ()))
         return bool(hit), (f"quote names {hit!r}" if hit else f"quote does not name {value}"), value
     if name in ("asset_type", "chiller_arrangement"):

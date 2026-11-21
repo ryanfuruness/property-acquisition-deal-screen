@@ -1,0 +1,31 @@
+# Standard first-pass diligence items. The memo lists the ones whose condition holds for the deal.
+# Conditions: always | building_age_at_least: <years> | strata | master_lease | title_not_confirmed | retail_units
+# This is the firm's checklist, not a market fact; edit it here, not in code.
+items:
+  - id: title_eligibility
+    when: always
+    text: "Title deed and DLD ownership search: freehold status, single title, and that the buyer is eligible to own the plot."
+  - id: completion_certificate
+    when: always
+    text: "Building completion certificate (Dubai Municipality) for the as-built building."
+  - id: affection_plan
+    when: always
+    text: "Affection plan and permitted use: confirm residential use and the plot's permitted floors match the building."
+  - id: ejari_export
+    when: always
+    text: "Ejari export for every lease, reconciled to the rent roll unit by unit."
+  - id: civil_defence_cladding
+    when: always
+    text: "Civil Defence completion and annual fire-safety certificates, and ACP cladding compliance."
+  - id: condition_capex
+    when: {building_age_at_least: 10}
+    text: "Building condition survey and capex plan for a building of this age (MEP, lifts, facade, waterproofing)."
+  - id: service_charge_status
+    when: strata
+    text: "Owners' association: service charge budget, arrears and Mollak status for every unit."
+  - id: master_lease_documents
+    when: master_lease
+    text: "Master lease, operator accounts and ownership, and the novation terms of the sub-tenancies at expiry."
+  - id: retail_leases
+    when: retail_units
+    text: "Retail leases: permitted use, trade licences and VAT treatment of shop rents."

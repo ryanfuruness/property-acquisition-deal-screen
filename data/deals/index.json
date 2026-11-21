@@ -257,7 +257,6 @@
    "asking_price_aed": 72500000,
    "broker": "Dunecrest Real Estate Brokers L.L.C",
    "planted_discrepancies": [
-    "occupancy_mismatch",
     "yield_excludes_acquisition_costs",
     "master_lease_related_party"
    ],

@@ -331,7 +331,7 @@ DEALS = [
               "file": "Silverline Residences Landlord Statement Oct25-Sep26.pdf",
               "title": "Landlord Income & Expense Statement - October 2025 to September 2026"},
         om_file="om.pdf", upside=None, om_occupancy_stated=1.0,
-        plant=[1, 4, 14],
+        plant=[4, 14],
         hard_fail="lease structure: whole-building master lease to Silverline Homes Management L.L.C, a related party of the Seller; mandate excludes master leases to related parties",
         describe="DSO building 'guaranteed' by a 5-year master lease to the seller's own operator, at ~17% over what the operator collects; OM shows 100% occupancy vs 86% sub-let. Hard fail.",
     ),

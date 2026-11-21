@@ -23,11 +23,13 @@ from .ingest import Document, ingest_package
 from .llm import AnthropicClient, CallRecord, Ledger, ModelClient, ReplayClient
 from .loader import PackageLoader
 from .memo import build_fact_sheet, write_memo
+from .notices import build_notices, diligence_items
 from .opex import run_opex
 from .reconcile import Context, merge, related_party_flag, review, run_rules
 from .rentroll import run_rent_roll
-from .verdict import TITLE_BLOCK, summarise_fit
-from .underwriting import CannotUnderwrite, build_deal_inputs, chiller_landlord_pays, deal_facts, underwrite
+from .underwriting import (CannotUnderwrite, build_deal_inputs, chiller_landlord_pays, deal_facts, noi_bridge,
+                           underwrite)
+from .verdict import summarise_fit
 
 
 def list_deals(deals_dir: Path = config.DEALS_DIR) -> list[str]:
@@ -138,6 +140,16 @@ def run_deal(deal_id: str, settings: RunSettings | None = None,
     ctx = Context(om=om_fields, rr=rr, opex=opex, uw=uw, deal_inputs=deal_inputs, mandate=mandate, market=market)
     with timer("reconcile_rules"):
         rule_findings, rule_errors = run_rules(ctx)
+        override = next((d["impact"]["observed_gap"] for d in rule_findings
+                         if d["id"] == "collections_gap" and d.get("impact")), None)
+        if override is not None and deal_inputs:
+            # underwrite income at what is actually collected, then re-test on that basis
+            deal_inputs, prov, _ = build_deal_inputs(deal_id, om_fields, rr, opex, market,
+                                                     collection_loss_override=override)
+            uw = underwrite(deal_inputs, mandate, market)
+            ctx = Context(om=om_fields, rr=rr, opex=opex, uw=uw, deal_inputs=deal_inputs, mandate=mandate,
+                          market=market)
+            rule_findings, rule_errors = run_rules(ctx)
         errors += [{"stage": "reconcile", **e} for e in rule_errors]
     model_findings, rejected, conclusion = [], [], "unclear"
     if om_doc:
@@ -153,17 +165,23 @@ def run_deal(deal_id: str, settings: RunSettings | None = None,
 
     if deal_inputs and deal_inputs.get("master_lease") and related is not None:
         with timer("underwrite_final"):
-            deal_inputs, prov, _ = build_deal_inputs(deal_id, om_fields, rr, opex, market, related_party=related)
+            deal_inputs, prov, _ = build_deal_inputs(deal_id, om_fields, rr, opex, market, related_party=related,
+                                                     collection_loss_override=override)
             uw = underwrite(deal_inputs, mandate, market)
     facts, facts_prov = deal_facts(om_fields, rr, related, lease_structure)
     fit = engine.mandate_fit(facts, uw, mandate)
     fit_words = summarise_fit(fit)
     for t in fit["tests"]:
-        if any(b["test"] == t["name"] for b in fit_words["blocked_on"]):
-            t["screen_note"] = TITLE_BLOCK
+        for b in fit_words["blocked_on_statements"]:
+            if b["test"] == t["name"]:
+                t["screen_note"] = b["statement"]
+    bridge = noi_bridge(uw, opex)
+    notices = build_notices(rr, opex, uw, mandate)
+    diligence = diligence_items(om_fields, rr, mandate)
 
     fact_sheet = build_fact_sheet(om_fields, rr, opex, uw, fit | fit_words, discrepancies, mandate,
-                                  notes + ([f"Could not underwrite: {uw_error}"] if uw_error else []))
+                                  notes + ([f"Could not underwrite: {uw_error}"] if uw_error else []),
+                                  notices=notices, diligence=diligence, bridge=bridge)
     with timer("memo"):
         memo, results = write_memo(client, settings.model, fact_sheet)
         calls += [r.call for r in results]
@@ -178,10 +196,12 @@ def run_deal(deal_id: str, settings: RunSettings | None = None,
         "rent_roll_summary": rr,
         "opex": opex,
         "discrepancies": discrepancies,
+        "notices": notices,
+        "diligence_checklist": diligence,
         "rejected_model_findings": rejected,
         "underwriting": {"status": "ok" if uw else "not_underwritten", "error": uw_error,
                          "deal_inputs": deal_inputs, "inputs_provenance": prov,
-                         "outputs": uw, "sensitivities": (uw or {}).get("sensitivity")},
+                         "outputs": uw, "sensitivities": (uw or {}).get("sensitivity"), "noi_bridge": bridge},
         "mandate_fit": {**fit, **fit_words, "deal_facts": facts, "deal_facts_provenance": facts_prov,
                         "lease_structure_conclusion": conclusion},
         "fact_sheet": fact_sheet,

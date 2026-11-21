@@ -63,8 +63,13 @@ def chiller_landlord_pays(om_fields: dict, units: list[dict]) -> tuple[bool | No
 
 
 def build_deal_inputs(deal_id: str, om_fields: dict, rent_roll: dict | None, opex: dict | None,
-                      market: dict, related_party: bool | None = None) -> tuple[dict, dict, list[str]]:
-    """Return (deal_inputs, provenance by input, notes). Raises CannotUnderwrite with the reason."""
+                      market: dict, related_party: bool | None = None,
+                      collection_loss_override: float | None = None) -> tuple[dict, dict, list[str]]:
+    """Return (deal_inputs, provenance by input, notes). Raises CannotUnderwrite with the reason.
+
+    ``collection_loss_override`` is the observed gap between statement collections and rent-roll rent,
+    passed when the collections_gap check fires, so income is underwritten at what is collected.
+    """
     prov: dict[str, Any] = {}
     notes: list[str] = []
 
@@ -131,6 +136,19 @@ def build_deal_inputs(deal_id: str, om_fields: dict, rent_roll: dict | None, ope
         "deal_id": deal_id, "price_aed": price["value"], "area": area_f["value"], "nsa_sqft": nsa,
         "bua_sqft": bua_f["value"] if bua_f else None, "units": units_in,
     }
+    year = trusted(om_fields, "completion_year")
+    if year:
+        deal_inputs["completion_year"] = int(year["value"])
+        prov["completion_year"] = _om_source(year, "completion_year")
+    deposits = rent_roll["summary"].get("deposits_aed") or 0
+    if deposits > 0:
+        deal_inputs["security_deposits_aed"] = deposits
+        prov["security_deposits_aed"] = {"from": "rent_roll.sum_of_deposits", "doc": rent_roll["doc"],
+                                         "status": "parsed", "note": "sum of the deposit column; a closing credit"}
+    if collection_loss_override is not None:
+        deal_inputs["collection_loss_override"] = round(collection_loss_override, 4)
+        prov["collection_loss_override"] = {"from": "collections_gap", "status": "derived",
+                                            "note": "statement rental income vs rent-roll in-place rent"}
     if rent_roll["summary"].get("as_of"):
         deal_inputs["rent_roll_date"] = rent_roll["summary"]["as_of"]
         prov["rent_roll_date"] = {"from": "rent_roll.as_of", "doc": rent_roll["doc"], "status": "parsed",
@@ -273,3 +291,48 @@ def impact(base_inputs: dict, base_result: dict, alt_inputs: dict, mandate: dict
     return {"metric": metric_name, "base": round(b, 0), "alternative": round(a, 0), "delta_aed": round(a - b, 0),
             "walk_away_delta_aed": round(wa - wb, 0) if wa is not None and wb is not None else None}
 
+
+
+def noi_bridge(uw: dict | None, opex: dict | None) -> dict | None:
+    """Statement NOI to the screen's Year-1 NOI, one engine component at a time (all from engine Year-1 lines).
+
+    Each step is ``{label, aed}`` with the sign of its effect on NOI; the steps sum to the screen NOI exactly
+    (any rounding remainder is shown, never hidden).
+    """
+    if not uw or not opex:
+        return None
+    y1 = {k: v["values"][0] for k, v in uw["cash_flow"]["lines"].items() if isinstance(v, dict) and "values" in v}
+    by_cat = {k: v["values"][0] for k, v in uw["cash_flow"]["opex_by_category"].items()}
+    stated = opex["totals_by_category"]
+    inputs = uw.get("inputs") or {}
+    steps = []
+    statement_income = sum(stated.get(k, 0.0) for k in ("rental_income", "other_income"))
+    steps.append({"label": "income: rent-roll leases modelled lease by lease, net of re-letting downtime, vs "
+                           "statement income", "aed": y1["gross_income"] - statement_income})
+    # the engine's vacancy allowance is met by modelled downtime; only the structural top-up and the collection
+    # loss come off gross income
+    steps.append({"label": "structural vacancy top-up and collection loss (house view), vs statement losses",
+                  "aed": -(y1.get("structural_vacancy", 0) + y1.get("collection_loss", 0)) + opex["total_deductions_aed"]})
+    steps.append({"label": "management fee at the mandate rate on EGI, vs the stated fee",
+                  "aed": -(y1["management_fee"] - stated.get("property_management", 0.0))})
+    carried = 0.0
+    for cat, amount in by_cat.items():
+        if cat == "property_management":
+            continue
+        prov = (inputs.get(f"deal.opex_aed.{cat}") or {}).get("provenance")
+        diff = amount - stated.get(cat, 0.0)
+        if prov == "default" and amount:
+            steps.append({"label": f"{cat.replace('_', ' ')}: absent from the statement, mandate default", "aed": -amount})
+        else:
+            carried += diff
+    if abs(carried) >= 1:
+        steps.append({"label": "stated costs carried to Year 1", "aed": -carried})
+    if y1.get("leasing_fees"):
+        steps.append({"label": "leasing fees on modelled turnover", "aed": -y1["leasing_fees"]})
+    if y1.get("input_vat"):
+        steps.append({"label": "irrecoverable input VAT on costs", "aed": -y1["input_vat"]})
+    total = opex["noi_aed"] + sum(st["aed"] for st in steps)
+    if abs(total - y1["noi"]) >= 1:
+        steps.append({"label": "other", "aed": y1["noi"] - total})
+    return {"statement_noi_aed": round(opex["noi_aed"], 0), "screen_noi_year1_aed": round(y1["noi"], 0),
+            "steps": [{"label": st["label"], "aed": round(st["aed"], 0)} for st in steps if abs(st["aed"]) >= 1]}

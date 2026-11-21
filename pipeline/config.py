@@ -11,7 +11,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-PIPELINE_VERSION = "0.2.0"
+PIPELINE_VERSION = "0.3.0"
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEALS_DIR = REPO_ROOT / "data" / "deals"
@@ -39,7 +39,7 @@ PRICES_USD_PER_MTOK: dict[str, dict[str, float]] = {
 FALLBACK_PRICE = PRICES_USD_PER_MTOK["claude-opus-5-5"]
 
 # A run refuses to start when the ledger's cumulative spend is above this.
-BUDGET_USD = float(os.environ.get("DEAL_SCREEN_BUDGET_USD", "25"))
+BUDGET_USD = float(os.environ.get("DEAL_SCREEN_BUDGET_USD", "48"))
 
 # Page images for the site: PyMuPDF zoom (1.0 = 72 dpi). 2.0 = 144 dpi, sharp on a laptop
 # screen at full width; pages are then quantised to a 256-colour palette to keep PNGs small.
@@ -88,6 +88,19 @@ class ReconcileThresholds:
 
 
 THRESHOLDS = ReconcileThresholds()
+
+
+@dataclass(frozen=True)
+class NoticeThresholds:
+    """When a notice (not a discrepancy) is raised."""
+
+    stale_rent_roll_days: int = 30            # rent roll older than this at the screen date (mandate as_of)
+    tenant_unit_share: float = 0.10           # one tenant (normalised name) holding this share of let units
+    tenant_rent_share: float = 0.10           # ... or of in-place rent
+    noi_decline: float = 0.05                 # statement NOI down more than this on the prior period is a warning
+
+
+NOTICES = NoticeThresholds()
 
 # Categories the screen expects on a whole-building statement (catalogue item 7). District
 # cooling is expected only when the landlord pays chilled water.

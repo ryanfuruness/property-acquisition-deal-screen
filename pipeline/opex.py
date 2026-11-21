@@ -192,6 +192,8 @@ def build_opex(doc: Document, docs: list[Document], mapping: dict, chiller_landl
                        "stated_annualised_aed": round(stated_annual, 2), "computed_aed": round(computed, 2),
                        "foots": ok, **where})
 
+    prior = _prior_period(doc, docs, mapping.get("prior_period"))
+
     expected = list(config.STANDARD_OPEX_CATEGORIES)
     if chiller_landlord_pays:
         expected.append(config.CHILLER_CATEGORY)
@@ -212,8 +214,36 @@ def build_opex(doc: Document, docs: list[Document], mapping: dict, chiller_landl
         "absent_standard_categories": absent,
         "unverified_lines": [ln["label"] for ln in lines if ln["status"] != "verified"
                              and ln["category"] not in ("total_or_subtotal",)],
+        "prior_period": prior,
         "notes": mapping.get("notes"),
     }
+
+
+def _prior_period(doc: Document, docs: list[Document], spec: dict | None) -> dict | None:
+    """Prior-period NOI read by code from the cells (or verified quote) the mapping names."""
+    if not spec:
+        return None
+
+    def cell(ref: str | None) -> float | None:
+        if not ref:
+            return None
+        vals, err = _cell_values(doc, ref)
+        return None if err or not vals else parse_number(vals[0][1])
+
+    noi = cell(spec.get("noi_cell"))
+    income, expenses = cell(spec.get("total_income_cell")), cell(spec.get("total_expenses_cell"))
+    if noi is None and income is not None and expenses is not None:
+        noi = income - abs(expenses)
+    if noi is None and spec.get("noi_quote") and spec.get("noi_as_printed"):
+        _, qm, _ = locate(docs, doc.doc_id, spec.get("page"), spec["noi_quote"])
+        nums = parse_numbers(spec["noi_as_printed"])
+        if qm.found and nums and loose_digits(spec["noi_as_printed"]) in loose_digits(spec["noi_quote"]):
+            noi = nums[-1].value
+    if noi is None:
+        return None
+    return {"label": spec.get("label"), "noi_aed": noi, "total_income_aed": income, "total_expenses_aed": expenses,
+            "source": {k: spec.get(k) for k in ("noi_cell", "total_income_cell", "total_expenses_cell", "page",
+                                               "noi_quote") if spec.get(k)}}
 
 
 def run_opex(client: ModelClient, model: str, doc: Document, docs: list[Document],

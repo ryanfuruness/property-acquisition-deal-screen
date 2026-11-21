@@ -87,7 +87,7 @@ def test_fact_sheet_uses_verified_fields_only():
     facts = build_fact_sheet(om, None, None, None, None, [], engine.load_mandate(), [])
     assert "deal.asking_price_aed" in facts and "om.occupancy_stated" not in facts
     assert facts["deal.asking_price_aed"]["source"]["page"] == 1
-    assert "occupancy_stated" in facts["screen.unverified_om_fields"]["value"]
+    assert "occupancy stated" in facts["screen.unverified_om_fields"]["value"]
 
 
 def test_percentage_points():
@@ -107,13 +107,27 @@ def test_display_values_pass_the_checker():
     for key, fact in FACTS.items():
         if fact["unit"] == "text":
             continue
-        for shown in display(fact).rstrip(")").split(" ("):      # "AED 83,000,000 (AED 83.00m)": either form
-            assert check_memo(f"{shown} [[{key}]]", FACTS) == [], (key, shown)
-    assert display({"value": 0.0612, "unit": "ratio"}) == "6.12%"
-    assert display({"value": 4_502_892, "unit": "AED/yr"}) == "AED 4,502,892 (AED 4.50m)"
+        shown = display(fact).replace(" (negative)", "")
+        sign = "-" if isinstance(fact["value"], (int, float)) and fact["value"] < 0 else ""
+        assert check_memo(f"{sign}{shown} [[{key}]]", FACTS) == [], (key, shown)
+    assert display({"value": 0.0612, "unit": "ratio"}) == "6.1%"
+    assert display({"value": 0.5494, "unit": "ratio"}) == "55%"
+    assert display({"value": 4_502_892, "unit": "AED/yr"}) == "AED 4.5m"
+    assert display({"value": -2_896_431, "unit": "AED"}) == "AED 2.9m (negative)"
     assert display({"value": "2026-10-31", "unit": "date"}) == "31 October 2026"
 
 
 def test_year_spans_and_place_names_are_not_figures():
     assert check_memo("Years 1 to 5 of the hold, JVC District 11, Al Barsha 1, a 12-month statement.", FACTS) == []
     assert check_memo("From 31 October 2026 [[rr.as_of]] to 31 October 2026.", FACTS)   # each date needs its anchor
+
+
+def test_calendar_references_are_not_figures():
+    assert check_memo("Leases renew through 2027 and the OM expects the uplift within 12 months.", FACTS) == []
+    assert check_memo("Rent is AED 2027 a month.", FACTS)             # a bare figure still needs its anchor
+
+
+def test_negative_facts_must_read_negative():
+    assert check_memo("Levered, the IRR is 1.2% [[uw.levered_irr_pre_tax]].", FACTS)
+    assert check_memo("Levered, the IRR is -1.2% [[uw.levered_irr_pre_tax]].", FACTS) == []
+    assert check_memo("Levered, the deal makes a loss of 1.2% [[uw.levered_irr_pre_tax]] a year.", FACTS) == []

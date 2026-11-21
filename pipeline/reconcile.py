@@ -14,6 +14,7 @@ one are rejected and recorded, never shown as discrepancies.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from typing import Any, Callable
 
@@ -25,7 +26,7 @@ from .llm import ModelClient, ToolResult, load_prompt
 from .numbers import close
 from .opex import EXPENSES as OPEX_EXPENSES
 from .schemas import om_tools
-from .underwriting import impact, metric, trusted, with_changes
+from .underwriting import metric, noi_bridge, trusted
 from .verify import TRUSTED, contains_any, verify_evidence
 
 SEVERITY_ORDER = {"high": 0, "medium": 1, "low": 2}
@@ -74,6 +75,14 @@ def record(id: str, severity: str, title: str, sources: list[dict], relied_on: s
             "why": why, "impact": impact_, "analyst_action": analyst_action, "detected_by": detected_by}
 
 
+def gap_impact(metric: str, overstatement_aed: float, basis: str, **extra: Any) -> dict:
+    """Impact of a gap where the documents overstate income or value: ``delta_aed`` is signed (negative = the
+    screen's figure is lower), ``amount_aed`` is the size and ``direction`` says which way, so prose never needs
+    a minus sign."""
+    return {"metric": metric, "delta_aed": round(-overstatement_aed, 0), "amount_aed": round(abs(overstatement_aed), 0),
+            "direction": "overstated" if overstatement_aed > 0 else "understated", "basis": basis, **extra}
+
+
 def om_source(field: dict, unit: str, value: Any = None, label: str | None = None) -> dict:
     s = field["source"]
     v = field["value"] if value is None else value
@@ -114,6 +123,8 @@ def occupancy_mismatch(c: Context) -> dict | None:
     om_occ, rr_occ = f["value"], s["occupancy_by_units"]
     if rr_occ is None or abs(om_occ - rr_occ) <= c.t.occupancy_points + 1e-9:
         return None
+    if c.rr.get("master_lease") and om_occ >= 0.999:
+        return None    # 100% leased under a master lease is correct; sub-let occupancy is covenant risk (item 14)
     gap_units = round((om_occ - rr_occ) * s["unit_count"])
     let_avg = s["in_place_rent_aed"] / s["let_units"] if s["let_units"] else 0
     dated = f" (as of {f['as_of']})" if f.get("as_of") else " (undated)"
@@ -127,9 +138,9 @@ def occupancy_mismatch(c: Context) -> dict | None:
         f"The rent roll is unit-level{' and dated ' + s['as_of'] if s['as_of'] else ''}; the OM figure{dated} "
         f"is a headline the screen cannot trace to units. A gap of {abs(om_occ - rr_occ) * 100:.1f} points is "
         f"about {abs(gap_units)} units.",
-        {"metric": "annual_rent", "delta_aed": round(-abs(gap_units) * let_avg, 0),
-         "basis": f"{abs(gap_units)} units x average in-place rent {_aed(let_avg)} (estimate of income the OM implies "
-                  f"but the roll does not show)"},
+        gap_impact("annual_rent", abs(gap_units) * let_avg,
+                   f"{abs(gap_units)} units x average in-place rent {_aed(let_avg)}: income the OM implies but the "
+                   f"roll does not show (estimate)"),
         "Ask for the Ejari export and the vacancy list at the rent-roll date; reconcile the OM figure to unit numbers.")
 
 
@@ -146,7 +157,7 @@ def potential_rent_as_income(c: Context) -> dict | None:
     market_vacant = None
     if c.uw:
         units = c.uw["unit_schedule"]["units"]
-        market_vacant = sum(u["market_rent_reference_aed"] for u in units if u["status"] == "vacant")
+        market_vacant = sum(u["screen_reference_rent_aed"] for u in units if u["status"] == "vacant")
     how = None
     if basis == "potential":
         how = "the OM itself calls the figure potential income"
@@ -155,7 +166,8 @@ def potential_rent_as_income(c: Context) -> dict | None:
             how = (f"it equals the rent roll's in-place rent plus asking rent on {s['vacant_units_with_asking_rent']} "
                    f"vacant units ({_aed(potential)})")
         elif market_vacant and close(om_rent, in_place + market_vacant, rel=0.03):
-            how = f"it is close to in-place rent plus market rent on the vacant units ({_aed(in_place + market_vacant)})"
+            how = (f"it is close to in-place rent plus screen reference rent on the vacant units "
+                   f"({_aed(in_place + market_vacant)})")
         else:
             how = f"it is {om_rent / in_place - 1:.1%} above the rent roll's in-place rent"
     if not how:
@@ -164,17 +176,22 @@ def potential_rent_as_income(c: Context) -> dict | None:
     if c.uw and c.f("asking_price_aed"):
         yield_note = (f" Gross yield on price falls from {_pct(om_rent / c.f('asking_price_aed')['value'])} "
                       f"to {_pct(c.m('gross_yield_in_place_on_price'))} on in-place rent.")
+    sources = [om_source(f, label=f"OM annual rent (basis: {basis})", unit="aed"),
+               rr_source(c.rr, in_place, f"rent roll in-place rent, {s['let_units']} let units", "aed")]
+    if s["vacant_units_with_asking_rent"]:
+        sources.append(rr_source(c.rr, potential, f"rent roll in-place rent plus asking rent on "
+                                 f"{s['vacant_units_with_asking_rent']} vacant units", "aed"))
+    elif market_vacant:
+        sources.append({"doc": "engine", "value": round(in_place + market_vacant, 0), "unit": "aed",
+                        "label": "in-place rent plus screen reference rent on the vacant units (the roll shows no "
+                                 "asking rents)"})
     return record(
         "potential_rent_as_income", "high" if om_rent > in_place * 1.03 else "medium",
         f"OM income {_aed(om_rent)} vs in-place rent {_aed(in_place)}",
-        [om_source(f, label=f"OM annual rent (basis: {basis})", unit="aed"),
-         rr_source(c.rr, in_place, f"rent roll in-place rent, {s['let_units']} let units", "aed"),
-         rr_source(c.rr, potential, "rent roll potential incl. asking rent on vacant units", "aed")],
-        "rent_roll",
+        sources, "rent_roll",
         f"The OM figure is not contracted income: {how}. The screen underwrites let units at their contract "
-        f"rent and vacant units at market after downtime.{yield_note}",
-        {"metric": "annual_rent", "delta_aed": round(in_place - om_rent, 0),
-         "basis": "rent-roll in-place rent minus OM stated income"},
+        f"rent and vacant units at the screen reference rent after downtime.{yield_note}",
+        gap_impact("annual_rent", om_rent - in_place, "OM stated income above rent-roll in-place rent"),
         "Ask for signed leases or Ejari certificates behind any unit the OM counts as income; treat the rest as vacant.")
 
 
@@ -251,67 +268,90 @@ def over_rented_vs_market(c: Context) -> dict | None:
     if not c.uw:
         return None
     share = c.m("over_rent_share_of_income")
-    limit = c.t.over_rent_material_share or c.mandate["buy_box"]["soft"].get("max_over_rent_share_of_income", 0.2)
+    soft = c.mandate["buy_box"]["soft"]
+    limit = c.t.over_rent_material_share or soft.get("max_over_rent_share_of_income", 0.2)
+    threshold = soft.get("over_rent_threshold", 0.0)
     if share is None or share <= limit:
         return None
-    units = [u for u in c.uw["unit_schedule"]["units"] if (u.get("rent_vs_market") or 0) > 0
+    units = [u for u in c.uw["unit_schedule"]["units"] if (u.get("rent_vs_reference") or 0) > threshold
              and u["status"] in ("occupied", "under_renewal", "notice_served")]
-    excess = sum(u["in_place_rent_aed"] - u["market_rent_reference_aed"] for u in units)
-    alt_units = []
-    for u in c.deal_inputs["units"]:
-        ref = next((x for x in units if x["unit"] == str(u["unit"])), None)
-        alt_units.append(u | {"annual_rent_aed": ref["market_rent_reference_aed"]} if ref else u)
-    imp = impact(c.deal_inputs, c.uw, with_changes(c.deal_inputs, units=alt_units), c.mandate, c.market)
-    if imp:
-        imp["basis"] = (f"engine Year-1 NOI with the {len(units)} over-rented leases at market reference rent today, "
-                        f"minus the base case (which resets them only at expiry)")
+    excess = c.m("over_rent_excess_at_expiry_aed")
+    if excess is None:
+        excess = sum(u["in_place_rent_aed"] - u["screen_reference_rent_aed"] for u in units)
     return record(
         "over_rented_vs_market", "high" if share > 2 * limit else "medium",
-        f"{_pct(share)} of in-place rent is from units let above market",
+        f"{_pct(share)} of in-place rent is from units let more than {_pct(threshold)} above the screen reference",
         [rr_source(c.rr, round(sum(u["in_place_rent_aed"] for u in units), 0),
-                   f"{len(units)} let units above the area reference rent", "aed"),
-         {"doc": "data/market/areas.yaml", "value": c.deal_inputs["area"], "unit": "text", "label": "area reference rent (illustrative)"}],
+                   f"{len(units)} let units more than {_pct(threshold)} above the screen reference rent", "aed"),
+         {"doc": "data/market/areas.yaml", "value": c.deal_inputs["area"], "unit": "text",
+          "label": "screen reference rent (a proxy, not the RERA index)"}],
         "engine",
-        f"In a falling 2026 market these leases are {_aed(excess)} a year above reference rent; the engine resets "
-        f"each to market at expiry. The mandate limit is {_pct(limit)}.",
-        imp, "Check the over-rented leases' expiry dates and tenants; price the reset into the offer.")
+        f"In a falling 2026 market these leases are expected to reset towards the screen reference at renewal or "
+        f"expiry, which takes about {_aed(excess)} a year off income as they roll; the engine models each reset at "
+        f"its expiry date. The mandate limit is {_pct(limit)} of income. The reference is a proxy: confirm the "
+        f"rents with the DLD Smart Rental Index calculator.",
+        gap_impact("annual_rent_at_expiry", excess,
+                   "rent above the screen reference on over-rented leases, lost as each renews or expires"),
+        "Check the over-rented leases' expiry dates and tenants; price the resets into the offer.")
 
 
 def upside_exceeds_rera_cap(c: Context) -> dict | None:
+    """An OM uplift claim beyond what the screen reference supports.
+
+    At renewal, a sitting tenant's increase is capped by the RERA band for the gap between its own rent and the
+    index (here the screen reference), up to the top band; on turnover a unit re-lets at the reference, uncapped.
+    A claim about renewals is tested against the best renewal any tenant can get; any other claim against the best
+    of renewal and turnover. Only a claim beyond that is flagged.
+    """
     claims = [cl for cl in c.om.get("upside_claims", []) if cl["status"] in TRUSTED and cl.get("claimed_uplift")]
     if not claims or not c.uw:
         return None
-    # the engine's own renewal rule (RERA bands, notice window, market path) at each unit's first expiry
-    # in the next 24 months; a claim is flagged only if it exceeds what the best-placed unit can get
-    changes = []
+    renewal, turnover = [], []
     for u in c.uw["unit_schedule"]["units"]:
         ev = next((e for e in u.get("events", []) if e.get("type") == "expiry"), None)
-        if ev and ev.get("current_rent") and ev.get("renewal_rent") is not None and ev["month"] < 24:
-            changes.append((ev["renewal_rent"] / ev["current_rent"] - 1, ev["current_rent"]))
-    if not changes:
+        if not ev or not ev.get("current_rent") or ev["month"] >= 24:
+            continue
+        states = ev.get("tenant_states") or [{"current_rent": ev["current_rent"], "renewal_rent": ev.get("renewal_rent")}]
+        for st in states:
+            if st.get("current_rent") and st.get("renewal_rent") is not None:
+                renewal.append(st["renewal_rent"] / st["current_rent"] - 1)
+        ref = ev.get("reference_rent")
+        if ref:
+            turnover.append(ref / ev["current_rent"] - 1)
+    if not renewal:
         return None
-    best = max(ch for ch, _ in changes)
-    average = sum(ch * w for ch, w in changes) / sum(w for _, w in changes)
+    best_renewal = max(renewal)
+    best_any = max(renewal + turnover)
     worst = max(claims, key=lambda cl: cl["claimed_uplift"])
-    if worst["claimed_uplift"] <= best + c.t.rera_claim_tolerance_points:
+    text = f"{worst.get('applies_to') or ''} {worst.get('quote') or ''}".lower()
+    # renewal-only claims are tested against the RERA bands; anything that also counts re-lets or market
+    # reversion is tested against renewal or turnover to the reference, whichever is higher
+    about_renewals = "renew" in text and not re.search(r"re-?let|turnover|vacan|new lease|market", text)
+    supported = best_renewal if about_renewals else best_any
+    if worst["claimed_uplift"] <= supported + c.t.rera_claim_tolerance_points:
         return None
-    allowed = best
+    what = "at renewal (RERA bands on each tenant's own rent)" if about_renewals else \
+        "at renewal or on re-letting to the screen reference"
     return record(
         "upside_exceeds_rera_cap", "high",
-        f"OM claims {_pct(worst['claimed_uplift'])} rental uplift; RERA bands and the market allow at most {_pct(allowed)}",
+        f"OM claims {_pct(worst['claimed_uplift'])} rental uplift; the screen reference supports at most "
+        f"{_pct(supported)} {what}",
         [{"doc": worst["source"]["doc"], "page": worst["source"]["page"], "bbox": worst["source"]["bbox"],
           "quote": worst["quote"], "value": worst["claimed_uplift"], "unit": "pct", "label": "OM upside claim"},
-         {"doc": "engine", "value": round(allowed, 4), "unit": "pct",
-          "label": "largest change at renewal for any lease expiring in the next 24 months (RERA bands, notice period)"},
-         {"doc": "engine", "value": round(average, 4), "unit": "pct", "label": "rent-weighted average change at those renewals"}],
+         {"doc": "engine", "value": round(best_renewal, 4), "unit": "pct",
+          "label": "largest renewal increase any tenant can get in the next 24 months (RERA bands, notice period)"},
+         {"doc": "engine", "value": round(best_any, 4), "unit": "pct",
+          "label": "largest uplift including re-letting to the screen reference on turnover"}],
         "engine",
-        "Under the RERA rent-increase bands a renewal increase is capped by how far the rent sits below the RERA "
-        "index, and needs prior written notice; over-rented units reset down. Applied unit by unit, no lease expiring in the next two "
-        f"years can rise by more than {_pct(allowed)}, and renewals move rent by {_pct(average)} on average, not "
-        f"{_pct(worst['claimed_uplift'])}.",
-        {"metric": "rent_change_at_renewal", "delta": round(allowed - worst["claimed_uplift"], 4),
-         "basis": "engine renewal rule minus OM claim"},
-        "Ignore the claimed reversion; ask the broker which units it relies on and check each against the RERA calculator.")
+        "At renewal a tenant's rent can rise only within the RERA band for how far its own rent sits below the "
+        "index (the top band allows 20%), with prior written notice; on turnover a unit re-lets at market, "
+        f"uncapped. Applied unit by unit against the screen reference, the claim of {_pct(worst['claimed_uplift'])} "
+        f"is beyond the {_pct(supported)} the reference supports {what}. The screen reference is a proxy for the "
+        "RERA index: confirm unit by unit with the DLD Smart Rental Index calculator.",
+        {"metric": "rent_change", "delta": round(supported - worst["claimed_uplift"], 4),
+         "basis": "uplift the screen reference supports minus the OM claim"},
+        "Ignore the claimed reversion; ask the broker which units it relies on and check each in the DLD Smart "
+        "Rental Index calculator.")
 
 
 def missing_opex_items(c: Context) -> dict | None:
@@ -330,18 +370,24 @@ def missing_opex_items(c: Context) -> dict | None:
         absent = [a for a in absent if a in LANDLORD_COSTS_UNDER_MASTER_LEASE]
     if not absent:
         return None
-    priced = [a for a in absent if a != "property_management"]   # the engine always charges its own fee
-    alt = dict(c.deal_inputs.get("opex_aed") or {})
-    for a in priced:
-        alt[a] = 0.0
-    imp = impact(c.deal_inputs, c.uw, with_changes(c.deal_inputs, opex_aed=alt), c.mandate, c.market) if priced else None
-    if imp:
-        imp["basis"] = ("engine Year-1 NOI if the absent costs were zero, as the statement implies, minus the base "
-                        "case with mandate defaults; the delta is how much the statement overstates NOI")
+    bridge = noi_bridge(c.uw, c.opex)
+    defaulted = [st for st in (bridge or {}).get("steps", []) if "absent from the statement" in st["label"]]
+    imp = None
+    if bridge:
+        gap = bridge["statement_noi_aed"] - bridge["screen_noi_year1_aed"]
+        imp = gap_impact("noi_year1", gap, "statement NOI minus the screen's Year-1 NOI; every component is in "
+                         "`bridge`", bridge=bridge,
+                         absent_costs_aed=round(-sum(st["aed"] for st in defaulted), 0))
     chiller = "district_cooling" in absent
     defaults = {k: v for k, v in (c.uw.get("inputs") or {}).items() if k.startswith("deal.opex_aed.")
                 and v.get("provenance") == "default" and k.split(".")[-1] in absent}
-    material = chiller or (imp and c.m("noi_year1") and abs(imp["delta_aed"]) > 0.05 * c.m("noi_year1"))
+    material = chiller or (imp and c.m("noi_year1") and imp["absent_costs_aed"] > 0.05 * c.m("noi_year1"))
+    bridge_text = ""
+    if bridge:
+        parts = "; ".join(f"{st['label']} {'+' if st['aed'] >= 0 else 'less'} {_aed(abs(st['aed']))}"
+                          for st in bridge["steps"])
+        bridge_text = (f" From the statement's NOI of {_aed(bridge['statement_noi_aed'])} to the screen's Year-1 NOI "
+                       f"of {_aed(bridge['screen_noi_year1_aed'])}: {parts}.")
     return record(
         "missing_opex_items", "high" if material else "medium",
         "Operating statement omits " + ", ".join(a.replace("_", " ") for a in absent),
@@ -351,7 +397,7 @@ def missing_opex_items(c: Context) -> dict | None:
         "mandate_defaults",
         ("The building is chiller-free, so the landlord pays district cooling, yet the statement has no cooling line. "
          if chiller else "") + "A whole-building owner bears these costs; the screen fills each from the mandate "
-        "default per sq ft of NSA (the management fee is always the mandate's % of EGI).",
+        "default per sq ft of NSA (the management fee is always the mandate's % of EGI)." + bridge_text,
         imp, "Request the missing bills (Empower/chiller, insurance schedule, reserve study, management agreement).")
 
 
@@ -510,18 +556,20 @@ def collections_gap(c: Context) -> dict | None:
     if gap <= c.t.collections_gap:
         return None
     lines = [ln for ln in c.opex["lines"] if ln["category"] == "rental_income" and ln["status"] == "verified"]
+    mandate_loss = c.mandate["underwriting"]["operations"]["collection_loss"]
     return record(
         "collections_gap", "high" if gap > 0.10 else "medium",
         f"Statement rental income {_aed(collected)} is {_pct(gap)} below rent-roll in-place rent {_aed(in_place)}",
         [{"doc": c.opex["doc"], **{k: v for k, v in ln["source"].items() if k != "doc"}, "value": ln["amount_aed"], "unit": "aed",
           "label": ln["label"]} for ln in lines]
         + [rr_source(c.rr, in_place, "rent-roll in-place rent (annual)", "aed")],
-        "rent_roll",
+        "operating_statement",
         "Physical occupancy is not economic occupancy: units on the roll are not paying in full (arrears, "
-        "concessions, bounced cheques or tenants not paying). The engine applies the mandate collection loss, "
-        f"which is far smaller than this gap ({c.opex['period'].get('annualisation', {}).get('note', '')}).",
-        {"metric": "annual_rent", "delta_aed": round(collected - in_place, 0),
-         "basis": "statement rental income minus rent-roll in-place rent"},
+        "concessions, bounced cheques or tenants not paying). The screen therefore underwrites income at what is "
+        f"actually collected, a collection loss of {_pct(gap)} instead of the mandate's {_pct(mandate_loss)} "
+        f"({c.opex['period'].get('annualisation', {}).get('note', '')}).",
+        gap_impact("annual_rent", in_place - collected, "rent-roll in-place rent minus statement rental income",
+                   observed_gap=round(gap, 4)),
         "Request the aged receivables report and bank statements for the statement period.")
 
 
@@ -558,18 +606,27 @@ def master_lease(c: Context) -> dict | None:
     if ml:
         sources.append({"doc": c.rr["doc"], "cell": ml["source"]["range"], "value": ml.get("annual_rent_aed"), "unit": "aed",
                         "label": f"master lease: {ml.get('tenant')}, ends {ml.get('lease_end')}"})
-    sub = c.rr["summary"]["in_place_rent_aed"] if c.rr else None
+    s = c.rr["summary"] if c.rr else None
+    sub = s["in_place_rent_aed"] if s else None
     premium = (ml["annual_rent_aed"] / sub - 1) if ml and ml.get("annual_rent_aed") and sub else None
+    behind = ""
+    if ml and s and ml.get("annual_rent_aed"):
+        behind = (f" Behind the lease the operator sub-lets {s['let_units']} of {s['unit_count']} units "
+                  f"({_pct(s['occupancy_by_units'])}) and collects about {_aed(sub)} a year against the "
+                  f"{_aed(ml['annual_rent_aed'])} it pays, while bearing the running costs: the rent is supported by "
+                  "the operator, not earned by the units. That is covenant risk.")
     return record(
         "master_lease_related_party", "high",
         "Income depends on a master lease" + (f" at {_pct(premium)} over the sub-tenants' rent" if premium else ""),
-        sources, "rent_roll_sub_leases",
-        "The building's income is one tenant's covenant. If the master tenant pays more than it collects from "
-        "sub-tenants, the rent is supported by the seller's side, not the market; at expiry income falls to what "
-        "the units earn.",
-        {"metric": "annual_rent", "delta_aed": round(sub - ml["annual_rent_aed"], 0),
-         "basis": "sub-tenancy rent minus master-lease rent"} if premium is not None else None,
-        "Obtain the master lease, the master tenant's accounts and ownership; confirm whether it is related to the seller.")
+        sources, "master_lease_then_sub_leases",
+        "The building is leased to one operator, so occupancy of the lease itself is 100% and income is that "
+        "operator's covenant." + behind + " At expiry, or if the operator fails, income falls to what the "
+        "sub-tenancies earn. Whether the operator is related to the seller is a separate question, decided only "
+        "on stated evidence.",
+        gap_impact("annual_rent", ml["annual_rent_aed"] - sub, "master-lease rent above what the sub-tenancies pay")
+        if premium is not None else None,
+        "Obtain the master lease, the operator's accounts and ownership, and the seller's ownership; confirm in "
+        "writing whether the operator is related to the seller.")
 
 
 def expiry_concentration(c: Context) -> dict | None:
@@ -635,6 +692,24 @@ RULES: list[Callable[[Context], dict | None]] = [
 ]
 
 
+def link_same_gaps(findings: list[dict]) -> list[dict]:
+    """When the OM's occupancy and its income overstate the same vacant units, keep both ids but link them.
+
+    potential_rent_as_income carries the money; occupancy_mismatch is marked ``same_gap_as`` it, rated one step
+    lower, and its impact is not counted again.
+    """
+    by_id = {d["id"]: d for d in findings}
+    occ, rent = by_id.get("occupancy_mismatch"), by_id.get("potential_rent_as_income")
+    if occ and rent:
+        occ["same_gap_as"] = "potential_rent_as_income"
+        occ["severity"] = {"high": "medium", "medium": "low", "low": "low"}[occ["severity"]]
+        if occ.get("impact"):
+            occ["impact"] = {**occ["impact"], "counted_in": "potential_rent_as_income"}
+        occ["why"] += (" This is the same gap as the OM's income figure (potential rent as income), where its "
+                       "impact is counted.")
+    return findings
+
+
 def run_rules(ctx: Context) -> tuple[list[dict], list[dict]]:
     """Every rule; a rule that raises is recorded as an error, not a silent pass."""
     out, errors = [], []
@@ -646,7 +721,7 @@ def run_rules(ctx: Context) -> tuple[list[dict], list[dict]]:
             continue
         if r:
             out.append(r)
-    return out, errors
+    return link_same_gaps(out), errors
 
 
 # ---------------------------------------------------------------------------- model review
@@ -753,21 +828,32 @@ AFFILIATION_KEYWORDS = ("group company", "affiliate", "affiliated", "subsidiary"
                         "the seller's", "the vendor's")
 
 
+# A related-party finding stands only on a verified quote that states a relationship and names the seller side.
+RELATION_WORDS = ("group compan", "subsidiary", "affiliate", "related", "sister company", "common ownership",
+                  "same group", "parent company", "owned by", "under common")
+SELLER_WORDS = ("seller", "vendor", "owner", "landlord")
+
+
 def related_party_flag(discrepancies: list[dict], conclusion: str, om: dict) -> tuple[bool | None, str | None]:
-    """(master_lease_related_party, lease_structure) for mandate_fit, from verified evidence only."""
+    """(master_lease_related_party, lease_structure) for mandate_fit, from stated evidence only.
+
+    True needs a verified quote that states the relationship and names the seller (or owner / landlord); a
+    shared group name in two company names is not enough. Without it the relationship is unknown (None).
+    """
     ml = next((d for d in discrepancies if d["id"] == "master_lease_related_party"), None)
-    if ml and ml["detected_by"] in ("model", "rule+model"):
-        if ml.get("related_party") is True or conclusion == "master_lease_related_party":
-            return True, "master_lease"
-        quotes = " ".join(s.get("quote") or "" for s in ml["sources"] if s.get("label") == "verified quote")
-        if ml.get("related_party") is None and contains_any(quotes, AFFILIATION_KEYWORDS):
-            return True, "master_lease"
     ls = trusted(om, "lease_structure")
     if ml:
+        stated = [src for src in ml["sources"] if src.get("quote")
+                  and contains_any(src["quote"], RELATION_WORDS) and contains_any(src["quote"], SELLER_WORDS)]
+        ml["related_party_evidence"] = [src["quote"] for src in stated]
+        if ml.get("related_party") is True and stated:
+            return True, "master_lease"
+        if ml.get("related_party") is True:
+            ml["related_party_note"] = ("the review found a likely connection, but no verified quote states that the "
+                                        "operator and the seller are related; left unknown for the analyst")
         return (False if conclusion == "master_lease_third_party" else None), "master_lease"
     if ls and (ls["value"] or {}).get("type") == "direct_leases":
         return False, "direct_leases"
     if conclusion == "direct_leases":
         return False, "direct_leases"
     return None, None
-

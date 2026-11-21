@@ -4689,16 +4689,6 @@
  },
  "planted_discrepancies": [
   {
-   "num": 1,
-   "id": "occupancy_mismatch",
-   "how_planted": "OM headline occupancy taken from an earlier date or rounded up from marketing copy; rent roll is unit-level and dated.",
-   "expected": {
-    "om": 1.0,
-    "rent_roll": 0.8556,
-    "gap_points": 14.44
-   }
-  },
-  {
    "num": 4,
    "id": "yield_excludes_acquisition_costs",
    "how_planted": "OM yield (ROI) is rent divided by asking price, before DLD 4%, agency 2% + VAT and registration fees.",
@@ -4719,6 +4709,11 @@
   }
  ],
  "rule_checks_not_planted": {
+  "occupancy_mismatch": {
+   "om": 1.0,
+   "rent_roll": 0.8556,
+   "master_lease": true
+  },
   "potential_rent_as_income": {
    "om": 5980000,
    "rent_roll_in_place": 5108000,

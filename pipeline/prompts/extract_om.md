@@ -6,7 +6,8 @@ $document_list
 The offering memorandum is `$om_doc`. Extract from it only. $scan_note
 
 Field guidance:
-- `market_area`: choose from the listed market areas only if the OM's location text names it (or an obvious synonym such as "Jumeirah Village Circle" for JVC). Quote the location text.
+- `area`: the location exactly as written, including the sub-area (for example "Barsha Heights (TECOM), Al Barsha" or "Al Barsha 1").
+- `market_area`: choose from the listed market areas only if the OM's location text names that exact area (or an obvious synonym such as "Jumeirah Village Circle" for JVC). Sub-areas matter: Al Barsha 1, 2 and 3 and Barsha Heights (TECOM) are not Al Barsha South; for them choose none_of_these. Quote the location text.
 - `title_type`: record tenure (freehold / non-freehold) and ownership (single title / strata) only as the OM states them, with the quote that states them. "Single ownership", "one owner" or "whole building for sale" do not say whether the building is on one title deed or many; if that is all it says, ownership is "unstated". One title deed for the land and building (for example "Title deed in the name of the Seller (land and building)") is single_title; tenure stays "unstated" unless the OM says freehold. Statements about who may buy (purchaser eligibility, nationality) are tenure evidence: quote them under title_type only if they state the tenure.
 - `unit_count` and `unit_mix`: as the OM states them, even if they look inconsistent with other pages.
 - `occupancy_stated`: the occupancy figure and the date the OM gives for it (as_of); null as_of if the OM gives none.

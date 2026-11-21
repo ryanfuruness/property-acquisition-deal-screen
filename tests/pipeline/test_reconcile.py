@@ -7,7 +7,7 @@ from pipeline.reconcile import (Context, annualised_partial_period, area_basis_c
                                 contradicted_by_code, expired_lease_counted_occupied, expiry_concentration,
                                 gross_yield_as_net, master_lease, merge, missing_opex_items, occupancy_mismatch,
                                 over_rented_vs_market, potential_rent_as_income, related_party_flag,
-                                rent_roll_does_not_foot, run_rules, SOURCE_UNITS, title_check, unit_mix_mismatch,
+                                rent_roll_does_not_foot, run_rules, SOURCE_UNITS, SEVERITY_ORDER, title_check, unit_mix_mismatch,
                                 upside_exceeds_rera_cap, yield_excludes_acquisition_costs)
 
 REQUIRED_KEYS = {"id", "severity", "title", "sources", "relied_on", "why", "impact", "analyst_action", "detected_by"}
@@ -84,20 +84,27 @@ def test_over_rented_vs_market():
     for i, u in enumerate(units):
         u["unit"], u["source"]["range"] = str(500 + i), f"RR!A{5 + i}:K{5 + i}"
     d = check(over_rented_vs_market(make_context(rr=make_rr(units))), "over_rented_vs_market")
-    assert d["impact"]["metric"] == "noi_year1" and d["impact"]["delta_aed"] < 0   # engine-priced reset to market
+    assert d["impact"]["metric"] == "annual_rent_at_expiry" and d["impact"]["amount_aed"] > 0
+    assert "renewal or expiry" in d["why"] and "proxy" in d["why"]
     assert over_rented_vs_market(make_context()) is None
 
 
 def test_upside_exceeds_rera_cap():
-    units = standard_units(rent=60_000, vacant=0)       # ~24% below the 78,750 reference
-    claim = lambda x: {"quote": f"{x:.0%} reversion", "source": {"doc": "om.pdf", "page": 1, "bbox": []},
-                       "claimed_uplift": x, "status": "verified", "reason": None}
-    ok = make_context(om=make_om(upside_claims=[claim(0.05)]), rr=make_rr(units))
-    assert upside_exceeds_rera_cap(ok) is None
-    bad = make_context(om=make_om(upside_claims=[claim(0.25)]), rr=make_rr(units))
-    d = check(upside_exceeds_rera_cap(bad), "upside_exceeds_rera_cap")
-    assert d["sources"][1]["value"] < 0.25
-    unverified = make_context(om=make_om(upside_claims=[claim(0.25) | {"status": "unverified"}]), rr=make_rr(units))
+    units = standard_units(rent=60_000, vacant=0)       # ~20% below the screen reference after the rent path
+    claim = lambda x, text: {"quote": text.format(f"{x:.0%}"), "source": {"doc": "om.pdf", "page": 1, "bbox": []},
+                             "claimed_uplift": x, "status": "verified", "reason": None, "applies_to": None}
+    rr = make_rr(units)
+    ok = make_context(om=make_om(upside_claims=[claim(0.05, "{} uplift on renewals")]), rr=rr)
+    assert upside_exceeds_rera_cap(ok) is None                       # within the RERA band at renewal
+    d = check(upside_exceeds_rera_cap(make_context(om=make_om(upside_claims=[claim(0.25, "{} uplift on renewals")]),
+                                                   rr=rr)), "upside_exceeds_rera_cap")
+    assert "Smart Rental Index" in d["why"] and d["sources"][1]["value"] <= 0.20
+    turnover_ok = make_context(om=make_om(upside_claims=[claim(0.20, "{} reversion to market")]), rr=rr)
+    assert upside_exceeds_rera_cap(turnover_ok) is None              # re-letting on turnover is uncapped
+    beyond = make_context(om=make_om(upside_claims=[claim(0.45, "{} reversion to market")]), rr=rr)
+    assert upside_exceeds_rera_cap(beyond) is not None
+    unverified = make_context(om=make_om(upside_claims=[claim(0.25, "{} uplift on renewals") | {"status": "unverified"}]),
+                              rr=rr)
     assert upside_exceeds_rera_cap(unverified) is None
 
 
@@ -107,8 +114,12 @@ def test_missing_opex_items():
     ctx = make_context(rr=rr, opex=make_opex(partial, absent=["insurance", "sinking_fund"],
                                              rental_income=rr["summary"]["in_place_rent_aed"]))
     d = check(missing_opex_items(ctx), "missing_opex_items")
-    assert d["impact"]["delta_aed"] > 0          # the statement overstates NOI by the defaults
-    assert d["relied_on"] == "mandate_defaults"
+    assert d["impact"]["absent_costs_aed"] > 0 and d["impact"]["direction"] == "overstated"
+    bridge = d["impact"]["bridge"]
+    steps = {st["label"].split(":")[0]: st["aed"] for st in bridge["steps"]}
+    assert steps["insurance"] < 0 and steps["sinking fund"] < 0
+    assert abs(bridge["statement_noi_aed"] + sum(st["aed"] for st in bridge["steps"]) - bridge["screen_noi_year1_aed"]) <= 2
+    assert d["relied_on"] == "mandate_defaults" and "Year-1 NOI" in d["why"]
     assert missing_opex_items(make_context()) is None
 
 
@@ -183,7 +194,9 @@ def test_master_lease_rule_and_related_party():
     model = dict(d, detected_by="model", related_party=True, sources=[])
     merged = merge([d], [model])
     assert merged[0]["detected_by"] == "rule+model"
-    assert related_party_flag(merged, "master_lease_related_party", make_om()) == (True, "master_lease")
+    assert related_party_flag(merged, "unclear", make_om())[0] is None          # no stated evidence: unknown
+    stated = dict(merged[0], sources=[{"quote": "The seller and the operator are both Silverline Group companies."}])
+    assert related_party_flag([stated], "master_lease_related_party", make_om()) == (True, "master_lease")
     assert related_party_flag([], "unclear", make_om()) == (False, "direct_leases")
     assert related_party_flag([], "unclear", make_om(lease_structure=None)) == (None, None)
 
@@ -273,14 +286,64 @@ def test_missing_opex_is_context_aware():
     assert missing_opex_items(ctx) is None          # strata: the OA service charge covers common areas
 
 
-def test_related_party_from_verified_affiliation_wording_when_model_flag_missing():
-    """A run where the model quoted the tie but left its yes/no blank must still fail the hard filter."""
-    base = {"id": "master_lease_related_party", "detected_by": "rule+model", "related_party": None,
+def test_related_party_needs_a_stated_tie_to_the_seller():
+    """The operator's group alone, or a shared name, leaves the relationship unknown; a statement naming the seller
+    side decides it."""
+    base = {"id": "master_lease_related_party", "detected_by": "rule+model", "related_party": True,
             "sources": [{"label": "verified quote", "quote": "The operator is a Silverline Group company."}]}
-    assert related_party_flag([base], "unclear", make_om()) == (True, "master_lease")
-    unrelated = dict(base, sources=[{"label": "verified quote", "quote": "Master tenant: Acme Living LLC."}])
-    assert related_party_flag([unrelated], "unclear", make_om()) == (None, "master_lease")
-    third_party = dict(unrelated, related_party=False)
+    assert related_party_flag([dict(base)], "unclear", make_om()) == (None, "master_lease")
+    stated = dict(base, sources=[{"quote": "The operator is owned by the seller's parent, Silverline Group."}])
+    assert related_party_flag([stated], "unclear", make_om()) == (True, "master_lease")
+    third_party = dict(base, related_party=False)
     assert related_party_flag([third_party], "master_lease_third_party", make_om()) == (False, "master_lease")
-    unverified = dict(base, sources=[{"label": "unverified", "quote": "The operator is a Silverline Group company."}])
-    assert related_party_flag([unverified], "unclear", make_om()) == (None, "master_lease")
+
+
+
+
+def test_same_gap_is_linked_not_double_counted():
+    from pipeline.reconcile import link_same_gaps
+    units = standard_units(vacant=4)
+    rr = make_rr(units)
+    om = make_om(occupancy_stated=verified(1.0, "Fully let 100%"),
+                 annual_rent_stated=verified(rr["summary"]["in_place_rent_aed"] * 1.1, "Rent", basis="unstated"))
+    findings, _ = run_rules(make_context(om=om, rr=rr))
+    by = {d["id"]: d for d in findings}
+    occ, rent = by["occupancy_mismatch"], by["potential_rent_as_income"]
+    assert occ["same_gap_as"] == "potential_rent_as_income" and occ["impact"]["counted_in"] == "potential_rent_as_income"
+    assert SEVERITY_ORDER[occ["severity"]] > SEVERITY_ORDER[rent["severity"]]
+    assert link_same_gaps([dict(occ)])[0]["severity"] == occ["severity"]       # alone, nothing changes
+
+
+def test_potential_rent_evidence_never_shows_in_place_as_potential():
+    rr = make_rr(standard_units(vacant=4))                 # vacant rows carry no asking rent
+    om = make_om(annual_rent_stated=verified(rr["summary"]["in_place_rent_aed"] * 1.1, "Rent", basis="unstated"))
+    d = potential_rent_as_income(make_context(om=om, rr=rr))
+    labels = [src["label"] for src in d["sources"]]
+    assert not any("asking rent on" in lab for lab in labels)
+    ref = next(src for src in d["sources"] if "screen reference" in src["label"])
+    assert ref["value"] > rr["summary"]["in_place_rent_aed"]
+
+
+def test_master_lease_at_100_percent_is_not_an_occupancy_contradiction():
+    ml = {"tenant": "Op", "annual_rent_aed": 3_400_000.0, "lease_end": "2029-06-30", "cheques": 4,
+          "source": {"range": "M!B3", "cells": {"annual_rent": "M!B3"}}}
+    rr = make_rr(standard_units(vacant=6), master_lease=ml)
+    ctx = make_context(om=make_om(occupancy_stated=verified(1.0, "100% leased")), rr=rr)
+    assert occupancy_mismatch(ctx) is None
+    d = master_lease(ctx)
+    assert "covenant risk" in d["why"] and "sub-lets 34 of 40 units" in d["why"]
+
+
+def test_collections_gap_gives_the_observed_rate():
+    rr = make_rr(standard_units())
+    in_place = rr["summary"]["in_place_rent_aed"]
+    d = collections_gap(make_context(rr=rr, opex=make_opex(FULL_OPEX, rental_income=in_place * 0.85)))
+    assert d["impact"]["observed_gap"] == 0.15 and "underwrites income at what is" in d["why"]
+
+
+def test_claim_covering_re_lets_is_tested_against_turnover_too():
+    units = standard_units(rent=60_000, vacant=0)
+    rr = make_rr(units)
+    claim = {"quote": "As leases renew and re-let through 2027 income rises 20%", "claimed_uplift": 0.20,
+             "source": {"doc": "om.pdf", "page": 1, "bbox": []}, "status": "verified", "reason": None, "applies_to": None}
+    assert upside_exceeds_rera_cap(make_context(om=make_om(upside_claims=[claim]), rr=rr)) is None

@@ -329,9 +329,21 @@ OPEX_MAP_TOOL = {
                     "required": ["label", "measure"]},
             },
             "vat_basis": {"type": "string", "enum": ["includes_vat", "excludes_vat", "unstated"]},
+            "prior_period": {
+                "type": ["object", "null"],
+                "description": "Only if the statement also shows an earlier comparable period: where its totals are.",
+                "properties": {
+                    "label": {"type": "string", "description": "Column or period label, e.g. 'FY2025'."},
+                    "noi_cell": {"type": ["string", "null"]},
+                    "total_income_cell": {"type": ["string", "null"]},
+                    "total_expenses_cell": {"type": ["string", "null"]},
+                    "page": {"type": ["integer", "null"]},
+                    "noi_quote": {"type": ["string", "null"], "description": "PDF: verbatim NOI line text including the prior-period amount."},
+                    "noi_as_printed": {"type": ["string", "null"]}},
+                "required": ["label"]},
             "notes": {"type": ["string", "null"]},
         },
-        "required": ["period", "amount_basis", "lines", "stated_totals", "vat_basis"],
+        "required": ["period", "amount_basis", "lines", "stated_totals", "vat_basis", "prior_period"],
     },
 }
 

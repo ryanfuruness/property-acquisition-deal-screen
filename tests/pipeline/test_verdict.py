@@ -15,16 +15,27 @@ def fit_for(om):
 
 def test_unknown_title_blocks_the_deal_in_plain_words():
     s = summarise_fit(fit_for(make_om(title_type=None)))
-    assert s["blocked_on"] == [{"test": "title", "statement": TITLE_BLOCK}]
-    assert "blocked on title" in s["headline"] and "_" not in s["plain_reason"]
+    assert s["blocked_on_statements"] == [{"test": "title", "statement": TITLE_BLOCK}]
+    assert s["headline"].startswith("Needs work, blocked on freehold single title: Title not stated")
+    assert "_" not in s["plain_reason"]
 
 
 def test_known_title_is_not_blocking():
     s = summarise_fit(fit_for(make_om()))
-    assert s["blocked_on"] == [] and "_" not in s["headline"]
+    assert s["blocked_on_statements"] == [] and "_" not in s["headline"]
 
 
 def test_plain_reason_keeps_capitals():
     s = summarise_fit(fit_for(make_om(title_type=None)))
-    assert "IRR" in s["plain_reason"] or "Meets" in s["plain_reason"]
-    assert "irr" not in s["plain_reason"]
+    assert "irr" not in s["plain_reason"] and "irr" not in s["headline"]
+
+
+def test_decline_states_the_hard_fail_only():
+    import engine
+    fit = engine.mandate_fit({"area": "Al Barsha 1", "asset_type": "residential_building", "title_type":
+                              "freehold_single_title", "unit_count": 40, "price_aed": 32e6, "completion_year": 2015,
+                              "lease_structure": "direct_leases"}, None, engine.load_mandate())
+    s = summarise_fit(fit)
+    assert fit["verdict"] == "Decline" and s["headline"] == ("Decline: Declined on the mandate's hard filters: "
+                                                             "location in a mandate area.")
+    assert "not decisive" in s["plain_reason"]

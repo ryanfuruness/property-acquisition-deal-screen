@@ -158,3 +158,12 @@ def test_quote_lines_match_as_nearby_parts(tmp_path):
 def test_page_given_as_text_is_accepted(docs):
     f = verify_field("asking_price_aed", raw_field(48_500_000, "Guide price AED 48.5m", page="1", unit="AED"), docs)
     assert f["status"] == VERIFIED and f["source"]["page"] == 1
+
+
+def test_al_barsha_sub_areas_are_not_al_barsha_south(tmp_path):
+    d = ingest_pdf(make_pdf(tmp_path / "a.pdf", [["Location Al Barsha 1, Dubai", "Location Al Barsha South, Dubai",
+                                                   "Location Barsha Heights (TECOM), Al Barsha"]]), "om.pdf")
+    bad = verify_field("market_area", raw_field("Al Barsha South", "Location Al Barsha 1, Dubai"), [d])
+    heights = verify_field("market_area", raw_field("Al Barsha South", "Location Barsha Heights (TECOM), Al Barsha"), [d])
+    ok = verify_field("market_area", raw_field("Al Barsha South", "Location Al Barsha South, Dubai"), [d])
+    assert bad["status"] == UNVERIFIED and heights["status"] == UNVERIFIED and ok["status"] == VERIFIED

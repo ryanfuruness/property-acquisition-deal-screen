@@ -164,7 +164,10 @@ def make_opex(totals: dict, months=12, presented=True, absent=(), rental_income=
             "amount_basis": "period_total", "vat_basis": "unstated",
             "lines": [{"label": k, "category": k, "status": "verified", "amount_aed": v,
                        "source": {"doc": "st.xlsx", "cell": "S!B2"}} for k, v in t.items()],
-            "totals_by_category": t, "absent_standard_categories": list(absent), "notes": None}
+            "totals_by_category": t, "absent_standard_categories": list(absent), "notes": None,
+            "total_deductions_aed": 0.0, "prior_period": None,
+            "noi_aed": sum(v for k, v in t.items() if k in ("rental_income", "other_income"))
+            - sum(v for k, v in t.items() if k not in ("rental_income", "other_income"))}
 
 
 FULL_OPEX = {"maintenance_repairs": 120_000.0, "insurance": 36_000.0, "security_cleaning": 90_000.0,

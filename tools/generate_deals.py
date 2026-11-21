@@ -95,7 +95,11 @@ def check_rules(ctx, mandate, market):
         out[i] = {"fired": bool(fired), "margin_ok": bool(margin_ok), "values": values}
 
     d = abs(om["occupancy"]["value"] - rrm["occupancy_units"])
-    put(1, d > 0.02, d > 0.04 or d < 0.012, om=om["occupancy"]["value"], rent_roll=rrm["occupancy_units"], gap_points=round(d * 100, 2))
+    if master and om["occupancy"]["value"] >= 0.999:
+        # "100% leased" under a whole-building master lease is true; sub-let occupancy behind it is covenant risk (#14)
+        put(1, False, True, om=om["occupancy"]["value"], rent_roll=rrm["occupancy_units"], master_lease=True)
+    else:
+        put(1, d > 0.02, d > 0.04 or d < 0.012, om=om["occupancy"]["value"], rent_roll=rrm["occupancy_units"], gap_points=round(d * 100, 2))
     ref = master["annual_rent_aed"] if master else rrm["in_place_rent_aed"]
     x = om["annual_rent"]["value"] / ref - 1
     put(2, x > 0.01, x > 0.03 or x < 0.006, om=om["annual_rent"]["value"], rent_roll_in_place=rrm["in_place_rent_aed"],

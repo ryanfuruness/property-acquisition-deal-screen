@@ -85,7 +85,7 @@ def test_master_lease_input():
     assert di["master_lease"]["related_party"] is True and di["master_lease"]["annual_rent_aed"] == 3_400_000.0
     fit = engine.mandate_fit({"lease_structure": "master_lease", "master_lease_related_party": True},
                              underwrite(di, engine.load_mandate(), MARKET), engine.load_mandate())
-    assert fit["verdict"] == "Pass"
+    assert fit["verdict"] == "Decline"
 
 
 def test_deal_facts_from_verified_fields_only():
@@ -97,3 +97,14 @@ def test_deal_facts_from_verified_fields_only():
                     title_type=verified({"tenure": "freehold", "ownership": "unstated"}, "Freehold"))
     facts, _ = deal_facts(mixed, None, None, None)
     assert facts["asset_type"] == "residential_building" and "title_type" not in facts
+
+
+def test_completion_year_deposits_and_collection_override_reach_the_engine():
+    units = standard_units()
+    for u in units:
+        u["deposit_aed"] = 3000.0
+    di, prov, _ = build(rr=make_rr(units), collection_loss_override=0.15)
+    assert di["completion_year"] == 2015 and di["security_deposits_aed"] == 120_000
+    assert di["collection_loss_override"] == 0.15 and prov["collection_loss_override"]["from"] == "collections_gap"
+    uw = underwrite(di, engine.load_mandate(), MARKET)
+    assert uw["inputs"]["deal.collection_loss_override"]["value"] == 0.15

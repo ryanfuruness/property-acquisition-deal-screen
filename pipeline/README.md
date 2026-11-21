@@ -31,9 +31,10 @@ requests (`runs/<deal_id>/.model_cache/`), so code-side changes can be re-run at
 | 3 Verify | `verify.py`, `numbers.py` | no | Quote found on the cited page (case/whitespace, then punctuation-insensitive; ellipsis parts in order); fuzzy (>= 0.85) only on OCR pages and only if every figure in the quote is in the matched OCR text; value parses from the quote exactly (AED, commas, k/m/mn/million/bn, %, sq ft / sq m with conversion); categorical values need a keyword in the quote; boxes of the matched words. A quote found on another page is accepted with the page corrected and the move recorded. |
 | 4 Rent roll | `rentroll.py` | maps | Model returns header rows, column meanings, units of measure, rows to exclude, status and unit-type vocabularies, summary-row cells and the cells of a master lease's terms. Code reads every cell, drops total rows even if the layout missed them, converts sq m and monthly rent, treats rent on a vacant row as asking rent, reads asking rents and notices from a Remarks/Notes column ("Asking AED 76,500", "Vacating on expiry"), keeps every cell address, and computes the summary. The roll date comes from the cell the model names, else a dated line ("as at", "as on", "updated", "run date") in the sheet or PDF text, else a dated title line, else the file name; a month alone is read as month end; `as_of_source` records which. |
 | 5 Operating statement | `opex.py` | maps | Model maps each line to the chart of accounts and points to the amount cell, month range or (PDF) a quoted line, and states the period. Code reads amounts, annualises a partial period when needed, totals categories, checks the statement's own totals and lists absent standard costs. |
-| 7 Underwrite (base) | `underwriting.py` | no | `deal_inputs` from verified fields and parsed documents only; rent roll drives units; mandate defaults fill gaps (labelled by the engine); provenance per input. |
+| 7 Underwrite (base) | `underwriting.py` | no | `deal_inputs` from verified fields and parsed documents only (engine v2: also `completion_year`, `security_deposits_aed` from the rent roll's deposit column, `rent_roll_date`, and `collection_loss_override` = the observed gap when collections_gap fires, so income is underwritten at what is collected); rent roll drives units; mandate defaults fill gaps (labelled by the engine); provenance per input. `noi_bridge` explains statement NOI to the screen's Year-1 NOI step by step from engine lines; the steps sum exactly. |
 | 6 Reconcile | `reconcile.py` | rules, then review | 16 catalogue rules with thresholds in `config.ReconcileThresholds`; impacts priced by re-running the engine where an input changes. Model review (OM cached) for master lease / related party, title, upside language and other OM claims; a finding needs a quote code verifies, and findings code facts contradict are rejected. |
-| 7-8 Final underwriting, mandate fit | `run.py`, `verdict.py` | no | Re-run with the related-party flag; `engine.mandate_fit` on verified facts (unknown counts against the deal). `verdict.py` words the result: test names in plain English, and a deal whose title the documents do not establish is reported as blocked on title ("Title not stated; legal check required before any further work."), which leads the verdict and the memo's open items. The screen never decides title. |
+| Notices, checklist | `notices.py`, `data/diligence.yaml` | no | Not discrepancies, not scored: stale (> 30 days at the mandate's as-of date, or expiry windows already past) or inferred rent-roll date, tenant concentration (normalised names), statement NOI trend against a prior-period column, security deposits to credit at closing, cheque profile. The standard first-pass diligence items come from `data/diligence.yaml` with simple conditions (always, building age, strata, master lease, retail). |
+| 7-8 Final underwriting, mandate fit | `run.py`, `verdict.py` | no | Re-run with the related-party flag; `engine.mandate_fit` on verified facts (unknown counts against the deal). `verdict.py` words the engine's result (Pursue / Needs work / Decline): test names in plain English; a hard test the engine reports in `blocked_on` gives "Needs work, blocked on ...: <statement>" (title: "Title not stated; legal check required before any further work."); a hard fail gives "Decline: ..." from the engine's `stop_reason`, and soft tests are then marked not decisive. The screen never decides title. |
 | 9 Memo | `memo.py` | writes | Fact sheet only; every number carries `[[fact_id]]`; code checks each; one retry with the errors; a memo that still fails is marked `failed` and not shipped. |
 
 Stages run in the order ingest, extract/verify, rent roll, statement, base underwriting, rules,
@@ -56,9 +57,19 @@ years, dates and month-years; pairs each with the anchor that follows within 32 
 no other number in between; and compares it with the fact after rounding to the precision
 written (`1.5x` matches 1.4713). Ratios must be written as percentages. A number anchored to a
 text fact must appear in that text. Exempt: `Year 1`, `T-12`, unit types (`1BR`), floor codes
-(`G+P+7`), place names (`District 11`, `Al Barsha 1`), `Years 1 to 5`, `12-month`, `3M EIBOR`,
+(`G+P+7`), place names (`District 11`, `Al Barsha 1`), `Years 1 to 5`, `12-month`, "within 12 months",
+calendar references ("through 2027"), `3M EIBOR`,
 list markers and headings. Identifiers in prose (`min_dscr_year1`) are rejected: the memo must
-use plain words. The site renders each anchor as a
+use plain words. A negative fact (a negative IRR, a falling rent path) must read as negative: a minus
+sign or a negative word ("loss", "falls", "below zero") next to it. Facts are displayed to the writer
+rounded (55%, AED 2.9m); negative values are shown as a size marked "(negative)".
+
+Every memo has the same headings in the same order: Verdict (bold Pursue / Needs work / Decline first;
+then "Buy at [walk-away], exit at [exit yield]", the comparison with asking and the assumption that
+most moves the walk-away price, all labelled as house view; a declined deal states its hard fail and
+stops, with returns as context only), The deal, Returns (unlevered first), What would make it fail,
+Discrepancies, Checks before diligence (blocking items, analyst actions, notices, standard checklist),
+Assumptions. The site renders each anchor as a
 link to `fact_sheet[fact_id].source`.
 
 ## run.json schema
@@ -81,10 +92,14 @@ discrepancies[]      Discrepancy (DESIGN.md record), most severe first
 rejected_model_findings[]   review findings dropped, with rejected_because
 underwriting         {status: ok|not_underwritten, error, deal_inputs (exactly what the engine got),
                       inputs_provenance: {<input>: {from, status, doc, page, bbox, quote | cells | note}},
-                      outputs (engine result, see engine/README.md), sensitivities (= outputs.sensitivity)}
-mandate_fit          engine.mandate_fit result (title test gets screen_note when blocking) + {headline, plain_reason,
-                      blocked_on[]: {test, statement}, tests_in_words, deal_facts, deal_facts_provenance,
-                      lease_structure_conclusion}
+                      outputs (engine result, see engine/README.md), sensitivities (= outputs.sensitivity),
+                      noi_bridge: {statement_noi_aed, screen_noi_year1_aed, steps[]: {label, aed}}}
+mandate_fit          engine.mandate_fit result (verdict, blocked_on: [test names], stop_reason, tests[] with decisive;
+                      a blocked test gets screen_note) + {headline, plain_reason, stop_reason_plain,
+                      blocked_on_statements[]: {test, statement}, tests_in_words, deal_facts,
+                      deal_facts_provenance, lease_structure_conclusion}
+notices[]            {id, severity: info|warn, text, values}
+diligence_checklist[] {id, text}
 fact_sheet           {<fact_id>: {value, unit, label, source}}
 memo                 {status: passed|failed, markdown (null if failed), rejected_draft (failed only; never display),
                       attempts[]: {attempt, errors[]}, anchor_syntax: "[[fact_id]]"}
@@ -117,8 +132,11 @@ source: {doc, cell | cells | page+quote+bbox, label_cell}}`.
 
 **Discrepancy** `{id, severity, title, sources[]: {doc, page? | cell?, bbox?, quote?, value,
 unit: aed|pct|sqft|count|date|text, label},
-relied_on, why, impact: {metric, delta_aed | delta | value, basis, base?, alternative?,
-walk_away_delta_aed?} | null, analyst_action, detected_by: rule|model|rule+model}`. A source with
+relied_on, why, impact: {metric, delta_aed (signed), amount_aed (size), direction (overstated|understated),
+basis, delta?, value?, observed_gap?, bridge?, absent_costs_aed?, counted_in?} | null, analyst_action,
+detected_by: rule|model|rule+model, same_gap_as?, related_party?, related_party_evidence?}`. When the OM's
+occupancy and its income overstate the same vacant units, `occupancy_mismatch` carries
+`same_gap_as: potential_rent_as_income`, is rated one step lower, and its impact is `counted_in` the other. A source with
 `doc: "engine"` is an engine calculation; `data/mandate.yaml` or `data/market/areas.yaml` mark reference data.
 
 ## Costs
