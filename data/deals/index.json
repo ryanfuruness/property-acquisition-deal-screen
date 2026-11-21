@@ -1,0 +1,280 @@
+{
+ "generated_by": "tools/generate_deals.py",
+ "generator_version": "1.0.0",
+ "note": "Synthetic documents for demonstration. All properties, brokers, people and companies are fictional.",
+ "discrepancy_catalogue": {
+  "1": "occupancy_mismatch",
+  "2": "potential_rent_as_income",
+  "3": "gross_yield_as_net",
+  "4": "yield_excludes_acquisition_costs",
+  "5": "over_rented_vs_market",
+  "6": "upside_exceeds_rera_cap",
+  "7": "missing_opex_items",
+  "8": "area_basis_confusion",
+  "9": "rent_roll_does_not_foot",
+  "10": "unit_mix_mismatch",
+  "11": "expired_lease_counted_occupied",
+  "12": "collections_gap",
+  "13": "annualised_partial_period",
+  "14": "master_lease_related_party",
+  "15": "expiry_concentration",
+  "16": "title_check"
+ },
+ "deals": [
+  {
+   "deal_id": "d01-cedarline-dso",
+   "building_name": "Cedarline Residences",
+   "area": "Dubai Silicon Oasis",
+   "sub_community": "Dubai Silicon Oasis (Cedre side, near Silicon Central)",
+   "units": 112,
+   "asking_price_aed": 83000000,
+   "broker": "Harbour & Crest Real Estate Advisory",
+   "planted_discrepancies": [],
+   "expected_hard_filter_result": "pass",
+   "tests": "Clean DSO mid-rise from an institutional broker, honestly documented (NIY after purchaser's costs, RERA-compliant reversion note) but priced above what the house view supports. Expected Needs work; false-flag control.",
+   "documents": [
+    "Cedarline_T12_Operating_Statement_Nov25-Oct26.xlsx",
+    "Cedarline_Tenancy_Schedule_31Oct2026.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d02-lantana-ic",
+   "building_name": "Lantana Court",
+   "area": "International City",
+   "sub_community": "International City Phase 2 (Warsan First)",
+   "units": 94,
+   "asking_price_aed": 36000000,
+   "broker": "Marwah & Stone Capital",
+   "planted_discrepancies": [],
+   "expected_hard_filter_result": "pass",
+   "tests": "Clean International City Phase 2 building offered by a motivated seller (~10.6% gross on in-place); honestly documented and priced to clear the mandate. Expected Pursue; false-flag control.",
+   "documents": [
+    "Lantana Court - Rent Roll (01.10.2026).xlsx",
+    "Lantana_Court_Income_and_Expense_12m_to_Sep2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d03-sorrel-jvc",
+   "building_name": "Sorrel Heights",
+   "area": "JVC",
+   "sub_community": "Jumeirah Village Circle, District 14",
+   "units": 170,
+   "asking_price_aed": 192000000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "planted_discrepancies": [
+    "occupancy_mismatch",
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs",
+    "over_rented_vs_market"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "2024 JVC tower leased at 2025 peak rents: OM quotes potential rent and 97% occupancy against a 90% roll, gross ROI on asking. Over-rent risk after the 2026 fall.",
+   "documents": [
+    "SORREL HEIGHTS RENT ROLL NOV 2026.xlsx",
+    "Sorrel Heights - Income & Expense Summary 12M Sep 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d04-kestrel-bb",
+   "building_name": "Kestrel Tower",
+   "area": "Business Bay",
+   "sub_community": "Business Bay, Marasi Drive side",
+   "units": 107,
+   "asking_price_aed": 162500000,
+   "broker": "Meridian Gate Properties",
+   "planted_discrepancies": [
+    "gross_yield_as_net",
+    "yield_excludes_acquisition_costs",
+    "over_rented_vs_market",
+    "missing_opex_items"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "Chiller-free Business Bay tower: OM 'net yield' deducts only a service figure, Empower cooling missing from the P&L, and over 20% of rent sits above the 2026 market.",
+   "documents": [
+    "KT_RentRoll_Export_20261031.xlsx",
+    "Kestrel Tower P&L FY Oct25-Sep26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d05-larkspur-barsha",
+   "building_name": "Larkspur Residence",
+   "area": "Al Barsha",
+   "sub_community": "Barsha Heights (TECOM), Al Barsha",
+   "units": 126,
+   "asking_price_aed": 113000000,
+   "broker": "Harbour & Crest Real Estate Advisory",
+   "planted_discrepancies": [
+    "upside_exceeds_rera_cap",
+    "annualised_partial_period"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "Barsha Heights tower, institutional OM: claims ~15% reversion on 2027 renewals that RERA bands do not allow, and 'FY2026' opex is Jan-Sep annualised. Near miss.",
+   "documents": [
+    "Larkspur Income & Expense Statement FY2026.xlsx",
+    "Larkspur_Residence_Rent_Roll_Oct-2026.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d06-opaline-jvc",
+   "building_name": "Opaline Residence",
+   "area": "JVC",
+   "sub_community": "Jumeirah Village Circle, District 11",
+   "units": 48,
+   "asking_price_aed": 30500000,
+   "broker": "Saffron Key Realty",
+   "planted_discrepancies": [
+    "yield_excludes_acquisition_costs",
+    "rent_roll_does_not_foot",
+    "expired_lease_counted_occupied",
+    "collections_gap"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "Older self-run JVC G+4: rent-roll summary row is stale and does not foot, holding-over tenants and missing Ejari shown as occupied, T-12 collections ~15% below roll. Near miss.",
+   "documents": [
+    "Opaline rent roll.xlsx",
+    "Opaline_Residence_T12_Nov2025-Oct2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d07-vireo-dso",
+   "building_name": "Vireo Residences",
+   "area": "Dubai Silicon Oasis",
+   "sub_community": "Dubai Silicon Oasis, near Dubai-Al Ain Road",
+   "units": 118,
+   "asking_price_aed": 95000000,
+   "broker": "Meridian Gate Properties",
+   "planted_discrepancies": [
+    "yield_excludes_acquisition_costs",
+    "area_basis_confusion",
+    "unit_mix_mismatch",
+    "expiry_concentration"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "2024 DSO block leased up in one wave: ~80% of rent expires Jan-Mar 2027, OM mix is the developer brochure (120 units vs 118 let), price psf quoted on BUA, roll in sq m. Near miss.",
+   "documents": [
+    "Vireo Residences Tenancy Schedule.xlsx",
+    "Vireo_Operating_Statement_Oct25_Sep26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d08-jade-ic",
+   "building_name": "Jade Court",
+   "area": "International City",
+   "sub_community": "International City Phase 1, England Cluster",
+   "units": 92,
+   "asking_price_aed": 34500000,
+   "broker": "Saffron Key Realty",
+   "planted_discrepancies": [
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs",
+    "missing_opex_items"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "Owner-run International City Phase 1 building sold urgently, OM received as a scan: income includes vacant units at asking rent and the statement has no management fee, insurance or reserve. Still clears the mandate once corrected: discrepancies are not an automatic no. Expected Pursue.",
+   "documents": [
+    "Jade Court Income Expenses Oct25-Sep26.xlsx",
+    "Jade Court Rent List Oct 26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": true
+  },
+  {
+   "deal_id": "d09-aurelia-bb",
+   "building_name": "Aurelia Bay Tower",
+   "area": "Business Bay",
+   "sub_community": "Business Bay, Al Abraj Street",
+   "units": 96,
+   "asking_price_aed": 131000000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "planted_discrepancies": [
+    "yield_excludes_acquisition_costs"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "Business Bay tower sold as 'single ownership' but held as 96 strata title deeds with an owners association and Mollak service charges. Hard fail on title.",
+   "documents": [
+    "Aurelia Bay Tower - Rent Roll Oct 2026.xlsx",
+    "Aurelia Bay Tower Owner Statement 12M Sep 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d10-almehrab-barsha",
+   "building_name": "Al Mehrab Building",
+   "area": "Al Barsha",
+   "sub_community": "Al Barsha 1, behind Mall of the Emirates",
+   "units": 70,
+   "asking_price_aed": 75500000,
+   "broker": "Marwah & Stone Capital",
+   "planted_discrepancies": [
+    "occupancy_mismatch",
+    "title_check"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "Older Al Barsha 1 building whose OM never says freehold; plot is nationality-restricted. Occupancy quoted from June. Hard fail on title, for legal confirmation.",
+   "documents": [
+    "Al Mehrab Bldg - Tenancy List Sep 2026.pdf",
+    "Al Mehrab Building - Income Statement 12M Aug 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d11-silverline-dso",
+   "building_name": "Silverline Residences",
+   "area": "Dubai Silicon Oasis",
+   "sub_community": "Dubai Silicon Oasis, near RIT Dubai campus",
+   "units": 90,
+   "asking_price_aed": 72500000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "planted_discrepancies": [
+    "occupancy_mismatch",
+    "yield_excludes_acquisition_costs",
+    "master_lease_related_party"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "DSO building 'guaranteed' by a 5-year master lease to the seller's own operator, at ~17% over what the operator collects; OM shows 100% occupancy vs 86% sub-let. Hard fail.",
+   "documents": [
+    "Silverline Residences - Tenancy Schedule.xlsx",
+    "Silverline Residences Landlord Statement Oct25-Sep26.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d12-tulip-ic",
+   "building_name": "Tulip Court",
+   "area": "International City",
+   "sub_community": "International City Phase 1, China Cluster",
+   "units": 26,
+   "asking_price_aed": 11250000,
+   "broker": "Saffron Key Realty",
+   "planted_discrepancies": [
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "Small International City Phase 1 G+3 with two shops; income stated incl. vacant units at asking. Hard fail on size and price.",
+   "documents": [
+    "Tulip Court - Operating Statement Nov25-Oct26.xlsx",
+    "om.pdf",
+    "tulip_court_rentroll.csv"
+   ],
+   "scanned_om": false
+  }
+ ]
+}

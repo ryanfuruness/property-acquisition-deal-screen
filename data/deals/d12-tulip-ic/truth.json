@@ -1,0 +1,1895 @@
+{
+ "deal_id": "d12-tulip-ic",
+ "generator": {
+  "version": "1.0.0",
+  "seed": 2213,
+  "om_date": "2026-11-04"
+ },
+ "package": [
+  "Tulip Court - Operating Statement Nov25-Oct26.xlsx",
+  "om.pdf",
+  "tulip_court_rentroll.csv"
+ ],
+ "true_building": {
+  "name": "Tulip Court",
+  "area": "International City",
+  "sub_community": "International City Phase 1, China Cluster",
+  "dld_area": "International City",
+  "plot_number": "616-0461",
+  "plot_area_sqft": 8610,
+  "tenure": "freehold",
+  "title": "single_title",
+  "nationality_restriction": null,
+  "completion_year": 2009,
+  "floors": "G+3",
+  "residential_floors": 3,
+  "unit_count": 26,
+  "unit_mix": {
+   "studio": 15,
+   "1br": 9,
+   "retail": 2
+  },
+  "bua_sqft": 16430,
+  "nsa_sqft": 13472.0,
+  "efficiency_nsa_bua": 0.82,
+  "parking_spaces": 14,
+  "lifts": 1,
+  "chiller_arrangement": "tenant_dewa",
+  "chiller_landlord_pays": false,
+  "lease_structure": "direct_leases",
+  "master_lease": null,
+  "seller": "Private owner (individual)",
+  "rent_roll_date": "2026-10-31",
+  "in_place_rent_aed": 1006000,
+  "vacant_asking_rent_aed": 72500,
+  "potential_rent_aed": 1078500,
+  "other_income_aed": 0,
+  "occupancy_units": 0.9231,
+  "occupancy_area": 0.9396,
+  "asset_type": "mixed_use_ground_floor_retail",
+  "asking_price_aed": 11250000,
+  "units": [
+   {
+    "unit": "101",
+    "floor": 1,
+    "type": "studio",
+    "area_sqft": 404.1,
+    "market_rent_aed": 35116,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Bright Arc Building Contracting LLC",
+    "tenant_type": "company",
+    "ejari_no": "0120260268568443",
+    "lease_start": "2026-02-15",
+    "lease_end": "2027-02-14",
+    "cheques": 1,
+    "deposit_aed": 1400,
+    "annual_rent_aed": 32000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9113,
+    "rent_psf": 79.19
+   },
+   {
+    "unit": "102",
+    "floor": 1,
+    "type": "studio",
+    "area_sqft": 409.7,
+    "market_rent_aed": 35603,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Nuwan Wickramasinghe",
+    "tenant_type": "individual",
+    "ejari_no": "0120260229025676",
+    "lease_start": "2026-02-01",
+    "lease_end": "2027-01-31",
+    "cheques": 6,
+    "deposit_aed": 1500,
+    "annual_rent_aed": 32500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9128,
+    "rent_psf": 79.33
+   },
+   {
+    "unit": "103",
+    "floor": 1,
+    "type": "studio",
+    "area_sqft": 416.3,
+    "market_rent_aed": 36176,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Ironbridge Auto Spare Parts Trading Co. L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260839829070",
+    "lease_start": "2026-08-15",
+    "lease_end": "2027-08-14",
+    "cheques": 2,
+    "deposit_aed": 1725,
+    "annual_rent_aed": 34500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9537,
+    "rent_psf": 82.87
+   },
+   {
+    "unit": "104",
+    "floor": 1,
+    "type": "1br",
+    "area_sqft": 651.8,
+    "market_rent_aed": 51492,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Fatou Owusu",
+    "tenant_type": "individual",
+    "ejari_no": "0120261025448505",
+    "lease_start": "2026-10-04",
+    "lease_end": "2027-10-03",
+    "cheques": 4,
+    "deposit_aed": 2425,
+    "annual_rent_aed": 48500,
+    "tenancy_category": "new",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9419,
+    "rent_psf": 74.41
+   },
+   {
+    "unit": "105",
+    "floor": 1,
+    "type": "1br",
+    "area_sqft": 668.2,
+    "market_rent_aed": 52788,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Blessing Mensah",
+    "tenant_type": "individual",
+    "ejari_no": "0120260427104216",
+    "lease_start": "2026-04-04",
+    "lease_end": "2027-04-03",
+    "cheques": 4,
+    "deposit_aed": 2475,
+    "annual_rent_aed": 49500,
+    "tenancy_category": "new",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9377,
+    "rent_psf": 74.08
+   },
+   {
+    "unit": "106",
+    "floor": 1,
+    "type": "studio",
+    "area_sqft": 421.5,
+    "market_rent_aed": 36628,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Chen Hao",
+    "tenant_type": "individual",
+    "ejari_no": "0120260933468193",
+    "lease_start": "2026-09-01",
+    "lease_end": "2027-08-31",
+    "cheques": 6,
+    "deposit_aed": 1700,
+    "annual_rent_aed": 34000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9283,
+    "rent_psf": 80.66
+   },
+   {
+    "unit": "107",
+    "floor": 1,
+    "type": "studio",
+    "area_sqft": 430.0,
+    "market_rent_aed": 37367,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Xu Lei",
+    "tenant_type": "individual",
+    "ejari_no": "0120260259171538",
+    "lease_start": "2026-02-19",
+    "lease_end": "2027-02-18",
+    "cheques": 2,
+    "deposit_aed": 1825,
+    "annual_rent_aed": 36500,
+    "tenancy_category": "new",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9768,
+    "rent_psf": 84.88
+   },
+   {
+    "unit": "108",
+    "floor": 1,
+    "type": "1br",
+    "area_sqft": 677.4,
+    "market_rent_aed": 53515,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Meera Kulkarni",
+    "tenant_type": "individual",
+    "ejari_no": "0120251299087451",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "cheques": 6,
+    "deposit_aed": 2400,
+    "annual_rent_aed": 52000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9717,
+    "rent_psf": 76.76
+   },
+   {
+    "unit": "201",
+    "floor": 2,
+    "type": "studio",
+    "area_sqft": 404.1,
+    "market_rent_aed": 35116,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Liu Lei",
+    "tenant_type": "individual",
+    "ejari_no": "0120260126681211",
+    "lease_start": "2026-01-27",
+    "lease_end": "2027-01-26",
+    "cheques": 6,
+    "deposit_aed": 1575,
+    "annual_rent_aed": 31500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.897,
+    "rent_psf": 77.95
+   },
+   {
+    "unit": "202",
+    "floor": 2,
+    "type": "studio",
+    "area_sqft": 409.7,
+    "market_rent_aed": 35603,
+    "chiller": "tenant_dewa",
+    "status": "vacant",
+    "tenant": null,
+    "tenant_type": null,
+    "ejari_no": null,
+    "lease_start": null,
+    "lease_end": null,
+    "cheques": null,
+    "deposit_aed": null,
+    "annual_rent_aed": null,
+    "tenancy_category": null,
+    "asking_rent_aed": 37000
+   },
+   {
+    "unit": "203",
+    "floor": 2,
+    "type": "studio",
+    "area_sqft": 416.3,
+    "market_rent_aed": 36176,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Cobalt Ridge Security Services L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120261014237049",
+    "lease_start": "2026-10-01",
+    "lease_end": "2027-09-30",
+    "cheques": 2,
+    "deposit_aed": 1600,
+    "annual_rent_aed": 32000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.8846,
+    "rent_psf": 76.87
+   },
+   {
+    "unit": "204",
+    "floor": 2,
+    "type": "1br",
+    "area_sqft": 651.8,
+    "market_rent_aed": 51492,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Summit Peak Software Development Co. L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260456101780",
+    "lease_start": "2026-04-14",
+    "lease_end": "2027-04-13",
+    "cheques": 1,
+    "deposit_aed": 2475,
+    "annual_rent_aed": 49500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9613,
+    "rent_psf": 75.94
+   },
+   {
+    "unit": "205",
+    "floor": 2,
+    "type": "1br",
+    "area_sqft": 668.2,
+    "market_rent_aed": 52788,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Kashif Mirza",
+    "tenant_type": "individual",
+    "ejari_no": "0120251298061757",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "cheques": 12,
+    "deposit_aed": 2350,
+    "annual_rent_aed": 50500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9567,
+    "rent_psf": 75.58
+   },
+   {
+    "unit": "206",
+    "floor": 2,
+    "type": "studio",
+    "area_sqft": 421.5,
+    "market_rent_aed": 36628,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Anjali Mathew",
+    "tenant_type": "individual",
+    "ejari_no": "0120261095918016",
+    "lease_start": "2026-10-15",
+    "lease_end": "2027-10-14",
+    "cheques": 12,
+    "deposit_aed": 1500,
+    "annual_rent_aed": 32000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.8736,
+    "rent_psf": 75.92
+   },
+   {
+    "unit": "207",
+    "floor": 2,
+    "type": "studio",
+    "area_sqft": 430.0,
+    "market_rent_aed": 37367,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Jerome Navarro",
+    "tenant_type": "individual",
+    "ejari_no": "0120251224189803",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "cheques": 4,
+    "deposit_aed": 1750,
+    "annual_rent_aed": 35000,
+    "tenancy_category": "new",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9367,
+    "rent_psf": 81.4
+   },
+   {
+    "unit": "208",
+    "floor": 2,
+    "type": "1br",
+    "area_sqft": 677.4,
+    "market_rent_aed": 53515,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Emeka Ndlovu",
+    "tenant_type": "individual",
+    "ejari_no": "0120260909025319",
+    "lease_start": "2026-09-08",
+    "lease_end": "2027-09-07",
+    "cheques": 12,
+    "deposit_aed": 2500,
+    "annual_rent_aed": 50000,
+    "tenancy_category": "new",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9343,
+    "rent_psf": 73.81
+   },
+   {
+    "unit": "301",
+    "floor": 3,
+    "type": "studio",
+    "area_sqft": 404.1,
+    "market_rent_aed": 35116,
+    "chiller": "tenant_dewa",
+    "status": "vacant",
+    "tenant": null,
+    "tenant_type": null,
+    "ejari_no": null,
+    "lease_start": null,
+    "lease_end": null,
+    "cheques": null,
+    "deposit_aed": null,
+    "annual_rent_aed": null,
+    "tenancy_category": null,
+    "asking_rent_aed": 35500
+   },
+   {
+    "unit": "302",
+    "floor": 3,
+    "type": "studio",
+    "area_sqft": 409.7,
+    "market_rent_aed": 35603,
+    "chiller": "tenant_dewa",
+    "status": "under_renewal",
+    "tenant": "Unity Link Hospitality Management LLC",
+    "tenant_type": "company",
+    "ejari_no": "0120251196837004",
+    "lease_start": "2025-11-18",
+    "lease_end": "2026-11-17",
+    "cheques": 1,
+    "deposit_aed": 1625,
+    "annual_rent_aed": 32500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9128,
+    "rent_psf": 79.33
+   },
+   {
+    "unit": "303",
+    "floor": 3,
+    "type": "studio",
+    "area_sqft": 416.3,
+    "market_rent_aed": 36176,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Zainab Raza",
+    "tenant_type": "individual",
+    "ejari_no": "0120251206131886",
+    "lease_start": "2025-12-30",
+    "lease_end": "2026-12-29",
+    "cheques": 12,
+    "deposit_aed": 1700,
+    "annual_rent_aed": 34000,
+    "tenancy_category": "new",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9398,
+    "rent_psf": 81.67
+   },
+   {
+    "unit": "304",
+    "floor": 3,
+    "type": "1br",
+    "area_sqft": 651.8,
+    "market_rent_aed": 51492,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Bilal Malik",
+    "tenant_type": "individual",
+    "ejari_no": "0120261049134312",
+    "lease_start": "2026-10-15",
+    "lease_end": "2027-10-14",
+    "cheques": 12,
+    "deposit_aed": 2250,
+    "annual_rent_aed": 49000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9516,
+    "rent_psf": 75.18
+   },
+   {
+    "unit": "305",
+    "floor": 3,
+    "type": "1br",
+    "area_sqft": 668.2,
+    "market_rent_aed": 52788,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Kristine Cruz",
+    "tenant_type": "individual",
+    "ejari_no": "0120260329786395",
+    "lease_start": "2026-03-01",
+    "lease_end": "2027-02-28",
+    "cheques": 2,
+    "deposit_aed": 2500,
+    "annual_rent_aed": 50000,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9472,
+    "rent_psf": 74.83
+   },
+   {
+    "unit": "306",
+    "floor": 3,
+    "type": "studio",
+    "area_sqft": 421.5,
+    "market_rent_aed": 36628,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Pearl Coast Auto Spare Parts Trading L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260665069516",
+    "lease_start": "2026-06-01",
+    "lease_end": "2027-05-31",
+    "cheques": 2,
+    "deposit_aed": 1550,
+    "annual_rent_aed": 34500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9419,
+    "rent_psf": 81.85
+   },
+   {
+    "unit": "307",
+    "floor": 3,
+    "type": "studio",
+    "area_sqft": 430.0,
+    "market_rent_aed": 37367,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Arun Bhat",
+    "tenant_type": "individual",
+    "ejari_no": "0120251266578875",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "cheques": 12,
+    "deposit_aed": 1775,
+    "annual_rent_aed": 35500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.95,
+    "rent_psf": 82.56
+   },
+   {
+    "unit": "308",
+    "floor": 3,
+    "type": "1br",
+    "area_sqft": 677.4,
+    "market_rent_aed": 53515,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Sapphire Line Interior Decoration LLC",
+    "tenant_type": "company",
+    "ejari_no": "0120260349147457",
+    "lease_start": "2026-03-29",
+    "lease_end": "2027-03-28",
+    "cheques": 2,
+    "deposit_aed": 2450,
+    "annual_rent_aed": 52500,
+    "tenancy_category": "sitting",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.981,
+    "rent_psf": 77.5
+   },
+   {
+    "unit": "G01",
+    "floor": 0,
+    "type": "retail",
+    "area_sqft": 590.3,
+    "market_rent_aed": 60624,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Spice Route Restaurant L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260624614951",
+    "lease_start": "2026-06-01",
+    "lease_end": "2029-05-31",
+    "cheques": 4,
+    "deposit_aed": 6000,
+    "annual_rent_aed": 59500,
+    "tenancy_category": "retail",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.9815,
+    "rent_psf": 100.8
+   },
+   {
+    "unit": "G02",
+    "floor": 0,
+    "type": "retail",
+    "area_sqft": 644.7,
+    "market_rent_aed": 66211,
+    "chiller": "tenant_dewa",
+    "status": "occupied",
+    "tenant": "Pure Cuts Gents Salon",
+    "tenant_type": "company",
+    "ejari_no": "0120240114916952",
+    "lease_start": "2024-01-01",
+    "lease_end": "2026-12-31",
+    "cheques": 4,
+    "deposit_aed": 5800,
+    "annual_rent_aed": 58500,
+    "tenancy_category": "retail",
+    "asking_rent_aed": null,
+    "rent_to_market": 0.8835,
+    "rent_psf": 90.74
+   }
+  ],
+  "operating_statement_true_12m": {
+   "period_start": "2025-11-01",
+   "months": 12,
+   "rental_income_aed": 985880,
+   "other_income_aed": 0,
+   "opex_items_aed": {
+    "fm_contract": 35291,
+    "lift_amc": 20144,
+    "fire_safety": 4849,
+    "repairs_general": 19617,
+    "pest_tank": 1682,
+    "security": 72000,
+    "cleaning": 54000,
+    "waste": 2049,
+    "dewa_common": 24837,
+    "insurance": 14345,
+    "master_community": 10431,
+    "sinking": 19415,
+    "admin": 5711,
+    "mgmt_fee": 49294,
+    "leasing_comm": 6234,
+    "marketing": 18510
+   },
+   "item_categories": {
+    "fm_contract": "maintenance_repairs",
+    "lift_amc": "maintenance_repairs",
+    "fire_safety": "maintenance_repairs",
+    "repairs_general": "maintenance_repairs",
+    "pest_tank": "maintenance_repairs",
+    "security": "security_cleaning",
+    "cleaning": "security_cleaning",
+    "waste": "security_cleaning",
+    "dewa_common": "utilities_common",
+    "insurance": "insurance",
+    "master_community": "service_charge",
+    "sinking": "sinking_fund",
+    "admin": "admin_other",
+    "mgmt_fee": "property_management",
+    "leasing_comm": "marketing_leasing",
+    "marketing": "marketing_leasing"
+   }
+  },
+  "metrics": {
+   "gross_yield_in_place_on_price": 0.0894,
+   "price_psf_nsa": 835,
+   "price_psf_bua": 685,
+   "over_rent": {
+    "share_of_income": 0.0,
+    "units": 0,
+    "excess_over_market_aed": 0
+   },
+   "rera_allowed_uplift_next_renewal": {
+    "allowed_uplift_aed": 7700,
+    "allowed_uplift_pct_of_in_place": 0.0077,
+    "units_by_gap_to_index": {
+     "at_or_above_index": 0,
+     "0-10%": 20,
+     "10-20%": 4,
+     "20-30%": 0,
+     "30-40%": 0,
+     ">40%": 0
+    }
+   },
+   "expiry": {
+    "by_month_share": {
+     "2026-11": 0.2043,
+     "2026-12": 0.0919,
+     "2027-01": 0.0636,
+     "2027-02": 0.1178,
+     "2027-03": 0.0522,
+     "2027-04": 0.0984,
+     "2027-05": 0.0343,
+     "2027-08": 0.0681,
+     "2027-09": 0.0815,
+     "2027-10": 0.1287,
+     "2029-05": 0.0591
+    },
+    "max_share_any_3_months": 0.3598,
+    "max_3m_window_start": "2026-11",
+    "max_share_any_12_months": 0.9409,
+    "max_12m_window_start": "2026-11",
+    "share_expiring_next_12_months": 0.9409
+   },
+   "expiry_by_3m_window_from_roll_date": {
+    "2026-10-31 to 2027-01-30": 0.3275,
+    "2027-01-31 to 2027-04-29": 0.3007,
+    "2027-04-30 to 2027-07-30": 0.0343,
+    "2027-07-31 to 2027-10-30": 0.2783
+   },
+   "opex_true_12m_aed": 358409,
+   "opex_true_by_category_aed": {
+    "maintenance_repairs": 81583,
+    "security_cleaning": 128049,
+    "utilities_common": 24837,
+    "insurance": 14345,
+    "service_charge": 10431,
+    "sinking_fund": 19415,
+    "admin_other": 5711,
+    "property_management": 49294,
+    "marketing_leasing": 24744
+   },
+   "opex_true_psf_nsa": 26.6,
+   "deposits_held_aed": 54850
+  },
+  "engine_inputs": {
+   "deal_id": "d12-tulip-ic",
+   "price_aed": 11250000,
+   "area": "International City",
+   "nsa_sqft": 13472.0,
+   "bua_sqft": 16430,
+   "units": [
+    {
+     "unit": "101",
+     "unit_type": "studio",
+     "area_sqft": 404.1,
+     "status": "occupied",
+     "annual_rent_aed": 32000,
+     "lease_end": "2027-02-14"
+    },
+    {
+     "unit": "102",
+     "unit_type": "studio",
+     "area_sqft": 409.7,
+     "status": "occupied",
+     "annual_rent_aed": 32500,
+     "lease_end": "2027-01-31"
+    },
+    {
+     "unit": "103",
+     "unit_type": "studio",
+     "area_sqft": 416.3,
+     "status": "occupied",
+     "annual_rent_aed": 34500,
+     "lease_end": "2027-08-14"
+    },
+    {
+     "unit": "104",
+     "unit_type": "1br",
+     "area_sqft": 651.8,
+     "status": "occupied",
+     "annual_rent_aed": 48500,
+     "lease_end": "2027-10-03"
+    },
+    {
+     "unit": "105",
+     "unit_type": "1br",
+     "area_sqft": 668.2,
+     "status": "occupied",
+     "annual_rent_aed": 49500,
+     "lease_end": "2027-04-03"
+    },
+    {
+     "unit": "106",
+     "unit_type": "studio",
+     "area_sqft": 421.5,
+     "status": "occupied",
+     "annual_rent_aed": 34000,
+     "lease_end": "2027-08-31"
+    },
+    {
+     "unit": "107",
+     "unit_type": "studio",
+     "area_sqft": 430.0,
+     "status": "occupied",
+     "annual_rent_aed": 36500,
+     "lease_end": "2027-02-18"
+    },
+    {
+     "unit": "108",
+     "unit_type": "1br",
+     "area_sqft": 677.4,
+     "status": "occupied",
+     "annual_rent_aed": 52000,
+     "lease_end": "2026-11-30"
+    },
+    {
+     "unit": "201",
+     "unit_type": "studio",
+     "area_sqft": 404.1,
+     "status": "occupied",
+     "annual_rent_aed": 31500,
+     "lease_end": "2027-01-26"
+    },
+    {
+     "unit": "202",
+     "unit_type": "studio",
+     "area_sqft": 409.7,
+     "status": "vacant",
+     "annual_rent_aed": null,
+     "lease_end": null
+    },
+    {
+     "unit": "203",
+     "unit_type": "studio",
+     "area_sqft": 416.3,
+     "status": "occupied",
+     "annual_rent_aed": 32000,
+     "lease_end": "2027-09-30"
+    },
+    {
+     "unit": "204",
+     "unit_type": "1br",
+     "area_sqft": 651.8,
+     "status": "occupied",
+     "annual_rent_aed": 49500,
+     "lease_end": "2027-04-13"
+    },
+    {
+     "unit": "205",
+     "unit_type": "1br",
+     "area_sqft": 668.2,
+     "status": "occupied",
+     "annual_rent_aed": 50500,
+     "lease_end": "2026-11-30"
+    },
+    {
+     "unit": "206",
+     "unit_type": "studio",
+     "area_sqft": 421.5,
+     "status": "occupied",
+     "annual_rent_aed": 32000,
+     "lease_end": "2027-10-14"
+    },
+    {
+     "unit": "207",
+     "unit_type": "studio",
+     "area_sqft": 430.0,
+     "status": "occupied",
+     "annual_rent_aed": 35000,
+     "lease_end": "2026-11-30"
+    },
+    {
+     "unit": "208",
+     "unit_type": "1br",
+     "area_sqft": 677.4,
+     "status": "occupied",
+     "annual_rent_aed": 50000,
+     "lease_end": "2027-09-07"
+    },
+    {
+     "unit": "301",
+     "unit_type": "studio",
+     "area_sqft": 404.1,
+     "status": "vacant",
+     "annual_rent_aed": null,
+     "lease_end": null
+    },
+    {
+     "unit": "302",
+     "unit_type": "studio",
+     "area_sqft": 409.7,
+     "status": "under_renewal",
+     "annual_rent_aed": 32500,
+     "lease_end": "2026-11-17"
+    },
+    {
+     "unit": "303",
+     "unit_type": "studio",
+     "area_sqft": 416.3,
+     "status": "occupied",
+     "annual_rent_aed": 34000,
+     "lease_end": "2026-12-29"
+    },
+    {
+     "unit": "304",
+     "unit_type": "1br",
+     "area_sqft": 651.8,
+     "status": "occupied",
+     "annual_rent_aed": 49000,
+     "lease_end": "2027-10-14"
+    },
+    {
+     "unit": "305",
+     "unit_type": "1br",
+     "area_sqft": 668.2,
+     "status": "occupied",
+     "annual_rent_aed": 50000,
+     "lease_end": "2027-02-28"
+    },
+    {
+     "unit": "306",
+     "unit_type": "studio",
+     "area_sqft": 421.5,
+     "status": "occupied",
+     "annual_rent_aed": 34500,
+     "lease_end": "2027-05-31"
+    },
+    {
+     "unit": "307",
+     "unit_type": "studio",
+     "area_sqft": 430.0,
+     "status": "occupied",
+     "annual_rent_aed": 35500,
+     "lease_end": "2026-11-30"
+    },
+    {
+     "unit": "308",
+     "unit_type": "1br",
+     "area_sqft": 677.4,
+     "status": "occupied",
+     "annual_rent_aed": 52500,
+     "lease_end": "2027-03-28"
+    },
+    {
+     "unit": "G01",
+     "unit_type": "retail",
+     "area_sqft": 590.3,
+     "status": "occupied",
+     "annual_rent_aed": 59500,
+     "lease_end": "2029-05-31"
+    },
+    {
+     "unit": "G02",
+     "unit_type": "retail",
+     "area_sqft": 644.7,
+     "status": "occupied",
+     "annual_rent_aed": 58500,
+     "lease_end": "2026-12-31"
+    }
+   ],
+   "opex_aed": {
+    "maintenance_repairs": 81583,
+    "security_cleaning": 128049,
+    "utilities_common": 24837,
+    "insurance": 14345,
+    "service_charge": 10431,
+    "sinking_fund": 19415,
+    "admin_other": 5711,
+    "property_management": 49294,
+    "marketing_leasing": 24744
+   },
+   "opex_includes_vat": true,
+   "other_income_aed": 0,
+   "chiller_landlord_pays": false,
+   "om_stated": {
+    "annual_rent_aed": 1078000,
+    "net_income_aed": null,
+    "yield": 0.0958,
+    "yield_basis": {
+     "measure": "gross",
+     "on": "asking_price"
+    }
+   },
+   "rent_roll_date": "2026-10-31"
+  },
+  "deal_facts": {
+   "asset_type": "residential_building",
+   "area": "International City",
+   "title_type": "freehold_single_title",
+   "unit_count": 26,
+   "price_aed": 11250000,
+   "completion_year": 2009,
+   "master_lease_related_party": false
+  }
+ },
+ "om_fields": {
+  "building_name": {
+   "value": "Tulip Court",
+   "quote": "Tulip Court",
+   "page": 1,
+   "also_on_pages": [
+    2
+   ]
+  },
+  "asset_type": {
+   "value": "mixed_use_ground_floor_retail",
+   "quote": "Residential building with ground-floor retail",
+   "page": 2
+  },
+  "area": {
+   "value": "International City",
+   "quote": "International City Phase 1, China Cluster, Dubai",
+   "page": 1,
+   "also_on_pages": [
+    2
+   ]
+  },
+  "plot_number": {
+   "value": "616-0461",
+   "quote": "616-0461",
+   "page": 2
+  },
+  "title_type": {
+   "value": {
+    "tenure": "freehold",
+    "title": "single_title"
+   },
+   "quote": "Freehold - Single Title Deed",
+   "page": 2
+  },
+  "completion_year": {
+   "value": 2009,
+   "quote": "2009",
+   "page": 2
+  },
+  "floors": {
+   "value": "G+3",
+   "quote": "G+3",
+   "page": 2
+  },
+  "unit_count": {
+   "value": 26,
+   "quote": "26",
+   "page": 1,
+   "also_on_pages": [
+    2,
+    3
+   ]
+  },
+  "unit_mix": {
+   "value": {
+    "studio": 15,
+    "1br": 9,
+    "retail": 2
+   },
+   "quote": "Studio 15",
+   "page": 2
+  },
+  "bua_sqft": {
+   "value": 16430,
+   "quote": "16,430 sq.ft",
+   "page": 2
+  },
+  "nsa_sqft": {
+   "value": 13472,
+   "quote": "13,472 sq.ft",
+   "original": {
+    "value": 13472,
+    "unit": "sq ft"
+   },
+   "page": 2
+  },
+  "parking_spaces": {
+   "value": 14,
+   "quote": "14 (open parking)",
+   "page": 2
+  },
+  "occupancy_stated": {
+   "value": 0.92,
+   "quote": "92% occupied",
+   "as_of": "October 2026",
+   "page": 3
+  },
+  "annual_rent_stated": {
+   "value": 1078000,
+   "quote": "AED 1,078,000 per year",
+   "basis": "potential",
+   "page": 3,
+   "basis_as_labelled": "unstated"
+  },
+  "yield_stated": {
+   "value": 0.0958,
+   "quote": "9.6%",
+   "basis": {
+    "measure": "gross",
+    "on": "asking_price"
+   },
+   "page": 1,
+   "also_on_pages": [
+    3
+   ],
+   "label": "ROI"
+  },
+  "asking_price_aed": {
+   "value": 11250000,
+   "quote": "AED 11,250,000 (negotiable)",
+   "page": 3
+  },
+  "chiller_arrangement": {
+   "value": "tenant_pays",
+   "quote": "Split AC - DEWA by tenant",
+   "page": 2
+  },
+  "opex_stated_aed": {
+   "value": null,
+   "reason": "not stated in the OM"
+  },
+  "lease_structure": {
+   "value": {
+    "value": "direct_leases",
+    "master_tenant": null
+   },
+   "quote": "Direct tenants, 1 year contracts with Ejari",
+   "page": 3
+  },
+  "upside_claims": {
+   "value": [],
+   "quote": null,
+   "page": null
+  },
+  "broker": {
+   "value": "Saffron Key Realty",
+   "quote": "Saffron Key Realty",
+   "page": 1,
+   "also_on_pages": [
+    2,
+    3,
+    4
+   ]
+  }
+ },
+ "om_pages": 4,
+ "rent_roll": {
+  "document": "tulip_court_rentroll.csv",
+  "format": "csv",
+  "header_line": 4,
+  "first_data_line": 5,
+  "last_data_line": 30,
+  "area_unit": "sq ft",
+  "date_format": "%d-%m-%Y",
+  "summary_rows": [
+   {
+    "line": 32,
+    "label": "Total rent incl. vacant at asking",
+    "kind": "total",
+    "rent_aed": 1078500,
+    "rent_basis": "incl. vacant at asking",
+    "units": 26
+   }
+  ],
+  "units": [
+   {
+    "unit": "G01",
+    "unit_type": "retail",
+    "area_sqft": 590.3,
+    "tenant": "Spice Route Restaurant L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260624614951",
+    "lease_start": "2026-06-01",
+    "lease_end": "2029-05-31",
+    "annual_rent_aed": 59500,
+    "asking_rent_aed": null,
+    "cheques": 4,
+    "deposit_aed": 6000,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 5"
+   },
+   {
+    "unit": "G02",
+    "unit_type": "retail",
+    "area_sqft": 644.7,
+    "tenant": "Pure Cuts Gents Salon",
+    "tenant_type": "company",
+    "ejari_no": "0120240114916952",
+    "lease_start": "2024-01-01",
+    "lease_end": "2026-12-31",
+    "annual_rent_aed": 58500,
+    "asking_rent_aed": null,
+    "cheques": 4,
+    "deposit_aed": 5800,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 6"
+   },
+   {
+    "unit": "101",
+    "unit_type": "studio",
+    "area_sqft": 404.1,
+    "tenant": "Bright Arc Building Contracting LLC",
+    "tenant_type": "company",
+    "ejari_no": "0120260268568443",
+    "lease_start": "2026-02-15",
+    "lease_end": "2027-02-14",
+    "annual_rent_aed": 32000,
+    "asking_rent_aed": null,
+    "cheques": 1,
+    "deposit_aed": 1400,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 7"
+   },
+   {
+    "unit": "102",
+    "unit_type": "studio",
+    "area_sqft": 409.7,
+    "tenant": "Nuwan Wickramasinghe",
+    "tenant_type": "individual",
+    "ejari_no": "0120260229025676",
+    "lease_start": "2026-02-01",
+    "lease_end": "2027-01-31",
+    "annual_rent_aed": 32500,
+    "asking_rent_aed": null,
+    "cheques": 6,
+    "deposit_aed": 1500,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 8"
+   },
+   {
+    "unit": "103",
+    "unit_type": "studio",
+    "area_sqft": 416.3,
+    "tenant": "Ironbridge Auto Spare Parts Trading Co. L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260839829070",
+    "lease_start": "2026-08-15",
+    "lease_end": "2027-08-14",
+    "annual_rent_aed": 34500,
+    "asking_rent_aed": null,
+    "cheques": 2,
+    "deposit_aed": 1725,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 9"
+   },
+   {
+    "unit": "104",
+    "unit_type": "1br",
+    "area_sqft": 651.8,
+    "tenant": "Fatou Owusu",
+    "tenant_type": "individual",
+    "ejari_no": "0120261025448505",
+    "lease_start": "2026-10-04",
+    "lease_end": "2027-10-03",
+    "annual_rent_aed": 48500,
+    "asking_rent_aed": null,
+    "cheques": 4,
+    "deposit_aed": 2425,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 10"
+   },
+   {
+    "unit": "105",
+    "unit_type": "1br",
+    "area_sqft": 668.2,
+    "tenant": "Blessing Mensah",
+    "tenant_type": "individual",
+    "ejari_no": "0120260427104216",
+    "lease_start": "2026-04-04",
+    "lease_end": "2027-04-03",
+    "annual_rent_aed": 49500,
+    "asking_rent_aed": null,
+    "cheques": 4,
+    "deposit_aed": 2475,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 11"
+   },
+   {
+    "unit": "106",
+    "unit_type": "studio",
+    "area_sqft": 421.5,
+    "tenant": "Chen Hao",
+    "tenant_type": "individual",
+    "ejari_no": "0120260933468193",
+    "lease_start": "2026-09-01",
+    "lease_end": "2027-08-31",
+    "annual_rent_aed": 34000,
+    "asking_rent_aed": null,
+    "cheques": 6,
+    "deposit_aed": 1700,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 12"
+   },
+   {
+    "unit": "107",
+    "unit_type": "studio",
+    "area_sqft": 430.0,
+    "tenant": "Xu Lei",
+    "tenant_type": "individual",
+    "ejari_no": "0120260259171538",
+    "lease_start": "2026-02-19",
+    "lease_end": "2027-02-18",
+    "annual_rent_aed": 36500,
+    "asking_rent_aed": null,
+    "cheques": 2,
+    "deposit_aed": 1825,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 13"
+   },
+   {
+    "unit": "108",
+    "unit_type": "1br",
+    "area_sqft": 677.4,
+    "tenant": "Meera Kulkarni",
+    "tenant_type": "individual",
+    "ejari_no": "0120251299087451",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "annual_rent_aed": 52000,
+    "asking_rent_aed": null,
+    "cheques": 6,
+    "deposit_aed": 2400,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 14"
+   },
+   {
+    "unit": "201",
+    "unit_type": "studio",
+    "area_sqft": 404.1,
+    "tenant": "Liu Lei",
+    "tenant_type": "individual",
+    "ejari_no": "0120260126681211",
+    "lease_start": "2026-01-27",
+    "lease_end": "2027-01-26",
+    "annual_rent_aed": 31500,
+    "asking_rent_aed": null,
+    "cheques": 6,
+    "deposit_aed": 1575,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 15"
+   },
+   {
+    "unit": "202",
+    "unit_type": "studio",
+    "area_sqft": 409.7,
+    "tenant": null,
+    "tenant_type": null,
+    "ejari_no": null,
+    "lease_start": null,
+    "lease_end": null,
+    "annual_rent_aed": null,
+    "asking_rent_aed": 37000,
+    "cheques": null,
+    "deposit_aed": null,
+    "status": "vacant",
+    "chiller": "tenant_dewa",
+    "source": "line 16",
+    "rent_column_shows": "asking rent"
+   },
+   {
+    "unit": "203",
+    "unit_type": "studio",
+    "area_sqft": 416.3,
+    "tenant": "Cobalt Ridge Security Services L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120261014237049",
+    "lease_start": "2026-10-01",
+    "lease_end": "2027-09-30",
+    "annual_rent_aed": 32000,
+    "asking_rent_aed": null,
+    "cheques": 2,
+    "deposit_aed": 1600,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 17"
+   },
+   {
+    "unit": "204",
+    "unit_type": "1br",
+    "area_sqft": 651.8,
+    "tenant": "Summit Peak Software Development Co. L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260456101780",
+    "lease_start": "2026-04-14",
+    "lease_end": "2027-04-13",
+    "annual_rent_aed": 49500,
+    "asking_rent_aed": null,
+    "cheques": 1,
+    "deposit_aed": 2475,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 18"
+   },
+   {
+    "unit": "205",
+    "unit_type": "1br",
+    "area_sqft": 668.2,
+    "tenant": "Kashif Mirza",
+    "tenant_type": "individual",
+    "ejari_no": "0120251298061757",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "annual_rent_aed": 50500,
+    "asking_rent_aed": null,
+    "cheques": 12,
+    "deposit_aed": 2350,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 19"
+   },
+   {
+    "unit": "206",
+    "unit_type": "studio",
+    "area_sqft": 421.5,
+    "tenant": "Anjali Mathew",
+    "tenant_type": "individual",
+    "ejari_no": "0120261095918016",
+    "lease_start": "2026-10-15",
+    "lease_end": "2027-10-14",
+    "annual_rent_aed": 32000,
+    "asking_rent_aed": null,
+    "cheques": 12,
+    "deposit_aed": 1500,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 20"
+   },
+   {
+    "unit": "207",
+    "unit_type": "studio",
+    "area_sqft": 430.0,
+    "tenant": "Jerome Navarro",
+    "tenant_type": "individual",
+    "ejari_no": "0120251224189803",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "annual_rent_aed": 35000,
+    "asking_rent_aed": null,
+    "cheques": 4,
+    "deposit_aed": 1750,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 21"
+   },
+   {
+    "unit": "208",
+    "unit_type": "1br",
+    "area_sqft": 677.4,
+    "tenant": "Emeka Ndlovu",
+    "tenant_type": "individual",
+    "ejari_no": "0120260909025319",
+    "lease_start": "2026-09-08",
+    "lease_end": "2027-09-07",
+    "annual_rent_aed": 50000,
+    "asking_rent_aed": null,
+    "cheques": 12,
+    "deposit_aed": 2500,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 22"
+   },
+   {
+    "unit": "301",
+    "unit_type": "studio",
+    "area_sqft": 404.1,
+    "tenant": null,
+    "tenant_type": null,
+    "ejari_no": null,
+    "lease_start": null,
+    "lease_end": null,
+    "annual_rent_aed": null,
+    "asking_rent_aed": 35500,
+    "cheques": null,
+    "deposit_aed": null,
+    "status": "vacant",
+    "chiller": "tenant_dewa",
+    "source": "line 23",
+    "rent_column_shows": "asking rent"
+   },
+   {
+    "unit": "302",
+    "unit_type": "studio",
+    "area_sqft": 409.7,
+    "tenant": "Unity Link Hospitality Management LLC",
+    "tenant_type": "company",
+    "ejari_no": "0120251196837004",
+    "lease_start": "2025-11-18",
+    "lease_end": "2026-11-17",
+    "annual_rent_aed": 32500,
+    "asking_rent_aed": null,
+    "cheques": 1,
+    "deposit_aed": 1625,
+    "status": "under_renewal",
+    "chiller": "tenant_dewa",
+    "source": "line 24"
+   },
+   {
+    "unit": "303",
+    "unit_type": "studio",
+    "area_sqft": 416.3,
+    "tenant": "Zainab Raza",
+    "tenant_type": "individual",
+    "ejari_no": "0120251206131886",
+    "lease_start": "2025-12-30",
+    "lease_end": "2026-12-29",
+    "annual_rent_aed": 34000,
+    "asking_rent_aed": null,
+    "cheques": 12,
+    "deposit_aed": 1700,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 25"
+   },
+   {
+    "unit": "304",
+    "unit_type": "1br",
+    "area_sqft": 651.8,
+    "tenant": "Bilal Malik",
+    "tenant_type": "individual",
+    "ejari_no": "0120261049134312",
+    "lease_start": "2026-10-15",
+    "lease_end": "2027-10-14",
+    "annual_rent_aed": 49000,
+    "asking_rent_aed": null,
+    "cheques": 12,
+    "deposit_aed": 2250,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 26"
+   },
+   {
+    "unit": "305",
+    "unit_type": "1br",
+    "area_sqft": 668.2,
+    "tenant": "Kristine Cruz",
+    "tenant_type": "individual",
+    "ejari_no": "0120260329786395",
+    "lease_start": "2026-03-01",
+    "lease_end": "2027-02-28",
+    "annual_rent_aed": 50000,
+    "asking_rent_aed": null,
+    "cheques": 2,
+    "deposit_aed": 2500,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 27"
+   },
+   {
+    "unit": "306",
+    "unit_type": "studio",
+    "area_sqft": 421.5,
+    "tenant": "Pearl Coast Auto Spare Parts Trading L.L.C",
+    "tenant_type": "company",
+    "ejari_no": "0120260665069516",
+    "lease_start": "2026-06-01",
+    "lease_end": "2027-05-31",
+    "annual_rent_aed": 34500,
+    "asking_rent_aed": null,
+    "cheques": 2,
+    "deposit_aed": 1550,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 28"
+   },
+   {
+    "unit": "307",
+    "unit_type": "studio",
+    "area_sqft": 430.0,
+    "tenant": "Arun Bhat",
+    "tenant_type": "individual",
+    "ejari_no": "0120251266578875",
+    "lease_start": "2025-12-01",
+    "lease_end": "2026-11-30",
+    "annual_rent_aed": 35500,
+    "asking_rent_aed": null,
+    "cheques": 12,
+    "deposit_aed": 1775,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 29"
+   },
+   {
+    "unit": "308",
+    "unit_type": "1br",
+    "area_sqft": 677.4,
+    "tenant": "Sapphire Line Interior Decoration LLC",
+    "tenant_type": "company",
+    "ejari_no": "0120260349147457",
+    "lease_start": "2026-03-29",
+    "lease_end": "2027-03-28",
+    "annual_rent_aed": 52500,
+    "asking_rent_aed": null,
+    "cheques": 2,
+    "deposit_aed": 2450,
+    "status": "occupied",
+    "chiller": "tenant_dewa",
+    "source": "line 30"
+   }
+  ],
+  "totals_computed": {
+   "unit_count": 26,
+   "occupied_units": 24,
+   "vacant_units": 2,
+   "occupancy_units": 0.9231,
+   "occupancy_area": 0.9396,
+   "in_place_rent_aed": 1006000,
+   "vacant_asking_rent_aed": 72500,
+   "potential_rent_aed": 1078500,
+   "total_area_sqft": 13472.0,
+   "by_type": {
+    "retail": {
+     "units": 2,
+     "occupied": 2,
+     "area_sqft": 1235.0,
+     "rent_aed": 118000,
+     "avg_rent_psf": 95.55
+    },
+    "studio": {
+     "units": 15,
+     "occupied": 13,
+     "area_sqft": 6244.8,
+     "rent_aed": 436500,
+     "avg_rent_psf": 80.37
+    },
+    "1br": {
+     "units": 9,
+     "occupied": 9,
+     "area_sqft": 5992.2,
+     "rent_aed": 451500,
+     "avg_rent_psf": 75.35
+    }
+   },
+   "status_counts": {
+    "occupied": 23,
+    "under_renewal": 1,
+    "vacant": 2
+   },
+   "expired_but_occupied_units": [],
+   "missing_ejari_units": [],
+   "deposits_held_aed": 54850
+  },
+  "totals_stated": [
+   {
+    "line": 32,
+    "label": "Total rent incl. vacant at asking",
+    "kind": "total",
+    "rent_aed": 1078500,
+    "rent_basis": "incl. vacant at asking",
+    "units": 26
+   }
+  ],
+  "expiry_by_3m_window_from_roll_date": {
+   "2026-10-31 to 2027-01-30": 0.3275,
+   "2027-01-31 to 2027-04-29": 0.3007,
+   "2027-04-30 to 2027-07-30": 0.0343,
+   "2027-07-31 to 2027-10-30": 0.2783
+  }
+ },
+ "opex": {
+  "document": "Tulip Court - Operating Statement Nov25-Oct26.xlsx",
+  "format": "xlsx",
+  "title": "Operating Statement Nov 2025 - Oct 2026",
+  "period": {
+   "start": "2025-11-01",
+   "end": "2026-10-31",
+   "months_covered": 12,
+   "annualised": false,
+   "presented_as": "12 months"
+  },
+  "lines": [
+   {
+    "label": "Rent received - flats",
+    "category": "rental_income",
+    "amount_aed": 870239,
+    "source": "Statement!B7"
+   },
+   {
+    "label": "Rent received - shops",
+    "category": "rental_income",
+    "amount_aed": 115641,
+    "source": "Statement!B8"
+   },
+   {
+    "label": "Maintenance company",
+    "category": "maintenance_repairs",
+    "amount_aed": 35291,
+    "source": "Statement!B12"
+   },
+   {
+    "label": "Lift service",
+    "category": "maintenance_repairs",
+    "amount_aed": 20144,
+    "source": "Statement!B13"
+   },
+   {
+    "label": "Civil defence",
+    "category": "maintenance_repairs",
+    "amount_aed": 4849,
+    "source": "Statement!B14"
+   },
+   {
+    "label": "Repairs",
+    "category": "maintenance_repairs",
+    "amount_aed": 19617,
+    "source": "Statement!B15"
+   },
+   {
+    "label": "Pest control",
+    "category": "maintenance_repairs",
+    "amount_aed": 1682,
+    "source": "Statement!B16"
+   },
+   {
+    "label": "Watchman salary",
+    "category": "security_cleaning",
+    "amount_aed": 72000,
+    "source": "Statement!B17"
+   },
+   {
+    "label": "Cleaner salary",
+    "category": "security_cleaning",
+    "amount_aed": 54000,
+    "source": "Statement!B18"
+   },
+   {
+    "label": "Garbage",
+    "category": "security_cleaning",
+    "amount_aed": 2049,
+    "source": "Statement!B19"
+   },
+   {
+    "label": "DEWA (common)",
+    "category": "utilities_common",
+    "amount_aed": 24837,
+    "source": "Statement!B20"
+   },
+   {
+    "label": "Insurance",
+    "category": "insurance",
+    "amount_aed": 14345,
+    "source": "Statement!B21"
+   },
+   {
+    "label": "Community charges",
+    "category": "service_charge",
+    "amount_aed": 10431,
+    "source": "Statement!B22"
+   },
+   {
+    "label": "Management fee",
+    "category": "property_management",
+    "amount_aed": 49294,
+    "source": "Statement!B23"
+   },
+   {
+    "label": "Agent commission",
+    "category": "marketing_leasing",
+    "amount_aed": 6234,
+    "source": "Statement!B24"
+   },
+   {
+    "label": "Advertisement",
+    "category": "marketing_leasing",
+    "amount_aed": 18510,
+    "source": "Statement!B25"
+   },
+   {
+    "label": "Office & misc",
+    "category": "admin_other",
+    "amount_aed": 5711,
+    "source": "Statement!B26"
+   },
+   {
+    "label": "Sinking fund",
+    "category": "sinking_fund",
+    "amount_aed": 19415,
+    "source": "Statement!B27"
+   }
+  ],
+  "rental_income_aed": 985880,
+  "other_income_aed": 0,
+  "opex_by_category_aed": {
+   "maintenance_repairs": 81583,
+   "security_cleaning": 128049,
+   "utilities_common": 24837,
+   "insurance": 14345,
+   "service_charge": 10431,
+   "property_management": 49294,
+   "marketing_leasing": 24744,
+   "admin_other": 5711,
+   "sinking_fund": 19415
+  },
+  "total_opex_aed": 358409,
+  "categories_absent": [
+   "district_cooling"
+  ],
+  "amounts_basis": "as stated in the document's annual/total column",
+  "opex_includes_vat": true,
+  "noi_stated_aed": 627471,
+  "layout": {
+   "sheet": "Statement",
+   "header_row": 5,
+   "amount_column": "B",
+   "columns": [
+    "Amount (AED)"
+   ],
+   "notes": [
+    "Prepared by owner's accountant from bank statements. Not audited.",
+    "Expenses are shown inclusive of VAT, which is not recoverable on residential rent."
+   ]
+  }
+ },
+ "planted_discrepancies": [
+  {
+   "num": 2,
+   "id": "potential_rent_as_income",
+   "how_planted": "OM 'annual rental income' includes vacant units at the landlord's asking rent (rent-roll potential), presented as income.",
+   "expected": {
+    "om": 1078000,
+    "rent_roll_in_place": 1006000,
+    "rent_roll_potential": 1078500,
+    "master_lease_rent": null
+   }
+  },
+  {
+   "num": 4,
+   "id": "yield_excludes_acquisition_costs",
+   "how_planted": "OM yield (ROI) is rent divided by asking price, before DLD 4%, agency 2% + VAT and registration fees.",
+   "expected": {
+    "om_yield": 0.0958,
+    "om_label": "ROI",
+    "on": "asking_price"
+   }
+  }
+ ],
+ "rule_checks_not_planted": {
+  "occupancy_mismatch": {
+   "om": 0.92,
+   "rent_roll": 0.9231,
+   "gap_points": 0.31
+  },
+  "gross_yield_as_net": {
+   "om_yield": 0.0958,
+   "basis": "gross"
+  },
+  "over_rented_vs_market": {
+   "over_rent_share_of_income": 0.0,
+   "units_over_market": 0,
+   "threshold": 0.2
+  },
+  "upside_exceeds_rera_cap": {
+   "claim": null
+  },
+  "missing_opex_items": {
+   "missing_categories": [],
+   "chiller_landlord_pays": false
+  },
+  "area_basis_confusion": {
+   "om_price_psf": null,
+   "basis": null,
+   "price_psf_nsa": 835,
+   "price_psf_bua": 685
+  },
+  "rent_roll_does_not_foot": {
+   "stated_total_aed": 1078500,
+   "sum_of_rows_aed": 1078500,
+   "difference_aed": 0
+  },
+  "unit_mix_mismatch": {
+   "om_unit_count": 26,
+   "om_mix": {
+    "studio": 15,
+    "1br": 9,
+    "retail": 2
+   },
+   "rent_roll_unit_count": 26,
+   "rent_roll_mix": {
+    "retail": 2,
+    "studio": 15,
+    "1br": 9
+   }
+  },
+  "expired_lease_counted_occupied": {
+   "expired_but_occupied": [],
+   "missing_ejari": []
+  },
+  "collections_gap": {
+   "statement_rental_income_aed": 985880,
+   "rent_roll_in_place_aed": 1006000,
+   "ratio": 0.98
+  },
+  "annualised_partial_period": {
+   "months_covered": 12,
+   "presented_as": "12 months"
+  },
+  "master_lease_related_party": {
+   "master_tenant": null,
+   "related_party": null
+  },
+  "expiry_concentration": {
+   "max_share_any_3m_window_from_roll_date": 0.3275,
+   "by_quarter": {
+    "2026-10-31 to 2027-01-30": 0.3275,
+    "2027-01-31 to 2027-04-29": 0.3007,
+    "2027-04-30 to 2027-07-30": 0.0343,
+    "2027-07-31 to 2027-10-30": 0.2783
+   },
+   "threshold": 0.4
+  },
+  "title_check": {
+   "true_tenure": "freehold",
+   "nationality_restriction": null,
+   "om_title_text": "Freehold - Single Title Deed"
+  }
+ },
+ "expected_hard_filter_result": {
+  "result": "fail",
+  "failed_filters": [
+   "units: 26 outside 30-250",
+   "price: AED 11,250,000 outside AED 30,000,000-200,000,000"
+  ],
+  "reason": "units: 26 outside 30-250; price: AED 11,250,000 outside AED 30,000,000-200,000,000",
+  "note": "min_dscr_year1 is engine-computed and not included here; run tools/check_engine.py for the engine's result on truth."
+ },
+ "expected_verdict": null,
+ "expected_verdict_note": "To be computed by running the engine and mandate_fit on true_building.engine_inputs and deal_facts.",
+ "notes": [
+  "Small International City Phase 1 G+3 with two shops; income stated incl. vacant units at asking. Hard fail on size and price.",
+  "engine_inputs are built from TRUE facts (true 12-month costs, true unit areas and statuses), not from the documents.",
+  "Opex amounts are as paid, inclusive of non-recoverable VAT (opex_includes_vat: true). A stated management fee is included in opex_aed.property_management for completeness; the engine applies its own fee on EGI.",
+  "Occupancy counts occupied, notice-served, under-renewal and legal-case units as let.",
+  "Market reference rent per unit = area 1BR psf x unit-type factor x unit area (areas.yaml), as in the engine."
+ ]
+}
