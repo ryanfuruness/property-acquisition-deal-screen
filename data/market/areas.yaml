@@ -1,0 +1,40 @@
+# Area market reference, late 2026.
+# This stands in for the RERA Smart Rental Index and a firm's comps database, which are not available
+# as bulk downloads (see docs/research/dubai_conventions.md, section 7). Rents are derived as
+# unit-level price per sq ft x gross yield from the cited sources, then split by unit type with a
+# house-view premium. Treat every value as illustrative reference data, not a valuation.
+
+as_of: "2026-11"
+derivation: "market_rent_aed_psf = unit_price_aed_psf x unit_gross_yield; unit-type factors are house view"
+unit_type_factors: {studio: 1.10, 1br: 1.00, 2br: 0.95, 3br: 0.90, retail: 1.30}
+areas:
+  JVC:
+    unit_price_aed_psf: 1497
+    unit_gross_yield: 0.070
+    market_rent_aed_psf_1br: 105
+    rent_change_yoy: -0.104
+    sources: ["dubizzle H1 2026 (price, yield)", "Savills Q3 2026 (rent change)"]
+  Dubai Silicon Oasis:
+    unit_price_aed_psf: 1339
+    unit_gross_yield: 0.0666
+    market_rent_aed_psf_1br: 89
+    rent_change_yoy: null
+    sources: ["dubizzle H1 2026 (price, yield)"]
+  International City:
+    unit_price_aed_psf: 1116
+    unit_gross_yield: 0.071
+    market_rent_aed_psf_1br: 79
+    rent_change_yoy: -0.004
+    sources: ["dubizzle H1 2026 (price, yield)", "Savills Q3 2026 (rent change)"]
+  Business Bay:
+    unit_price_aed_psf: 2408
+    unit_gross_yield: 0.0554
+    market_rent_aed_psf_1br: 133
+    rent_change_yoy: -0.122
+    sources: ["dubizzle H1 2026 (price, yield)", "Savills Q3 2026 (rent change)"]
+  Al Barsha:
+    unit_price_aed_psf: null
+    unit_gross_yield: null
+    market_rent_aed_psf_1br: 98
+    rent_change_yoy: null
+    sources: ["UNVERIFIED: no public unit-level figure found; house estimate"]

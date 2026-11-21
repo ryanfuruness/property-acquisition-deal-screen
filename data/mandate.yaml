@@ -1,0 +1,94 @@
+# Firm mandate and house underwriting view.
+# This is the firm's own knowledge: what it buys, how it underwrites, and its market view.
+# The screen applies it to every deal. Values marked `basis: house_view` are the firm's
+# judgement, not market facts; `basis: source` values cite public sources in docs/research.
+
+firm: "Gulf Residential Income Fund I (illustrative)"
+strategy: "Core-plus: stabilised, fully let residential buildings in Dubai freehold areas"
+as_of: "2026-11-21"
+
+buy_box:
+  # Hard filters fail the deal outright. Soft filters count against it but leave it for a person to decide.
+  hard:
+    asset_type: ["residential_building"]
+    title: ["freehold_single_title"]          # strata buildings and non-freehold plots are out of mandate
+    areas: ["JVC", "Dubai Silicon Oasis", "International City", "Al Barsha", "Business Bay"]
+    min_units: 30
+    max_units: 250
+    min_price_aed: 30000000
+    max_price_aed: 200000000
+    min_completion_year: 2008
+    min_dscr_year1: 1.30                       # lender covenant at mandate leverage
+    no_master_lease_to_related_party: true
+  soft:
+    min_going_in_net_yield_on_cost: 0.065      # Year-1 NOI / (price + acquisition costs)
+    target_levered_irr: 0.12
+    target_equity_multiple: 1.50
+    min_occupancy: 0.90
+    max_lease_expiry_share_in_any_12_months: 0.60   # most Dubai leases are annual, so this is a loose test
+    max_over_rent_share_of_income: 0.20        # income from units let above market reference rent
+
+verdict_rules:
+  pass_if_any_hard_fails: true
+  pursue_if_soft_fails_at_most: 0
+  needs_work_otherwise: true
+
+underwriting:
+  hold_years: 5
+  analysis_start: "2027-01-01"
+  acquisition_costs:
+    dld_transfer_fee_pct: 0.04                 # basis: source (DLD), buyer pays by convention
+    dld_admin_aed: 580                         # basis: source (DLD fee schedule, approx.)
+    trustee_fee_aed: 4200                      # basis: source (two sources differ; immaterial)
+    broker_fee_pct: 0.02                       # basis: source (market norm)
+    broker_fee_vat_pct: 0.05
+    mortgage_registration_pct: 0.0025          # of loan amount, basis: source (DLD)
+    mortgage_registration_admin_aed: 290
+  debt:
+    ltv: 0.55                                  # basis: house_view (institutional terms unverified)
+    base_rate_3m_eibor: 0.0430                 # basis: source (29 Oct 2026 fixing, secondary source)
+    margin: 0.0250                             # basis: house_view
+    amortisation_years: 15
+    arrangement_fee_pct: 0.0075                # basis: house_view
+  operations:
+    structural_vacancy: 0.05                   # basis: house_view (falling-rent market, heavy supply)
+    collection_loss: 0.01                      # basis: house_view
+    renewal_probability: 0.70                  # basis: house_view
+    downtime_months_on_turnover: 1.5           # basis: house_view
+    leasing_fee_months_on_turnover: 0.5        # basis: source (one month's rent is common; split)
+    property_management_pct_of_egi: 0.05       # basis: source 5-8% retail, institutional lower
+    input_vat_on_opex_pct: 0.05                # residential rent is VAT exempt, so input VAT is a cost
+    opex_defaults_aed_per_sqft_nsa:            # used only when the operating statement is missing a line; basis: house_view
+      maintenance_repairs: 4.0
+      insurance: 1.2
+      security_cleaning: 3.0
+      utilities_common: 2.0
+      admin_other: 0.8
+      sinking_fund: 2.0
+      district_cooling_if_landlord_pays: 9.0   # chiller-free buildings: landlord pays capacity and consumption
+  rera:
+    # Decree 43 of 2013 bands, applied against the RERA Smart Rental Index (here: the area reference rent).
+    # Increase allowed at renewal by how far the current rent sits below the index.
+    increase_bands:
+      - {below_index_up_to: 0.10, max_increase: 0.00}
+      - {below_index_up_to: 0.20, max_increase: 0.05}
+      - {below_index_up_to: 0.30, max_increase: 0.10}
+      - {below_index_up_to: 0.40, max_increase: 0.15}
+      - {below_index_up_to: 1.00, max_increase: 0.20}
+    notice_days_for_change: 90
+  market_view:                                 # basis: house_view, informed by docs/research (rents falling in 2026)
+    rent_growth_by_year:                       # applied to market reference rents
+      default: [-0.04, -0.01, 0.02, 0.03, 0.03]
+      International City: [-0.01, 0.00, 0.02, 0.03, 0.03]
+    exit_net_yield_by_area:
+      JVC: 0.0725
+      Dubai Silicon Oasis: 0.0750
+      International City: 0.0800
+      Al Barsha: 0.0750
+      Business Bay: 0.0650
+    exit_yield_expansion_bps: 25               # exit above entry-market yield as a cushion
+    selling_costs_pct: 0.02
+  tax:
+    corporate_tax_rate: 0.09                   # basis: source (UAE CT)
+    corporate_tax_threshold_aed: 375000
+    model: "simplified: taxable income = NOI - interest - arrangement fee amortisation; no depreciation; pre- and post-tax returns shown"
