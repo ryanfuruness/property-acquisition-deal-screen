@@ -156,11 +156,13 @@ def aggregate(deals: dict[str, dict]) -> dict:
     uw_ok = sum(x["within_tolerance"] for x in uw)
 
     def mean_abs_rel(metric):
-        vals = [abs(x["errors"][metric]["rel_error"]) for x in uw if x["errors"][metric]["rel_error"] is not None]
+        vals = [abs(x["errors"][metric]["rel_error"]) for x in uw
+                if metric in x["errors"] and x["errors"][metric]["rel_error"] is not None]
         return (round(sum(vals) / len(vals), 4) if vals else None), len(vals)
 
     def mean_abs(metric):
-        vals = [abs(x["errors"][metric]["abs_error"]) for x in uw if x["errors"][metric]["abs_error"] is not None]
+        vals = [abs(x["errors"][metric]["abs_error"]) for x in uw
+                if metric in x["errors"] and x["errors"][metric]["abs_error"] is not None]
         return (round(sum(vals) / len(vals), 5) if vals else None), len(vals)
 
     verdict_ok = sum(x["verdict_ok"] for x in uw)
@@ -240,8 +242,8 @@ def per_deal_brief(res: dict) -> dict:
             "opex_category_accuracy": s["opex"]["summary"].get("category_accuracy"),
             "opex_period_ok": s["opex"]["summary"]["period_ok"],
             "discrepancies": {"tp": len(di["tp"]), "fn": len(di["fn"]), "fp": len(di["fp"])},
-            "noi_rel_error": uw["errors"]["noi_year1"]["rel_error"],
-            "walk_away_rel_error": uw["errors"]["walk_away_price_aed"]["rel_error"],
+            "noi_rel_error": uw["errors"].get("noi_year1", {}).get("rel_error"),
+            "walk_away_rel_error": uw["errors"].get("walk_away_price_aed", {}).get("rel_error"),
             "set": res.get("deal_sets", {}).get(d, "dev"),
             "verdict": {"expected": norm_verdict(uw["verdict_expected"]), "got": norm_verdict(uw["verdict_got"])},
             "memo": {"status": s["memo"]["summary"]["status"], "grounding": s["memo"]["summary"]["share"]},

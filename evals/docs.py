@@ -52,7 +52,8 @@ def _num_patterns(value: float) -> list[re.Pattern]:
 
 def value_in_unit_row(doc_path: Path, unit_id: str, value: float) -> bool:
     """Does a row/line that names this unit also print this amount?"""
-    uid = re.compile(rf"(?<![\w-]){re.escape(str(unit_id))}(?![\w-])", re.I)
+    # the unit id as a whole token: not part of a number such as an area "412.40" or an amount "1,412"
+    uid = re.compile(rf"(?<![\w.,-]){re.escape(str(unit_id))}(?![\w-]|[.,]\d)", re.I)
     pats = _num_patterns(value)
     for line in rows_text(str(doc_path)):
         if uid.search(line) and any(p.search(line) for p in pats):

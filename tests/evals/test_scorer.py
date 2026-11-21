@@ -57,7 +57,12 @@ def test_perfect_run_has_no_misses(deal_id, truths, perfect):
     assert rr["recall"] == rr["precision"] == 1.0 and rr["summary_rows_as_units"] == 0
     assert s["opex"]["summary"]["period_ok"]
     assert s["underwriting"]["summary"]["verdict_ok"]
-    assert s["memo"]["summary"]["share"] == 1.0 and s["memo"]["summary"]["numbers"] == 3
+    # fixture memo: walk-away price (only when the engine can underwrite the true building), occupancy, units
+    has_uw = bool(engine_on_truth(truths[deal_id])["metrics"])
+    assert s["memo"]["summary"]["share"] == 1.0 and s["memo"]["summary"]["numbers"] == (3 if has_uw else 2)
+    assert s["underwriting"]["summary"]["applicable"] is has_uw
+    assert len([c for c in s["underwriting"]["checks"] if c["section"] == "underwriting"]) == (4 if has_uw else 0)
+    assert [c["item"] for c in s["underwriting"]["checks"] if c["section"] == "verdict"] == ["verdict"]
 
 
 def test_perfect_set_headline_is_100_percent(perfect, tmp_path):
@@ -75,7 +80,8 @@ def test_perfect_set_headline_is_100_percent(perfect, tmp_path):
     assert h["deals_scored"] == len(ALL_DEALS)
     assert h["cost_usd_per_deal"] == 0.5 and h["duration_s_per_deal"] == 100.0
     assert res["misses"] == []
-    assert res["discrepancies"]["clean_deals"] == ["d01-cedarline-dso", "d02-lantana-ic"]
+    clean = sorted(d for d in ALL_DEALS if not load_truth(d)["planted_discrepancies"])
+    assert clean and res["discrepancies"]["clean_deals"] == clean
 
 
 # ---------------------------------------------------------------------------- OM fields
@@ -85,8 +91,10 @@ def test_om_known_errors(truths, perfect):
     d = "d06-opaline-jvc"
     run = copy.deepcopy(perfect[d])
     om = run["extracted"]["om"]
-    om["asking_price_aed"]["value"] = 30_500_000 * 1.004        # inside 0.5%: still correct
-    om["nsa_sqft"]["value"] = 32124 * 1.006                      # outside 0.5%: wrong
+    tom = truths[d]["om_fields"]
+    assert tom["opex_stated_aed"]["value"] is None and tom["occupancy_stated"]["value"] is not None
+    om["asking_price_aed"]["value"] = tom["asking_price_aed"]["value"] * 1.004   # inside 0.5%: still correct
+    om["nsa_sqft"]["value"] = tom["nsa_sqft"]["value"] * 1.006                   # outside 0.5%: wrong
     om["occupancy_stated"] = {"value": None, "status": "not_stated", "source": None}            # missed
     om["opex_stated_aed"] = {"value": 100000.0, "status": "verified",                             # truth: not stated
                              "source": {"doc": "om.pdf", "page": 3}}
@@ -183,16 +191,23 @@ def test_status_classes_and_asking_visibility(truths, perfect):
     d = "d08-jade-ic"
     run = copy.deepcopy(perfect[d])
     units = {u["unit"]: u for u in run["rent_roll_summary"]["units"]}
-    units["114"]["status"] = "occupied"     # truth under_renewal: same to the engine, not a miss
-    units["122"]["status"] = "occupied"     # truth notice_served: a miss
+    truth_status = {u["unit"]: u["status"] for u in truths[d]["rent_roll"]["units"]}
+    renewing = next(k for k, v in truth_status.items() if v == "under_renewal")
+    notice = next(k for k, v in truth_status.items() if v == "notice_served")
+    units[renewing]["status"] = "occupied"   # truth under_renewal: same to the engine, not a miss
+    units[notice]["status"] = "occupied"     # truth notice_served: a miss
     m = misses(score_deal(d, truths[d], run), "rent_roll")
-    assert [c["item"] for c in m] == ["unit 122.status"]
+    assert [c["item"] for c in m] == [f"unit {notice}.status"]
     # the asking-rent reader: d01 prints asking rents in Remarks; d06 prints none
+    def vacant_asking(t):
+        p = Path(t["_package_dir"]) / t["rent_roll"]["document"]
+        return p, [(u["unit"], u["asking_rent_aed"]) for u in t["rent_roll"]["units"]
+                   if u["status"] == "vacant" and u.get("asking_rent_aed")]
     t1, t6 = truths["d01-cedarline-dso"], truths["d06-opaline-jvc"]
-    p1 = Path(t1["_package_dir"]) / t1["rent_roll"]["document"]
-    p6 = Path(t6["_package_dir"]) / t6["rent_roll"]["document"]
-    assert value_in_unit_row(p1, "207", 76500)
-    assert not value_in_unit_row(p6, "106", 108000)
+    p1, v1 = vacant_asking(t1)
+    p6, v6 = vacant_asking(t6)
+    assert v1 and all(value_in_unit_row(p1, u, a) for u, a in v1)
+    assert v6 and not any(value_in_unit_row(p6, u, a) for u, a in v6)
     s = score_deal("d06-opaline-jvc", t6, perfect["d06-opaline-jvc"])
     exp = next(c for c in s["rent_roll"]["checks"] if c["item"] == "vacant_asking_rent_aed")
     assert exp["expected"] == 0 and "does not print" in exp["note"]
@@ -434,9 +449,12 @@ def test_stability(perfect, tmp_path):
     r3["discrepancies"] = [x for x in r3["discrepancies"] if x["id"] != "over_rented_vs_market"] + [
         {"id": "title_check"}, {"id": "other_om_claim"}]                        # {o,p,y,v} vs {o,p,y,t}: 3/5
     r3["underwriting"]["outputs"]["metrics"]["walk_away_price_aed"]["value"] *= 1.10
-    r3["mandate_fit"]["verdict"] = "Needs work"
+    v3 = engine_on_truth(load_truth("d03-sorrel-jvc"))["verdict"]
+    other = next(v for v in ("Pursue", "Needs work", "Decline") if v != v3)
+    r3["mandate_fit"]["verdict"] = other
     r3["memo"]["status"] = "failed"
-    rep["d08-jade-ic"]["mandate_fit"]["verdict"] = "Pursue"
+    v8 = engine_on_truth(load_truth("d08-jade-ic"))["verdict"]
+    rep["d08-jade-ic"]["mandate_fit"]["verdict"] = v8          # same verdict as the perfect run
     b = _write_runs(tmp_path / "b", rep)
     res = run_stability([a, b], sets={"d08-jade-ic": "heldout"})
     by = {d["deal_id"]: d for d in res["deals"]}
@@ -444,7 +462,7 @@ def test_stability(perfect, tmp_path):
     assert res["deals_not_compared"] == {"d12-tulip-ic": "1 readable run(s)"} | {
         d: "0 readable run(s)" for d in ALL_DEALS if d not in ids}
     s3 = by["d03-sorrel-jvc"]
-    assert s3["verdicts"] == ["Decline", "Needs work"] and not s3["verdict_unanimous"]
+    assert s3["verdicts"] == [v3, other] and not s3["verdict_unanimous"]
     assert s3["discrepancy_jaccard_mean"] == 0.6
     assert s3["discrepancies_in_some_runs"] == ["over_rented_vs_market", "title_check"]
     assert s3["walk_away_spread_aed"] == pytest.approx(s3["walk_away_min"] * 0.10)
@@ -458,7 +476,7 @@ def test_stability(perfect, tmp_path):
     assert res["aggregate_by_set"]["heldout"]["deals"] == 1 and res["aggregate_by_set"]["dev"]["deals"] == 1
     block = stability_block(res)
     md, txt = "\n".join(stability_markdown(block)), stability_text(block)
-    assert "## Stability" in md and "Decline, Needs work (Decline)" in md and str(tmp_path) not in md + txt
+    assert "## Stability" in md and f"{v3}, {other} ({v3})" in md and str(tmp_path) not in md + txt
 
 
 def test_stability_cli_writes_summary_and_report(perfect, tmp_path, monkeypatch, capsys):
@@ -478,3 +496,16 @@ def test_stability_cli_writes_summary_and_report(perfect, tmp_path, monkeypatch,
     from evals.scorer import latest_results_file
     assert "_stability_" not in latest_results_file(evals_dir / "results").name
     assert cli(["stability", "--runs", str(a), "--no-write"]) == 2
+
+
+def test_asking_reader_needs_the_unit_id_as_a_token(tmp_path):
+    # h07 regression: unit 412's asking rent (36,000) matched a row for unit 404 with area "412.40" and rent 36,000
+    f = tmp_path / "rr.csv"
+    f.write_text("68,404,Studio,412.40,Sana Iqbal,36000,Occupied\n76,412,Studio,403.70,-,-,Vacant\n")
+    assert not value_in_unit_row(f, "412", 36000)
+    assert value_in_unit_row(f, "404", 36000)
+    t = load_truth("h07-cypress-ic") if "h07-cypress-ic" in ALL_DEALS else None
+    if t:
+        p = Path(t["_package_dir"]) / t["rent_roll"]["document"]
+        assert not any(value_in_unit_row(p, u["unit"], u["asking_rent_aed"]) for u in t["rent_roll"]["units"]
+                       if u["status"] == "vacant" and u.get("asking_rent_aed"))

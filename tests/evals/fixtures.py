@@ -121,15 +121,20 @@ def _opex(truth: dict) -> dict:
 def perfect_run(truth: dict) -> dict:
     mandate, market = engine.load_mandate(), engine.load_market()
     ei = copy.deepcopy(truth["true_building"]["engine_inputs"])
-    uw = engine.underwrite(ei, mandate, market)
+    try:
+        uw = engine.underwrite(ei, mandate, market)
+    except engine.MarketDataError:
+        uw = None  # out-of-mandate area: no screen reference, judged on the mandate alone
     fit = engine.mandate_fit(truth["true_building"]["deal_facts"], uw, mandate)
-    wa = uw["metrics"]["walk_away_price_aed"]["value"]
+    wa = uw["metrics"]["walk_away_price_aed"]["value"] if uw else None
     occ = truth["rent_roll"]["totals_computed"]["occupancy_units"]
-    facts = {"uw.walk_away_price_aed": {"value": wa, "unit": "AED", "label": "walk-away price"},
-             "rr.occupancy_by_units": {"value": occ, "unit": "ratio", "label": "occupancy"},
+    facts = {"rr.occupancy_by_units": {"value": occ, "unit": "ratio", "label": "occupancy"},
              "deal.unit_count": {"value": truth["rent_roll"]["totals_computed"]["unit_count"], "unit": "units",
                                  "label": "units"}}
-    md = (f"**{fit['verdict']}.** Walk-away price AED {wa / 1e6:.2f}m [[uw.walk_away_price_aed]]. "
+    if uw:
+        facts["uw.walk_away_price_aed"] = {"value": wa, "unit": "AED", "label": "walk-away price"}
+    walk = f"Walk-away price AED {wa / 1e6:.2f}m [[uw.walk_away_price_aed]]. " if uw else ""
+    md = (f"**{fit['verdict']}.** {walk}"
           f"Occupancy is {occ * 100:.1f}% [[rr.occupancy_by_units]] across "
           f"{truth['rent_roll']['totals_computed']['unit_count']} [[deal.unit_count]] units.")
     return {
@@ -140,11 +145,12 @@ def perfect_run(truth: dict) -> dict:
         "discrepancies": [{"id": d["id"], "severity": "high", "title": f"planted {d['id']}", "detected_by": "rule"}
                           for d in truth["planted_discrepancies"]],
         "rejected_model_findings": [],
-        "underwriting": {"status": "ok", "error": None, "deal_inputs": ei, "outputs": uw},
+        "underwriting": ({"status": "ok", "error": None, "deal_inputs": ei, "outputs": uw} if uw else
+                         {"status": "skipped", "error": "no screen reference for this area", "deal_inputs": ei, "outputs": None}),
         "mandate_fit": fit,
         "fact_sheet": facts,
         "memo": {"status": "passed", "markdown": md, "attempts": [{"attempt": 1, "errors": []}]},
         "notes": [], "errors": [],
-        "meta": {"pipeline_version": "test", "engine_version": uw.get("engine_version"), "model": "fixture",
+        "meta": {"pipeline_version": "test", "engine_version": uw.get("engine_version") if uw else None, "model": "fixture",
                  "cost_usd": 0.5, "duration_s": 100.0, "tokens": {}, "calls": []},
     }

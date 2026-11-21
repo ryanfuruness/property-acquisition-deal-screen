@@ -38,16 +38,19 @@ def engine_on_truth(truth: dict) -> dict:
     import engine
     mandate, market = _mandate_market()
     tb = truth["true_building"]
-    uw = engine.underwrite(tb["engine_inputs"], mandate, market)
+    try:
+        uw = engine.underwrite(tb["engine_inputs"], mandate, market)
+    except engine.MarketDataError:
+        uw = None  # area outside the screen's reference data: the deal is judged on the mandate alone
     fit = engine.mandate_fit(tb["deal_facts"], uw, mandate)
     return {
-        "metrics": {k: uw["metrics"][k]["value"] for k in UW_METRICS},
+        "metrics": {k: uw["metrics"][k]["value"] for k in UW_METRICS} if uw else {},
         "verdict": norm_verdict(fit["verdict"]),
         "reason": fit["reason"],
         "hard_fails": sorted(t["name"] for t in fit["tests"] if t["kind"] == "hard" and t["status"] == "fail"),
         "soft_fails": sorted(t["name"] for t in fit["tests"] if t["kind"] == "soft" and t["status"] == "fail"),
         "unknown": sorted(t["name"] for t in fit["tests"] if t["status"] == "unknown"),
         "tests": {t["name"]: {"kind": t["kind"], "status": t["status"], "actual": t.get("actual")} for t in fit["tests"]},
-        "engine_version": uw.get("engine_version"),
-        "warnings": uw.get("warnings", []),
+        "engine_version": uw.get("engine_version") if uw else None,
+        "warnings": uw.get("warnings", []) if uw else ["no screen reference for this area; underwriting skipped"],
     }

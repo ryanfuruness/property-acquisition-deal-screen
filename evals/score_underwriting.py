@@ -33,7 +33,10 @@ def score(deal_id: str, truth: dict, run: dict, expected: dict) -> dict:
     uw_status = get(run, "underwriting", "status")
     metrics = get(run, "underwriting", "outputs", "metrics", default={}) or {}
     checks, errors = [], {}
-    for m in UW_METRICS:
+    # No engine result on truth (area outside the screen's reference data): nothing to compare the run's
+    # underwriting with, so no underwriting checks; the verdict is still scored.
+    applicable = bool(expected.get("metrics"))
+    for m in (UW_METRICS if applicable else ()):
         e = expected["metrics"].get(m)
         g = get(metrics, m, "value")
         ok = within(m, e, g)
@@ -58,7 +61,7 @@ def score(deal_id: str, truth: dict, run: dict, expected: dict) -> dict:
                    ("tests that differ: " + "; ".join(diffs)) if diffs else "every mandate test has the same status",
                    expected_hard_fails=expected["hard_fails"], run_hard_fails=hard_got, test_differences=diffs)
     return {"checks": checks + [vcheck], "summary": {
-        "status": uw_status, "errors": errors,
+        "status": uw_status, "errors": errors, "applicable": applicable,
         "within_tolerance": sum(c["ok"] for c in checks), "n": len(checks),
         "verdict_expected": v_exp, "verdict_got": v_got, "verdict_ok": v_exp == v_got,
         "hard_fails_expected": expected["hard_fails"], "hard_fails_got": hard_got,
