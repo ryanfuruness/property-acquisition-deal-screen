@@ -1,4 +1,4 @@
-# Area market reference, late 2026.
+# Screen reference rents by area, late 2026. Not the RERA Smart Rental Index.
 # This stands in for the RERA Smart Rental Index and a firm's comps database, which are not available
 # as bulk downloads (see docs/research/dubai_conventions.md, section 7). Rents are derived as
 # unit-level price per sq ft x gross yield from the cited sources, then split by unit type with a
@@ -32,7 +32,7 @@ areas:
     market_rent_aed_psf_1br: 133
     rent_change_yoy: -0.122
     sources: ["dubizzle H1 2026 (price, yield)", "Savills Q3 2026 (rent change)"]
-  Al Barsha:
+  Al Barsha South:
     unit_price_aed_psf: null
     unit_gross_yield: null
     market_rent_aed_psf_1br: 98
