@@ -30,7 +30,7 @@ ENGINE_VERSION = "1.1.0"
 SENSITIVITY_EXIT_YIELD_SHIFTS_BPS = (-50, 0, 50)
 SENSITIVITY_RENT_SHIFTS = (-0.05, 0.0, 0.05)
 WALK_AWAY_STEP_AED = 10_000
-EXPIRY_HORIZON_MONTHS = 12      # expiry concentration looks at the quarters of the next 12 months
+EXPIRY_WINDOWS = 4              # expiry concentration: four 3-month windows from the rent roll date
 
 
 # --------------------------------------------------------------------------------------
@@ -83,9 +83,13 @@ def run_operations(ctx: Context, rent_shift: float = 0.0) -> Operations:
 
     other = [ctx.other_income * (1.0 + ctx.other_income_growth) ** y for y in range(n_years)]
     gross_income = [r + mr + o for r, mr, o in zip(gross_rent, master, other)]
-    # Structural vacancy applies to unit-level rent and other income, not to a master
-    # lease (one tenant pays for the whole building); collection loss applies to all.
-    vacancy = [(r + o) * ctx.structural_vacancy for r, o in zip(gross_rent, other)]
+    downtime = [p - g - mr for p, g, mr in zip(potential, gross_rent, master)]
+    # Structural vacancy is a general allowance that already includes the modelled
+    # turnover and lease-up downtime: the deduction tops downtime up to the allowance
+    # rather than stacking on it. The allowance is on unit-level rent and other income,
+    # not on a master lease (one tenant pays for the whole building).
+    allowance = [(r + o) * ctx.structural_vacancy for r, o in zip(gross_rent, other)]
+    vacancy = [max(0.0, a - d) for a, d in zip(allowance, downtime)]
     collection = [(g - v) * ctx.collection_loss for g, v in zip(gross_income, vacancy)]
     egi = [g - v - c for g, v, c in zip(gross_income, vacancy, collection)]
     mgmt = [e * ctx.management_pct for e in egi]
@@ -105,12 +109,13 @@ def run_operations(ctx: Context, rent_shift: float = 0.0) -> Operations:
     noi = [e - t for e, t in zip(egi, total_opex)]
     lines = {
         "potential_rental_income": potential,       # includes any master lease rent
-        "downtime_loss": [p - g - mr for p, g, mr in zip(potential, gross_rent, master)],
+        "downtime_loss": downtime,
         "gross_rental_income": gross_rent,
         "master_lease_income": master,
         "other_income": other,
         "gross_income": gross_income,
-        "structural_vacancy": vacancy,
+        "vacancy_allowance": allowance,
+        "structural_vacancy": vacancy,         # top-up: max(0, allowance - downtime)
         "collection_loss": collection,
         "effective_gross_income": egi,
         "management_fee": mgmt,
@@ -265,6 +270,9 @@ def solve_walk_away_price(ctx: Context, ops: Operations,
 def rent_roll_stats(ctx: Context) -> dict[str, Any]:
     """Occupancy, in-place rent, over-rent share and expiry concentration.
 
+    Expiry concentration uses lease-end dates against windows from the rent roll date
+    (``deal_inputs.rent_roll_date``, else the analysis start).
+
     Under a master lease the building is let in full to one tenant: occupancy is 100%,
     in-place rent is the master rent, the whole income expires on the master lease end,
     and it counts as over-rented if the master rent exceeds the market reference rent of
@@ -275,35 +283,37 @@ def rent_roll_stats(ctx: Context) -> dict[str, Any]:
     if ctx.master_lease is not None:
         ml = ctx.master_lease
         in_place = ml.annual_rent_aed
-        lets = [(ml.reversion_month, in_place)]
+        lets = [(dt.date.fromisoformat(ml.lease_end), in_place)]
         over = in_place if in_place > total_ref else 0.0
         occ_units = occ_area = 1.0
         occupied_count = len(roll)
     else:
         occupied = [u for u in roll if u.status in PHYSICALLY_LET_STATUSES]
         in_place = sum(u.annual_rent_aed or 0.0 for u in occupied)
-        lets = [(u.expiry_month or 0, u.annual_rent_aed or 0.0) for u in occupied]
+        lets = [(dt.date.fromisoformat(u.lease_end) if u.lease_end else dt.date.min, u.annual_rent_aed or 0.0)
+                for u in occupied]
         over = sum(u.annual_rent_aed or 0.0 for u, ref in zip(roll, ctx.unit_market_rent_ref)
                    if u.status in PHYSICALLY_LET_STATUSES and (u.annual_rent_aed or 0.0) > ref)
         occ_units = len(occupied) / len(roll)
         occ_area = sum(u.area_sqft for u in occupied) / sum(u.area_sqft for u in roll)
         occupied_count = len(occupied)
 
-    # Calendar quarters of the next 12 months. Month m of the analysis is calendar month
-    # (start.month - 1 + m) % 12; a lease already expired rolls in month 0.
-    quarters: list[dict[str, Any]] = []
-    for m in range(EXPIRY_HORIZON_MONTHS):
-        date = add_months(ctx.analysis_start, m)
-        label = f"{date.year}-Q{(date.month - 1) // 3 + 1}"
-        if not quarters or quarters[-1]["quarter"] != label:
-            quarters.append({"quarter": label, "months": []})
-        quarters[-1]["months"].append(m)
-    for q in quarters:
-        rent = sum(r for e, r in lets if e in q["months"])
-        q["expiring_rent_aed"] = rent
-        q["share"] = rent / in_place if in_place > 0 else None
-        del q["months"]
-    best = max(quarters, key=lambda q: q["share"] or 0.0) if in_place > 0 else None
+    # Four consecutive 3-month windows from the rent roll date. A lease counts in the
+    # window containing its lease end; one already expired (or with no end) counts in
+    # the first window; one ending 12 months or more out counts in none.
+    basis = ctx.expiry_basis_date
+    edges = [add_months(basis, 3 * k) for k in range(EXPIRY_WINDOWS + 1)]
+    windows: list[dict[str, Any]] = []
+    for k in range(EXPIRY_WINDOWS):
+        lo, hi = edges[k], edges[k + 1]
+        rent = 0.0
+        for end_date, r in lets:
+            in_window = (lo <= end_date < hi) or (k == 0 and end_date < lo)
+            rent += r if in_window else 0.0
+        windows.append({"window": k + 1, "start": lo.isoformat(),
+                         "end": (hi - dt.timedelta(days=1)).isoformat(),
+                         "expiring_rent_aed": rent, "share": rent / in_place if in_place > 0 else None})
+    best = max(windows, key=lambda w: w["share"] or 0.0) if in_place > 0 else None
     return {
         "unit_count": len(roll) if roll else None,
         "occupied_units": occupied_count,
@@ -313,9 +323,9 @@ def rent_roll_stats(ctx: Context) -> dict[str, Any]:
         "market_rent_reference_total": total_ref,
         "over_rent_income": over,
         "over_rent_share_of_income": over / in_place if in_place > 0 else None,
-        "expiry_by_quarter": quarters,
+        "expiry_windows": windows,
         "max_expiry_share_quarter": best["share"] if best else None,
-        "max_expiry_quarter": best["quarter"] if best else None,
+        "max_expiry_window": best if best else None,
     }
 
 
@@ -373,9 +383,9 @@ def underwrite(deal_inputs: dict, mandate: dict, market: dict) -> dict[str, Any]
     M["over_rent_share_of_income"] = metric(rr["over_rent_share_of_income"], "ratio", rr_market,
                                             "in-place rent of leases above as-of market reference / in-place rent")
     M["max_expiry_share_quarter"] = metric(rr["max_expiry_share_quarter"], "ratio",
-                                           rr_deps + refs(extra=("mandate.underwriting.analysis_start",)),
-                                           f"largest share of in-place rent expiring in one calendar quarter of "
-                                           f"the next {EXPIRY_HORIZON_MONTHS} months ({rr['max_expiry_quarter']})")
+                                           rr_deps + refs(extra=("deal.rent_roll_date",
+                                                                 "mandate.underwriting.analysis_start")),
+                                           _expiry_note(rr["max_expiry_window"]))
 
     # ---- operations ----------------------------------------------------------------------
     M["potential_rental_income_year1"] = metric(L["potential_rental_income"][0], "AED/yr", refs("rent_model"))
@@ -517,7 +527,8 @@ def underwrite(deal_inputs: dict, mandate: dict, market: dict) -> dict[str, Any]
         "potential_rental_income": refs("rent_model"), "downtime_loss": refs("rent_model"),
         "gross_rental_income": refs("rent_model"), "master_lease_income": refs("rent_model"),
         "other_income": refs("other_income"),
-        "gross_income": refs("rent_model", "other_income"), "structural_vacancy": refs("egi"),
+        "gross_income": refs("rent_model", "other_income"), "vacancy_allowance": refs("egi"),
+        "structural_vacancy": refs("egi"),
         "collection_loss": refs("egi"), "effective_gross_income": refs("egi"),
         "management_fee": refs("egi", "management"), "operating_expenses": refs("opex"),
         "leasing_fees": refs("rent_model"), "input_vat": dep_noi,
@@ -596,7 +607,8 @@ def underwrite(deal_inputs: dict, mandate: dict, market: dict) -> dict[str, Any]
         "unit_schedule": unit_schedule,
         "om_yield_check": om_check,
         "master_lease": _master_lease_summary(ctx, refs),
-        "expiry_by_quarter": {"depends_on": rr_deps, "unit": "AED/yr", "quarters": rr["expiry_by_quarter"]},
+        "expiry_windows": {"depends_on": rr_deps + refs(extra=("deal.rent_roll_date",)), "unit": "AED/yr",
+                           "basis_date": ctx.expiry_basis_date.isoformat(), "windows": rr["expiry_windows"]},
         "warnings": list(ctx.warnings),
     }
     return result
@@ -630,6 +642,14 @@ def _om_yield_check(ctx: Context, noi1: float, cap: dict[str, Any], refs) -> dic
         "buyer_net_on_total_cost": metric(raw["buyer_net_on_total_cost"], "ratio", buyer_deps),
         "gap_vs_stated": metric(raw["gap_vs_stated"], "ratio", buyer_deps + om_deps),
     }
+
+
+def _expiry_note(window: dict[str, Any] | None) -> str:
+    text = (f"largest share of in-place rent expiring in one of the {EXPIRY_WINDOWS} consecutive "
+            f"3-month windows from the rent roll date")
+    if window:
+        text += f" (window {window['window']}: {window['start']} to {window['end']})"
+    return text
 
 
 def _master_lease_summary(ctx: Context, refs) -> dict[str, Any] | None:

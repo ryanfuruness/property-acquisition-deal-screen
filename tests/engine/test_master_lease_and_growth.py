@@ -74,26 +74,45 @@ class TestExitGainTax:
         assert tax[5] < tax[4]
 
 
-class TestQuarterlyExpiry:
-    def _deal(self, ends):
+class TestExpiryWindows:
+    """Four 3-month windows from the rent roll date, on stated lease-end dates."""
+
+    def _deal(self, ends, rent_roll_date="2026-10-31"):
         d = single_unit_deal()
         d["units"] = [{"unit": f"U{i}", "unit_type": "1br", "area_sqft": 500, "status": "occupied",
                        "annual_rent_aed": 50_000, "lease_end": e} for i, e in enumerate(ends)]
+        if rent_roll_date:
+            d["rent_roll_date"] = rent_roll_date
         return d
 
-    def test_shares_by_calendar_quarter(self, test_mandate, test_market):
-        # Rolls in Feb (Q1), May (Q2), Jun (Q3: lease ends 30 Jun, next lease starts 1 Jul), 2028.
-        r = underwrite(self._deal(["2027-01-31", "2027-04-30", "2027-06-30", "2028-03-31"]),
-                       test_mandate, test_market)
-        q = {x["quarter"]: x["share"] for x in r["expiry_by_quarter"]["quarters"]}
-        assert q == {"2027-Q1": 0.25, "2027-Q2": 0.25, "2027-Q3": 0.25, "2027-Q4": 0.0}
-        assert v(r, "max_expiry_share_quarter") == 0.25
+    def shares(self, r):
+        return [w["share"] for w in r["expiry_windows"]["windows"]]
 
-    def test_expired_leases_fall_in_first_quarter(self, test_mandate, test_market):
-        r = underwrite(self._deal(["2026-10-31", "2026-12-31", "2027-02-28", "2027-11-30"]),
+    def test_windows_start_at_rent_roll_date(self, test_mandate, test_market):
+        # Windows: 31 Oct-30 Jan, 31 Jan-30 Apr, 30 Apr-30 Jul, 31 Jul-30 Oct.
+        r = underwrite(self._deal(["2026-12-31", "2027-01-31", "2027-06-30", "2027-10-31"]),
                        test_mandate, test_market)
-        assert v(r, "max_expiry_share_quarter") == 0.75
-        assert "2027-Q1" in r["metrics"]["max_expiry_share_quarter"]["note"]
+        w = r["expiry_windows"]["windows"]
+        assert [x["start"] for x in w] == ["2026-10-31", "2027-01-31", "2027-04-30", "2027-07-31"]
+        assert w[0]["end"] == "2027-01-30"
+        # 31 Oct 2027 is 12 months after the rent roll date: in no window.
+        assert self.shares(r) == [0.25, 0.25, 0.25, 0.0]
+        assert v(r, "max_expiry_share_quarter") == 0.25
+        assert r["expiry_windows"]["basis_date"] == "2026-10-31"
+
+    def test_already_expired_count_in_first_window(self, test_mandate, test_market):
+        r = underwrite(self._deal(["2026-08-31", "2026-10-30", "2026-11-30", "2027-05-31"]),
+                       test_mandate, test_market)
+        assert self.shares(r) == [0.75, 0.0, 0.25, 0.0]
+        assert "window 1: 2026-10-31 to 2027-01-30" in r["metrics"]["max_expiry_share_quarter"]["note"]
+
+    def test_falls_back_to_analysis_start_with_warning(self, test_mandate, test_market):
+        r = underwrite(self._deal(["2026-12-31", "2027-02-28", "2027-03-31", "2027-04-30"], rent_roll_date=None),
+                       test_mandate, test_market)
+        assert r["expiry_windows"]["basis_date"] == "2027-01-01"
+        assert self.shares(r) == [0.75, 0.25, 0.0, 0.0]
+        assert any("Rent roll date not given" in w for w in r["warnings"])
+        assert r["inputs"]["deal.rent_roll_date"]["provenance"] == "default"
 
 
 class TestMasterLease:
@@ -103,9 +122,12 @@ class TestMasterLease:
         unit_rent = 100_000 / 12 * (6 - 1.5)                      # re-let from July after 1.5 months
         assert line(r, "master_lease_income")[0] == pytest.approx(master_income)
         assert line(r, "gross_rental_income")[0] == pytest.approx(unit_rent)
-        # Structural vacancy on unit rent only; collection loss on everything.
-        assert line(r, "structural_vacancy")[0] == pytest.approx(0.05 * unit_rent)
-        assert line(r, "collection_loss")[0] == pytest.approx(0.01 * (master_income + 0.95 * unit_rent))
+        # Vacancy allowance on unit rent only (5% = 1,875) is less than the 12,500 of
+        # lease-up downtime already modelled, so no top-up. Collection loss on everything.
+        assert line(r, "vacancy_allowance")[0] == pytest.approx(0.05 * unit_rent)
+        assert line(r, "downtime_loss")[0] == pytest.approx(100_000 / 12 * 1.5)
+        assert line(r, "structural_vacancy")[0] == 0.0
+        assert line(r, "collection_loss")[0] == pytest.approx(0.01 * (master_income + unit_rent))
         assert line(r, "leasing_fees")[0] == pytest.approx(100_000 / 12 * 0.5)
         assert line(r, "master_lease_income")[1] == 0.0
         assert r["master_lease"]["reversion_date"] == "2027-07-01"

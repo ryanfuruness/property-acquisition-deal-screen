@@ -1,6 +1,6 @@
 # Underwriting engine
 
-Deterministic underwriting for the Dubai residential-building deal screen. The engine is pure Python (standard library plus PyYAML for the loaders). It makes no LLM calls, uses no network and has no randomness: the same inputs always give the same output. Every rule and number comes from `data/mandate.yaml` and `data/market/areas.yaml`, which are passed in as dicts. The engine hard-codes only the analysis settings that DESIGN.md fixes: the sensitivity axes, the AED 10,000 walk-away grid and the 12-month expiry window.
+Deterministic underwriting for the Dubai residential-building deal screen. The engine is pure Python (standard library plus PyYAML for the loaders). It makes no LLM calls, uses no network and has no randomness: the same inputs always give the same output. Every rule and number comes from `data/mandate.yaml` and `data/market/areas.yaml`, which are passed in as dicts. The engine hard-codes only the analysis settings that DESIGN.md fixes: the sensitivity axes, the AED 10,000 walk-away grid and the four 3-month expiry windows.
 
 ```python
 from engine import underwrite, mandate_fit, recompute_stated_yield, load_mandate, load_market
@@ -36,6 +36,7 @@ All money is in AED, all areas in sq ft, and every rate is a ratio (0.05 means 5
 | `chiller_landlord_pays` | bool or null | no, default `null` | `true` means a chiller-free building where the landlord pays cooling. `null` (unstated) applies the cooling default conservatively, with a warning. |
 | `om_stated` | dict | no | The OM's own income and yield, for the yield check (below). |
 | `master_lease` | dict or null | no | A lease of the whole building to one tenant (below). |
+| `rent_roll_date` | `YYYY-MM-DD` | no, but recommended | Date of the rent roll. The expiry-concentration windows start here; without it they start at `analysis_start`, with a warning. |
 | `provenance` | dict | no | Overrides the default `document` tag for a field, for example `{"price_aed": "default"}` or `{"opex_aed.insurance": "default"}`. Values must be `document`, `default`, `mandate` or `market`. |
 
 **`units[]`** (field names match the rent-roll extraction fields in DESIGN.md):
@@ -87,14 +88,14 @@ It returns `{"verdict", "reason", "hard_fails", "soft_fails", "unknown", "tests"
 | `inputs` | Every input the run used, by dotted name: `{"value", "unit", "provenance", "note"?}`. |
 | `metrics` | Headline numbers, each a **metric** (below), listed under "Metrics" below. |
 | `acquisition_costs` | Metrics for `dld_transfer_fee`, `dld_admin`, `trustee_fee`, `broker_fee`, `broker_fee_vat`, `mortgage_registration`, `transfer_costs` and `total`. |
-| `cash_flow` | Years 1 to hold+1: `years`, `period_start`, `period_end`, `in_hold`, and `lines` (`potential_rental_income`, `downtime_loss`, `gross_rental_income`, `other_income`, `gross_income`, `structural_vacancy`, `collection_loss`, `effective_gross_income`, `management_fee`, `operating_expenses`, `leasing_fees`, `input_vat`, `total_operating_costs`, `noi`), with `master_lease_income` after `gross_rental_income`, plus `opex_by_category`. `potential_rental_income` includes master-lease rent. Each line is a **series**. |
+| `cash_flow` | Years 1 to hold+1: `years`, `period_start`, `period_end`, `in_hold`, and `lines` (`potential_rental_income`, `downtime_loss`, `gross_rental_income`, `other_income`, `gross_income`, `structural_vacancy`, `collection_loss`, `effective_gross_income`, `management_fee`, `operating_expenses`, `leasing_fees`, `input_vat`, `total_operating_costs`, `noi`), with `vacancy_allowance` before `structural_vacancy` and `master_lease_income` after `gross_rental_income`, plus `opex_by_category`. `potential_rental_income` includes master-lease rent. Each line is a **series**. |
 | `debt_schedule` | Years 1 to hold: `opening_balance`, `interest`, `principal`, `debt_service`, `closing_balance`. |
 | `returns_cash_flows` | Years 0 to hold: `unlevered_pre_tax`, `unlevered_post_tax`, `levered_pre_tax`, `levered_post_tax`, `tax_unlevered`, `tax_levered`. |
 | `sensitivity` | `rent_shifts`, `exit_yield_shifts_bps`, `units`, `depends_on` and nine `cells`, each with `rent_shift`, `exit_yield_shift_bps`, `exit_yield`, `noi_year1`, `dscr_year1`, `levered_irr_pre_tax`, `unlevered_irr_pre_tax` and `levered_equity_multiple_pre_tax`. |
 | `walk_away` | `price_aed`, `binding_constraint` (`levered_irr`, `dscr_year1` or `both`), `target_levered_irr`, `dscr_floor`, the IRR and DSCR at the price and one AED 10,000 step above it, `discount_to_asking`, and `going_in_net_yield_on_cost_at_price`. |
 | `om_yield_check` | `null`, or `summary` ("The OM says X; on a buyer's basis it is Y"), `om_basis`, `reproduces_stated`, and metrics `stated_yield`, `reproduced_on_om_basis`, `gross_on_price`, `gross_on_total_cost`, `buyer_net_on_price`, `buyer_net_on_total_cost` and `gap_vs_stated`. |
 | `master_lease` | `null` for direct leases, or `tenant`, `related_party`, `annual_rent_aed` (a metric), `lease_end`, `cheques`, `reversion_month` and `reversion_date` (first month the units revert to the owner). |
-| `expiry_by_quarter` | `depends_on`, `unit`, and `quarters`, one per calendar quarter of the next 12 months, each with `quarter` (for example `2027-Q3`), `expiring_rent_aed` and `share`. |
+| `expiry_windows` | `depends_on`, `unit`, `basis_date` (the rent roll date, or the analysis start if none was given), and `windows`: four consecutive 3-month windows, each with `window` (1-4), `start`, `end` (inclusive), `expiring_rent_aed` and `share`. |
 | `unit_schedule` | Per unit: in-place and reference rent, `rent_vs_market`, `expiry_month`, `market_rent_by_year`, `expected_rent_by_year` and `events` (each expiry with the renewal rule applied). |
 | `warnings` | Plain-text data-quality warnings (unit areas not footing to NSA, unverified market data, unstated chiller). |
 
@@ -121,7 +122,11 @@ It returns `{"verdict", "reason", "hard_fails", "soft_fails", "unknown", "tests"
 - **Vacant or legal case:** no rent at the start (rent-roll statistics such as occupancy and in-place rent still count a legal-case unit as let, because the tenant is in place). The unit leases up at year-1 market after the downtime, with a leasing fee, and then rolls like any other. Rent under a legal dispute is assumed not collected.
 
 **Operating statement.**
-- **Losses:** gross income (rent after downtime, plus other income) bears `structural_vacancy`. Collection loss then applies to what remains, which gives EGI.
+- **Losses:** `structural_vacancy` is a general vacancy allowance that already includes the modelled turnover and lease-up downtime, so the two are not stacked.
+  - The allowance is `structural_vacancy` x gross income (unit rent after downtime, plus other income; a master lease is excluded).
+  - The deduction is only the top-up: `structural_vacancy` line = max(0, allowance - `downtime_loss`), each year.
+  - The cash flow shows `downtime_loss`, `vacancy_allowance` and the top-up `structural_vacancy` separately, so the reader can see the allowance being topped up.
+  - Collection loss then applies to gross income less the top-up, which gives EGI.
 - **Management fee:** `property_management_pct_of_egi` of EGI. A stated management fee is recorded but not used.
 - **Opex:** stated categories are taken as given (`document`). A missing category uses the mandate default per sq ft of NSA (`default`). A missing category with no default (service charge, marketing) is 0 (`default`).
 - **District cooling:** a stated amount is always used. The default applies only if `chiller_landlord_pays` is `true` or unstated.
@@ -148,11 +153,20 @@ It returns `{"verdict", "reason", "hard_fails", "soft_fails", "unknown", "tests"
 - **Interest cover:** Year-1 NOI / Year-1 interest, shown for context.
 - **Breakeven occupancy:** the share of Year-1 potential income (every unit let at its scheduled rent all year, plus other income) at which NOI equals debt service. Management fee and its VAT vary with income; everything else is fixed.
 
+Breakeven occupancy treats occupancy as the variable, so the vacancy allowance and downtime do not enter it. NOI, and so DSCR, the walk-away price and the sensitivity grid, use the top-up rule above.
+
 **Walk-away price.** The highest multiple of AED 10,000 at which the pre-tax levered IRR is at least `target_levered_irr` and Year-1 DSCR is at least `min_dscr_year1`. The loan scales with price, and NOI does not depend on price. The search brackets the boundary by doubling, then bisects on the AED 10,000 grid. It does not depend on the asking price.
 
 **Sensitivity.** The grid is exit yield -50 / 0 / +50 bps against market rent -5% / 0 / +5%. The rent shift scales every year's market level, so it reaches renewals, re-lets, RERA tests and the exit NOI; in-place rents are unchanged until they roll.
 
-**Expiry concentration.** The largest share of in-place rent whose roll month falls in a single calendar quarter of the next 12 months. Leases already expired roll in month 0, which is in the first quarter. Leases rolling later than 12 months out count in no quarter.
+**Expiry concentration** (`max_expiry_share_quarter`, tested against `max_lease_expiry_share_in_any_quarter`). The largest share of in-place rent whose `lease_end` falls in one of four consecutive 3-month windows starting at `rent_roll_date`.
+- The first window is [rent roll date, +3 months), and so on to 12 months.
+- A lease that had already expired at the rent roll date, or an occupied unit with no lease end, counts in the first window.
+- A lease ending 12 months or more after the rent roll date counts in no window.
+- Under a master lease the whole master rent counts at its `lease_end`.
+- Without `rent_roll_date`, the windows start at `analysis_start` and the result carries a warning.
+
+Expiry concentration uses stated lease-end dates. The cash flow uses roll months counted from the analysis start.
 
 **Master lease.** When `master_lease` is given:
 - **Income:** the master rent, flat and prorated by month, until the roll month of `lease_end`. It bears collection loss but no structural vacancy, since one tenant pays for the building.

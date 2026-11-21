@@ -173,7 +173,7 @@ def mandate_fit(deal_facts: dict, uw_result: dict | None, mandate: dict) -> dict
         ("target_equity_multiple", "levered_equity_multiple_pre_tax", "Levered equity multiple (pre-tax)", _x, True),
         ("min_occupancy", "occupancy_by_units", "Occupancy by units", _pct, True),
         ("max_lease_expiry_share_in_any_quarter", "max_expiry_share_quarter",
-         "Largest quarterly lease expiry share (next 12 months)", _pct, False),
+         "Largest 3-month lease expiry share (12 months from the rent roll date)", _pct, False),
         ("max_over_rent_share_of_income", "over_rent_share_of_income", "Over-rented share of income", _pct, False),
     )
     for key, metric_name, label, fmt, minimum in soft_specs:

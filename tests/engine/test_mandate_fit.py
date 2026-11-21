@@ -35,12 +35,13 @@ def test_pursue_when_everything_passes(mandate):
 
 
 def test_needs_work_on_one_soft_fail(mandate):
-    fit = mandate_fit(GOOD_FACTS, uw(levered_irr_pre_tax=0.08), mandate)
+    target = mandate["buy_box"]["soft"]["target_levered_irr"]
+    fit = mandate_fit(GOOD_FACTS, uw(levered_irr_pre_tax=target - 0.02), mandate)
     assert fit["verdict"] == "Needs work"
     t = by_name(fit)["target_levered_irr"]
-    assert t == {"name": "target_levered_irr", "kind": "soft", "threshold": 0.10, "actual": 0.08,
+    assert t == {"name": "target_levered_irr", "kind": "soft", "threshold": target, "actual": target - 0.02,
                  "passed": False, "status": "fail",
-                 "reason": "Levered IRR (pre-tax) 8.00% misses the at least 10.00% requirement.",
+                 "reason": f"Levered IRR (pre-tax) {target - 0.02:.2%} misses the at least {target:.2%} requirement.",
                  "source": "engine"}
 
 
@@ -93,16 +94,25 @@ def test_hard_fail_beats_soft_fails(mandate):
 
 
 def test_boundary_values_pass(mandate):
-    fit = mandate_fit({**GOOD_FACTS, "unit_count": 30, "price_aed": 30_000_000, "completion_year": 2008},
-                      uw(dscr_year1=1.30, max_expiry_share_quarter=0.40, levered_irr_pre_tax=0.10,
-                         going_in_net_yield_on_cost=0.06), mandate)
+    hard, soft = mandate["buy_box"]["hard"], mandate["buy_box"]["soft"]
+    fit = mandate_fit({**GOOD_FACTS, "unit_count": hard["min_units"], "price_aed": hard["min_price_aed"],
+                       "completion_year": hard["min_completion_year"]},
+                      uw(dscr_year1=hard["min_dscr_year1"],
+                         max_expiry_share_quarter=soft["max_lease_expiry_share_in_any_quarter"],
+                         levered_irr_pre_tax=soft["target_levered_irr"],
+                         levered_equity_multiple_pre_tax=soft["target_equity_multiple"],
+                         going_in_net_yield_on_cost=soft["min_going_in_net_yield_on_cost"],
+                         occupancy_by_units=soft["min_occupancy"],
+                         over_rent_share_of_income=soft["max_over_rent_share_of_income"]), mandate)
     assert fit["verdict"] == "Pursue"
 
 
 def test_verdict_rules_come_from_the_mandate(mandate):
     m = copy.deepcopy(mandate)
     m["verdict_rules"]["pursue_if_soft_fails_at_most"] = 1
-    assert mandate_fit(GOOD_FACTS, uw(levered_irr_pre_tax=0.08), m)["verdict"] == "Pursue"
+    one_soft_fail = uw(levered_irr_pre_tax=m["buy_box"]["soft"]["target_levered_irr"] - 0.02)
+    assert mandate_fit(GOOD_FACTS, one_soft_fail, mandate)["verdict"] == "Needs work"
+    assert mandate_fit(GOOD_FACTS, one_soft_fail, m)["verdict"] == "Pursue"
 
 
 def test_unimplemented_mandate_filter_is_an_error(mandate):

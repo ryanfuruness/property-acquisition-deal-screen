@@ -31,7 +31,7 @@ VAT_EXEMPT_CATEGORIES = ("sinking_fund",)
 ALLOWED_TOP_LEVEL = {
     "deal_id", "price_aed", "area", "nsa_sqft", "bua_sqft", "units", "opex_aed",
     "opex_includes_vat", "other_income_aed", "chiller_landlord_pays", "om_stated",
-    "provenance", "master_lease",
+    "provenance", "master_lease", "rent_roll_date",
 }
 
 
@@ -122,6 +122,7 @@ class Context:
     chiller_landlord_pays: bool | None
     om_stated: dict | None
     analysis_start: dt.date
+    expiry_basis_date: dt.date        # start of the expiry-concentration windows
     hold_years: int
     lease: LeaseAssumptions
     growth_index: list[float]         # cumulative market-rent index by year, len hold + 1
@@ -198,8 +199,10 @@ def _parse_unit(i: int, u: Any, factors: dict, analysis_start: dt.date, warnings
             expiry = 0
             warnings.append(f"Unit {unit_id}: occupied with no lease end; treated as expiring "
                             f"at the start of the analysis.")
+    lease_end = (parse_date(u["lease_end"], f"{label}.lease_end").isoformat()
+                 if u.get("lease_end") not in (None, "") else None)
     return UnitLease(unit=unit_id, unit_type=unit_type, area_sqft=area_sqft, status=status,
-                     annual_rent_aed=rent, expiry_month=expiry)
+                     annual_rent_aed=rent, expiry_month=expiry, lease_end=lease_end)
 
 
 def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
@@ -300,6 +303,17 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
         growth_index.append(level)
 
     # ---- units ------------------------------------------------------------------------
+    # ---- rent roll date (start of the expiry-concentration windows) -----------------------
+    if deal_inputs.get("rent_roll_date") not in (None, ""):
+        expiry_basis = parse_date(deal_inputs["rent_roll_date"], "rent_roll_date")
+        reg.add("deal.rent_roll_date", expiry_basis.isoformat(), "date", deal_tag("rent_roll_date"))
+    else:
+        expiry_basis = analysis_start
+        reg.add("deal.rent_roll_date", None, "date", "default",
+                "not stated; expiry windows start at the analysis start")
+        warnings.append("Rent roll date not given; lease expiry concentration is measured from the "
+                        "analysis start instead.")
+
     # ---- master lease (optional) -------------------------------------------------------
     master = _parse_master_lease(deal_inputs.get("master_lease"), analysis_start, reg, deal_tag)
     deps["master_lease"] = master.registry_names if master else []
@@ -482,7 +496,7 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
         opex_includes_vat=opex_includes_vat, other_income=other_income,
         opex_growth=float(opex_growth), other_income_growth=float(other_growth),
         chiller_landlord_pays=chiller, om_stated=deal_inputs.get("om_stated"),
-        analysis_start=analysis_start, hold_years=hold_years, lease=lease,
+        analysis_start=analysis_start, expiry_basis_date=expiry_basis, hold_years=hold_years, lease=lease,
         growth_index=growth_index, structural_vacancy=float(vac), collection_loss=float(coll),
         management_pct=float(mgmt), vat_on_opex=float(vat), acq=acq, ltv=float(ltv),
         interest_rate=float(base_rate) + float(margin), amortisation_years=int(amort),

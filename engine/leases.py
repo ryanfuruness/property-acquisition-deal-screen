@@ -68,6 +68,7 @@ class UnitLease:
     annual_rent_aed: float | None
     expiry_month: int | None          # analysis month in which the lease rolls; None = no lease
     available_month: int = 0          # vacant units: first month the unit can be let
+    lease_end: str | None = None      # stated lease end (ISO date), for expiry concentration
 
 
 @dataclass

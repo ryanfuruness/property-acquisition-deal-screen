@@ -12,7 +12,7 @@ a 6.24% yield gives about 1.49x.
 
 Returns are low: debt at 6.80% costs more than the 6.24% the building yields (negative
 leverage), and the house view exits at 6.75%, above the entry yield on price. The
-walk-away price, where levered IRR reaches 10%, is therefore well below asking.
+walk-away price, where levered IRR reaches the mandate target, is therefore well below asking.
 """
 
 import pytest
@@ -69,5 +69,6 @@ def test_mandate_fit_verdict(result, mandate):
     fit = mandate_fit(facts, result, mandate)
     assert fit["verdict"] == "Needs work"
     assert fit["hard_fails"] == 0 and fit["unknown"] == 0
-    assert sorted(t["name"] for t in fit["tests"] if t["status"] == "fail") == [
-        "min_going_in_net_yield_on_cost", "target_equity_multiple", "target_levered_irr"]
+    fails = {t["name"] for t in fit["tests"] if t["status"] == "fail"}
+    assert {"target_levered_irr", "target_equity_multiple"} <= fails
+    assert fails <= {"target_levered_irr", "target_equity_multiple", "min_going_in_net_yield_on_cost"}

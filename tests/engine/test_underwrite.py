@@ -204,7 +204,8 @@ class TestWalkAway:
     def test_irr_binds_on_jvc_deal(self, jvc_deal, mandate, market):
         r, price = self._check_boundary(jvc_deal, mandate, market)
         assert r["walk_away"]["binding_constraint"] == "levered_irr"
-        assert r["walk_away"]["levered_irr_at_price"]["value"] == pytest.approx(0.10, abs=2e-4)
+        target = mandate["buy_box"]["soft"]["target_levered_irr"]
+        assert r["walk_away"]["levered_irr_at_price"]["value"] == pytest.approx(target, abs=2e-4)
 
     def test_dscr_binds_when_irr_target_is_low(self, jvc_deal, mandate, market):
         m = copy.deepcopy(mandate)
@@ -298,3 +299,37 @@ def test_legal_case_counts_as_let_but_earns_nothing_at_start(test_mandate, test_
     assert v(r, "in_place_rent_aed") == 85_000
     # Cash flow: vacant at the start, leases up at the 100,000 market after 1.5 months.
     assert v(r, "gross_rental_income_year1") == pytest.approx(100_000 - 12_500)
+
+
+class TestVacancyAllowance:
+    """Structural vacancy is an allowance that includes modelled downtime: only the top-up is deducted."""
+
+    def _run(self, test_mandate, test_market, p, rent):
+        m = copy.deepcopy(test_mandate)
+        m["underwriting"]["operations"]["renewal_probability"] = p
+        return underwrite(single_unit_deal(rent=rent), m, test_market)["cash_flow"]["lines"]
+
+    def test_no_downtime_takes_full_allowance(self, test_mandate, test_market):
+        L = self._run(test_mandate, test_market, 1.0, 85_000)
+        assert L["downtime_loss"]["values"][0] == 0.0
+        assert L["structural_vacancy"]["values"][0] == pytest.approx(0.05 * 87_125)
+
+    def test_downtime_above_allowance_means_no_top_up(self, test_mandate, test_market):
+        # Turnover at month 6: 1.5 months lost = 12,500 > 5% of 82,500 = 4,125.
+        L = self._run(test_mandate, test_market, 0.0, 90_000)
+        assert L["downtime_loss"]["values"][0] == pytest.approx(12_500)
+        assert L["vacancy_allowance"]["values"][0] == pytest.approx(4_125)
+        assert L["structural_vacancy"]["values"][0] == 0.0
+
+    def test_partial_top_up(self, test_mandate, test_market):
+        # p = 0.7: gross 84,987.50, downtime 0.3 x 12,500 = 3,750, allowance 4,249.375.
+        L = self._run(test_mandate, test_market, 0.7, 85_000)
+        assert L["downtime_loss"]["values"][0] == pytest.approx(3_750)
+        assert L["structural_vacancy"]["values"][0] == pytest.approx(4_249.375 - 3_750)
+        assert L["collection_loss"]["values"][0] == pytest.approx(0.01 * (84_987.5 - 499.375))
+
+    def test_rule_holds_every_year(self, jvc_deal, mandate, market):
+        L = underwrite(jvc_deal, mandate, market)["cash_flow"]["lines"]
+        for a, d, s in zip(L["vacancy_allowance"]["values"], L["downtime_loss"]["values"],
+                           L["structural_vacancy"]["values"]):
+            assert s == pytest.approx(max(0.0, a - d))

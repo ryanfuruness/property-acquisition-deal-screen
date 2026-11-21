@@ -22,8 +22,8 @@ buy_box:
     no_master_lease_to_related_party: true
   soft:
     min_going_in_net_yield_on_cost: 0.060      # Year-1 NOI / (price + acquisition costs)
-    target_levered_irr: 0.10
-    target_equity_multiple: 1.50
+    target_levered_irr: 0.08                   # core-plus at 2026 debt costs
+    target_equity_multiple: 1.35
     min_occupancy: 0.90
     max_lease_expiry_share_in_any_quarter: 0.40     # leases are annual, so an even spread is 25% a quarter
     max_over_rent_share_of_income: 0.20        # income from units let above market reference rent
