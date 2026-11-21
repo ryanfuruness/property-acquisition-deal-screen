@@ -1,0 +1,941 @@
+{
+ "history": [
+  {
+   "label": "v0.1.0-first-9-deals",
+   "scored_at": "2026-11-21T17:49:49+00:00",
+   "results_file": "evals/results/20261121T174949Z_v0.1.0-first-9-deals.json",
+   "pipeline_versions": [
+    "0.1.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso"
+   ],
+   "headline": {
+    "deals_scored": 9,
+    "om_field_accuracy": 0.9955,
+    "om_trusted_accuracy": 0.9462,
+    "om_citation_valid": 0.9508,
+    "om_citation_page_match": 0.9672,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 0.9985,
+    "rent_roll_totals_accuracy": 0.9333,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 0.9615,
+    "discrepancy_precision": 0.7812,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.8611,
+    "noi_mean_abs_rel_error": 0.0227,
+    "walk_away_mean_abs_rel_error": 0.0049,
+    "yield_on_cost_mean_abs_error": 0.00156,
+    "levered_irr_mean_abs_error": 0.00183,
+    "verdict_agreement": 0.6667,
+    "memo_grounding": 0.995,
+    "memo_pass_rate": 0.7778,
+    "cost_usd_per_deal": 0.4897,
+    "cost_usd_total": 4.4077,
+    "duration_s_per_deal": 108.0
+   }
+  },
+  {
+   "label": "v0.1.0-after-reruns",
+   "scored_at": "2026-11-21T17:54:16+00:00",
+   "results_file": "evals/results/20261121T175416Z_v0.1.0-after-reruns.json",
+   "pipeline_versions": [
+    "0.1.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso"
+   ],
+   "headline": {
+    "deals_scored": 9,
+    "om_field_accuracy": 0.9955,
+    "om_trusted_accuracy": 0.9731,
+    "om_citation_valid": 0.9727,
+    "om_citation_page_match": 0.9672,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 0.9985,
+    "rent_roll_totals_accuracy": 0.9556,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 0.8387,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9722,
+    "noi_mean_abs_rel_error": 0.0016,
+    "walk_away_mean_abs_rel_error": 0.0017,
+    "yield_on_cost_mean_abs_error": 9e-05,
+    "levered_irr_mean_abs_error": 0.00069,
+    "verdict_agreement": 0.7778,
+    "memo_grounding": 0.995,
+    "memo_pass_rate": 0.7778,
+    "cost_usd_per_deal": 0.4759,
+    "cost_usd_total": 4.2828,
+    "duration_s_per_deal": 104.8
+   }
+  },
+  {
+   "label": "v0.2.0",
+   "scored_at": "2026-11-21T18:15:53+00:00",
+   "results_file": "evals/results/20261121T181553Z_v0.2.0.json",
+   "pipeline_versions": [
+    "0.2.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d02-lantana-ic",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d09-aurelia-bb",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso",
+    "d12-tulip-ic"
+   ],
+   "headline": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9865,
+    "om_citation_valid": 0.9836,
+    "om_citation_page_match": 0.9795,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 0.9917,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 0.9667,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 0.9975,
+    "memo_pass_rate": 0.8333,
+    "cost_usd_per_deal": 0.4815,
+    "cost_usd_total": 5.7785,
+    "duration_s_per_deal": 102.3
+   }
+  },
+  {
+   "label": "v0.2.1",
+   "scored_at": "2026-11-21T18:22:17+00:00",
+   "results_file": "evals/results/20261121T182217Z_v0.2.1.json",
+   "pipeline_versions": [
+    "0.2.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d02-lantana-ic",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d09-aurelia-bb",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso",
+    "d12-tulip-ic"
+   ],
+   "headline": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9877,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 0.9667,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 0.9852,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.4028,
+    "cost_usd_total": 4.8333,
+    "duration_s_per_deal": 84.9
+   }
+  },
+  {
+   "label": "v0.2.2",
+   "scored_at": "2026-11-21T18:25:37+00:00",
+   "results_file": "evals/results/20261121T182537Z_v0.2.2.json",
+   "pipeline_versions": [
+    "0.2.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d02-lantana-ic",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d09-aurelia-bb",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso",
+    "d12-tulip-ic"
+   ],
+   "headline": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9877,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 0.9667,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 1.0,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.1464,
+    "cost_usd_total": 1.7569,
+    "duration_s_per_deal": 41.5
+   }
+  },
+  {
+   "label": "v0.2.3",
+   "scored_at": "2026-11-21T18:27:03+00:00",
+   "results_file": "evals/results/20261121T182703Z_v0.2.3.json",
+   "pipeline_versions": [
+    "0.2.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d02-lantana-ic",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d09-aurelia-bb",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso",
+    "d12-tulip-ic"
+   ],
+   "headline": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9877,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 1.0,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 1.0,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.1546,
+    "cost_usd_total": 1.8555,
+    "duration_s_per_deal": 43.2
+   }
+  },
+  {
+   "label": "v0.2.4",
+   "scored_at": "2026-11-21T18:29:37+00:00",
+   "results_file": "evals/results/20261121T182937Z_v0.2.4.json",
+   "pipeline_versions": [
+    "0.2.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d02-lantana-ic",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d09-aurelia-bb",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso",
+    "d12-tulip-ic"
+   ],
+   "headline": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9877,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 1.0,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 1.0,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.1318,
+    "cost_usd_total": 1.5822,
+    "duration_s_per_deal": 37.5
+   }
+  },
+  {
+   "label": "v0.3.0-final-uncached",
+   "scored_at": "2026-11-21T18:53:27+00:00",
+   "results_file": "evals/results/20261121T185327Z_v0.3.0-final-uncached.json",
+   "pipeline_versions": [
+    "0.2.0"
+   ],
+   "deals_scored": [
+    "d01-cedarline-dso",
+    "d02-lantana-ic",
+    "d03-sorrel-jvc",
+    "d04-kestrel-bb",
+    "d05-larkspur-barsha",
+    "d06-opaline-jvc",
+    "d07-vireo-dso",
+    "d08-jade-ic",
+    "d09-aurelia-bb",
+    "d10-almehrab-barsha",
+    "d11-silverline-dso",
+    "d12-tulip-ic"
+   ],
+   "headline": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9795,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 0.9843,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 1.0,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 1.0,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.4491,
+    "cost_usd_total": 5.3891,
+    "duration_s_per_deal": 94.9
+   }
+  }
+ ],
+ "latest": {
+  "label": "v0.3.0-final-uncached",
+  "scored_at": "2026-11-21T18:53:27+00:00",
+  "results_file": "evals/results/20261121T185327Z_v0.3.0-final-uncached.json",
+  "pipeline_versions": [
+   "0.2.0"
+  ],
+  "deals_scored": [
+   "d01-cedarline-dso",
+   "d02-lantana-ic",
+   "d03-sorrel-jvc",
+   "d04-kestrel-bb",
+   "d05-larkspur-barsha",
+   "d06-opaline-jvc",
+   "d07-vireo-dso",
+   "d08-jade-ic",
+   "d09-aurelia-bb",
+   "d10-almehrab-barsha",
+   "d11-silverline-dso",
+   "d12-tulip-ic"
+  ],
+  "headline": {
+   "deals_scored": 12,
+   "om_field_accuracy": 1.0,
+   "om_trusted_accuracy": 0.9933,
+   "om_citation_valid": 0.9918,
+   "om_citation_page_match": 0.9795,
+   "rent_roll_unit_recall": 1.0,
+   "rent_roll_unit_precision": 1.0,
+   "rent_roll_summary_rows_as_units": 0,
+   "rent_roll_unit_field_accuracy": 1.0,
+   "rent_roll_totals_accuracy": 1.0,
+   "rent_roll_in_place_rent_ok": 1.0,
+   "rent_roll_occupancy_ok": 1.0,
+   "opex_category_accuracy": 0.9843,
+   "opex_period_ok": 1.0,
+   "discrepancy_recall": 1.0,
+   "discrepancy_precision": 1.0,
+   "false_flags_on_clean_deals": 0,
+   "underwriting_within_tolerance": 0.9792,
+   "noi_mean_abs_rel_error": 0.0012,
+   "walk_away_mean_abs_rel_error": 0.0012,
+   "yield_on_cost_mean_abs_error": 7e-05,
+   "levered_irr_mean_abs_error": 0.00051,
+   "verdict_agreement": 0.9167,
+   "memo_grounding": 1.0,
+   "memo_pass_rate": 1.0,
+   "cost_usd_per_deal": 0.4491,
+   "cost_usd_total": 5.3891,
+   "duration_s_per_deal": 94.9
+  },
+  "headline_detail": {
+   "deals_scored": {
+    "value": 12,
+    "k": null,
+    "n": null,
+    "label": "Deals scored"
+   },
+   "om_field_accuracy": {
+    "value": 1.0,
+    "k": 297,
+    "n": 297,
+    "label": "OM fields correct"
+   },
+   "om_trusted_accuracy": {
+    "value": 0.9933,
+    "k": 295,
+    "n": 297,
+    "label": "OM fields correct and verified"
+   },
+   "om_citation_valid": {
+    "value": 0.9918,
+    "k": 242,
+    "n": 244,
+    "label": "Citations valid"
+   },
+   "om_citation_page_match": {
+    "value": 0.9795,
+    "k": 239,
+    "n": 244,
+    "label": "Cited page = truth page"
+   },
+   "rent_roll_unit_recall": {
+    "value": 1.0,
+    "k": 1149,
+    "n": 1149,
+    "label": "Rent-roll units found"
+   },
+   "rent_roll_unit_precision": {
+    "value": 1.0,
+    "k": 1149,
+    "n": 1149,
+    "label": "Parsed rows that are real units"
+   },
+   "rent_roll_summary_rows_as_units": {
+    "value": 0,
+    "k": null,
+    "n": null,
+    "label": "Summary rows counted as units"
+   },
+   "rent_roll_unit_field_accuracy": {
+    "value": 1.0,
+    "k": 5667,
+    "n": 5667,
+    "label": "Unit fields correct (matched units)"
+   },
+   "rent_roll_totals_accuracy": {
+    "value": 1.0,
+    "k": 120,
+    "n": 120,
+    "label": "Rent-roll totals correct"
+   },
+   "rent_roll_in_place_rent_ok": {
+    "value": 1.0,
+    "k": 12,
+    "n": 12,
+    "label": "In-place rent within 0.5%"
+   },
+   "rent_roll_occupancy_ok": {
+    "value": 1.0,
+    "k": 12,
+    "n": 12,
+    "label": "Occupancy within 0.5%"
+   },
+   "opex_category_accuracy": {
+    "value": 0.9843,
+    "k": 125,
+    "n": 127,
+    "label": "Statement categories within 0.5%"
+   },
+   "opex_period_ok": {
+    "value": 1.0,
+    "k": 12,
+    "n": 12,
+    "label": "Statement period and annualisation right"
+   },
+   "discrepancy_recall": {
+    "value": 1.0,
+    "k": 29,
+    "n": 29,
+    "label": "Planted discrepancies found"
+   },
+   "discrepancy_precision": {
+    "value": 1.0,
+    "k": 29,
+    "n": 29,
+    "label": "Flags that were planted"
+   },
+   "false_flags_on_clean_deals": {
+    "value": 0,
+    "k": null,
+    "n": 2,
+    "label": "False flags on clean deals"
+   },
+   "underwriting_within_tolerance": {
+    "value": 0.9792,
+    "k": 47,
+    "n": 48,
+    "label": "Underwriting outputs within tolerance"
+   },
+   "noi_mean_abs_rel_error": {
+    "value": 0.0012,
+    "k": null,
+    "n": 12,
+    "label": "Year-1 NOI mean abs. relative error"
+   },
+   "walk_away_mean_abs_rel_error": {
+    "value": 0.0012,
+    "k": null,
+    "n": 12,
+    "label": "Walk-away price mean abs. relative error"
+   },
+   "yield_on_cost_mean_abs_error": {
+    "value": 7e-05,
+    "k": null,
+    "n": 12,
+    "label": "Yield on cost mean abs. error (ratio)"
+   },
+   "levered_irr_mean_abs_error": {
+    "value": 0.00051,
+    "k": null,
+    "n": 12,
+    "label": "Levered IRR mean abs. error (ratio)"
+   },
+   "verdict_agreement": {
+    "value": 0.9167,
+    "k": 11,
+    "n": 12,
+    "label": "Verdict matches engine on truth"
+   },
+   "memo_grounding": {
+    "value": 1.0,
+    "k": 837,
+    "n": 837,
+    "label": "Memo numbers grounded"
+   },
+   "memo_pass_rate": {
+    "value": 1.0,
+    "k": 12,
+    "n": 12,
+    "label": "Memos that passed the number check"
+   },
+   "cost_usd_per_deal": {
+    "value": 0.4491,
+    "k": null,
+    "n": 12,
+    "label": "Cost per deal (USD)"
+   },
+   "cost_usd_total": {
+    "value": 5.3891,
+    "k": null,
+    "n": 12,
+    "label": "Cost, all deals (USD)"
+   },
+   "duration_s_per_deal": {
+    "value": 94.9,
+    "k": null,
+    "n": 12,
+    "label": "Time per deal (s)"
+   }
+  },
+  "per_deal": {
+   "d01-cedarline-dso": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 0,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 0.0,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Needs work",
+     "got": "Needs work"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.4115,
+    "duration_s": 80.3,
+    "pipeline_version": "0.2.0"
+   },
+   "d02-lantana-ic": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 0,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 2.1131161593763966e-15,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pursue",
+     "got": "Pursue"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.4395,
+    "duration_s": 83.1,
+    "pipeline_version": "0.2.0"
+   },
+   "d03-sorrel-jvc": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 4,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 2.4077704759734236e-15,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pass",
+     "got": "Pass"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.5374,
+    "duration_s": 103.5,
+    "pipeline_version": "0.2.0"
+   },
+   "d04-kestrel-bb": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 0.8182,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 4,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 2.0539100108698796e-15,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pass",
+     "got": "Pass"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.5074,
+    "duration_s": 102.8,
+    "pipeline_version": "0.2.0"
+   },
+   "d05-larkspur-barsha": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 2,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 0.014477139195692792,
+    "walk_away_rel_error": 0.014936285773971172,
+    "verdict": {
+     "expected": "Needs work",
+     "got": "Needs work"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.5404,
+    "duration_s": 110.3,
+    "pipeline_version": "0.2.0"
+   },
+   "d06-opaline-jvc": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 4,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": -1.8008420546864417e-05,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Needs work",
+     "got": "Needs work"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.3822,
+    "duration_s": 85.6,
+    "pipeline_version": "0.2.0"
+   },
+   "d07-vireo-dso": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 4,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": -1.2774199646689438e-05,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Needs work",
+     "got": "Needs work"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.3866,
+    "duration_s": 77.4,
+    "pipeline_version": "0.2.0"
+   },
+   "d08-jade-ic": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 3,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 2.9421798049390767e-05,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pursue",
+     "got": "Pursue"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.4387,
+    "duration_s": 111.4,
+    "pipeline_version": "0.2.0"
+   },
+   "d09-aurelia-bb": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 1,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 0.0,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pass",
+     "got": "Pass"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.4113,
+    "duration_s": 90.3,
+    "pipeline_version": "0.2.0"
+   },
+   "d10-almehrab-barsha": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 2,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": -7.965097970699301e-16,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pass",
+     "got": "Needs work"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.5107,
+    "duration_s": 109.5,
+    "pipeline_version": "0.2.0"
+   },
+   "d11-silverline-dso": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 3,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": 0.0,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pass",
+     "got": "Pass"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.4138,
+    "duration_s": 101.5,
+    "pipeline_version": "0.2.0"
+   },
+   "d12-tulip-ic": {
+    "om_accuracy": 1.0,
+    "rent_roll_recall": 1.0,
+    "rent_roll_precision": 1.0,
+    "opex_category_accuracy": 1.0,
+    "opex_period_ok": true,
+    "discrepancies": {
+     "tp": 2,
+     "fn": 0,
+     "fp": 0
+    },
+    "noi_rel_error": -2.521320881941995e-15,
+    "walk_away_rel_error": 0.0,
+    "verdict": {
+     "expected": "Pass",
+     "got": "Pass"
+    },
+    "memo": {
+     "status": "passed",
+     "grounding": 1.0
+    },
+    "cost_usd": 0.4096,
+    "duration_s": 83.6,
+    "pipeline_version": "0.2.0"
+   }
+  },
+  "deals_not_scored": {}
+ },
+ "updated_at": "2026-11-21T18:53:27+00:00",
+ "note": "Written by `python -m evals score`. latest = most recent scoring; history = one entry per label (re-scoring a label replaces its entry). Metric definitions: evals/README.md."
+}

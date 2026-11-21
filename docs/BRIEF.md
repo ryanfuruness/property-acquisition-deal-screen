@@ -37,6 +37,8 @@ Sources for each point are in [docs/research](research/).
 
 An evaluation set of synthetic deal packages with discrepancies planted the way brokers plant them, so the right answer is known by construction. It measures field-level extraction accuracy, discrepancy recall and false flags, underwriting accuracy against the true building, verdict agreement, and memo grounding.
 
+**Results on twelve packages:** all 29 planted discrepancies caught with no false flags; verdicts matching the true building on 11 of 12; every OM field extracted correctly and 99% verified against its page by code; Year-1 NOI and walk-away price within 0.1% of the true building on average; all 835 memo numbers traced to a fact. Each deal costs about USD 0.45 and 95 seconds. The remaining misses are design choices (the screen never decides title, and it does not invent costs a seller left out) and one ambiguous cost line; the [failure log](../evals/FAILURES.md) traces every miss to its cause and fix.
+
 **Product metrics in use:** analyst review time per screened deal; deals screened per analyst per week; share of flags the analyst overrides (too high means noise, near zero on real deals means people stopped checking); deals the screen passed that later failed diligence.
 
 ## Risks

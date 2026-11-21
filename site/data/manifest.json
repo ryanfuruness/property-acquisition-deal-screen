@@ -1,0 +1,699 @@
+{
+ "generated_at": "2026-11-21T18:54:04+00:00",
+ "generated_by": "tools/build_site_data.py",
+ "repo_url": "https://github.com/ryanfuruness/property-acquisition-deal-screen",
+ "synthetic": true,
+ "dev_fixture": false,
+ "mandate": {
+  "firm": "Gulf Residential Income Fund I (illustrative)",
+  "as_of": "2026-11-21",
+  "min_going_in_net_yield_on_cost": 0.06,
+  "target_levered_irr": 0.08,
+  "target_equity_multiple": 1.35,
+  "min_dscr_year1": 1.3
+ },
+ "deals": [
+  {
+   "deal_id": "d02-lantana-ic",
+   "building_name": "Lantana Court",
+   "market_area": "International City",
+   "location": "International City Phase 2 (Warsan First), Dubai",
+   "units": 94,
+   "asking_price_aed": 36000000.0,
+   "walk_away_price_aed": 37520000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": -0.04222222222222216,
+   "going_in_net_yield_on_cost": 0.0749125191493802,
+   "levered_irr_pre_tax": 0.09684434987743729,
+   "dscr_year1": 1.902900188588405,
+   "verdict": "Pursue",
+   "verdict_reason": "Meets every hard filter and every soft filter.",
+   "hard_fails": 0,
+   "soft_fails": 0,
+   "unknown": 0,
+   "failed_tests": [],
+   "underwriting_status": "ok",
+   "discrepancy_count": 0,
+   "discrepancy_severity": {
+    "high": 0,
+    "medium": 0,
+    "low": 0
+   },
+   "top_discrepancy": null,
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.4395,
+   "duration_s": 83.1,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:32:05+00:00"
+  },
+  {
+   "deal_id": "d08-jade-ic",
+   "building_name": "Jade Court",
+   "market_area": "International City",
+   "location": "International City Phase 1, England Cluster, Dubai",
+   "units": 92,
+   "asking_price_aed": 34500000.0,
+   "walk_away_price_aed": 34940000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": -0.012753623188405783,
+   "going_in_net_yield_on_cost": 0.07307603999100215,
+   "levered_irr_pre_tax": 0.08523745579651054,
+   "dscr_year1": 1.856261322112949,
+   "verdict": "Pursue",
+   "verdict_reason": "Meets every hard filter and every soft filter.",
+   "hard_fails": 0,
+   "soft_fails": 0,
+   "unknown": 0,
+   "failed_tests": [],
+   "underwriting_status": "ok",
+   "discrepancy_count": 4,
+   "discrepancy_severity": {
+    "high": 2,
+    "medium": 1,
+    "low": 1
+   },
+   "top_discrepancy": {
+    "id": "potential_rent_as_income",
+    "title": "OM income AED 3,910,000 vs in-place rent AED 3,726,000",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": true,
+   "cost_usd": 0.4387,
+   "duration_s": 111.4,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:41:28+00:00"
+  },
+  {
+   "deal_id": "d06-opaline-jvc",
+   "building_name": "Opaline Residence",
+   "market_area": "JVC",
+   "location": "Jumeirah Village Circle, District 11, Dubai",
+   "units": 48,
+   "asking_price_aed": 30500000.0,
+   "walk_away_price_aed": 27540000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.0970491803278688,
+   "going_in_net_yield_on_cost": 0.059608127380777476,
+   "levered_irr_pre_tax": 0.03892407331363376,
+   "dscr_year1": 1.5141798716098946,
+   "verdict": "Needs work",
+   "verdict_reason": "Meets every hard filter; 3 soft fail(s) or unknown(s): min_going_in_net_yield_on_cost, target_levered_irr, target_equity_multiple.",
+   "hard_fails": 0,
+   "soft_fails": 3,
+   "unknown": 0,
+   "failed_tests": [
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 4,
+   "discrepancy_severity": {
+    "high": 3,
+    "medium": 1,
+    "low": 0
+   },
+   "top_discrepancy": {
+    "id": "rent_roll_does_not_foot",
+    "title": "Rent roll totals do not equal the sum of its rows: annual rent",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.3822,
+   "duration_s": 85.6,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:38:45+00:00"
+  },
+  {
+   "deal_id": "d07-vireo-dso",
+   "building_name": "Vireo Residences",
+   "market_area": "Dubai Silicon Oasis",
+   "location": "Dubai Silicon Oasis, near Dubai-Al Ain Road",
+   "units": 118,
+   "asking_price_aed": 95000000.0,
+   "walk_away_price_aed": 79430000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.16389473684210532,
+   "going_in_net_yield_on_cost": 0.059513000893996,
+   "levered_irr_pre_tax": 0.006586954020869094,
+   "dscr_year1": 1.511602831501967,
+   "verdict": "Needs work",
+   "verdict_reason": "Meets every hard filter; 4 soft fail(s) or unknown(s): min_going_in_net_yield_on_cost, target_levered_irr, target_equity_multiple, max_lease_expiry_share_in_any_quarter.",
+   "hard_fails": 0,
+   "soft_fails": 4,
+   "unknown": 0,
+   "failed_tests": [
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple",
+    "max_lease_expiry_share_in_any_quarter"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 4,
+   "discrepancy_severity": {
+    "high": 1,
+    "medium": 3,
+    "low": 0
+   },
+   "top_discrepancy": {
+    "id": "expiry_concentration",
+    "title": "61.1% of in-place rent expires between 2027-01-31 to 2027-04-29",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.3866,
+   "duration_s": 77.4,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:40:11+00:00"
+  },
+  {
+   "deal_id": "d05-larkspur-barsha",
+   "building_name": "Larkspur Residence",
+   "market_area": "Al Barsha",
+   "location": "Barsha Heights (TECOM), Al Barsha, Dubai",
+   "units": 126,
+   "asking_price_aed": 113000000.0,
+   "walk_away_price_aed": 97170000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.14008849557522118,
+   "going_in_net_yield_on_cost": 0.058337712349915506,
+   "levered_irr_pre_tax": 0.01864312204596312,
+   "dscr_year1": 1.4817391841935665,
+   "verdict": "Needs work",
+   "verdict_reason": "Meets every hard filter; 3 soft fail(s) or unknown(s): min_going_in_net_yield_on_cost, target_levered_irr, target_equity_multiple.",
+   "hard_fails": 0,
+   "soft_fails": 3,
+   "unknown": 0,
+   "failed_tests": [
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 3,
+   "discrepancy_severity": {
+    "high": 1,
+    "medium": 1,
+    "low": 1
+   },
+   "top_discrepancy": {
+    "id": "upside_exceeds_rera_cap",
+    "title": "OM claims 13.0% rental uplift; RERA bands and the market allow at most 10.0%",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.5404,
+   "duration_s": 110.3,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:36:55+00:00"
+  },
+  {
+   "deal_id": "d10-almehrab-barsha",
+   "building_name": "Al Mehrab Building",
+   "market_area": "Al Barsha",
+   "location": "Al Barsha 1, behind Mall of the Emirates, Dubai",
+   "units": 70,
+   "asking_price_aed": 75500000.0,
+   "walk_away_price_aed": 63510000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.15880794701986756,
+   "going_in_net_yield_on_cost": 0.05832019391506647,
+   "levered_irr_pre_tax": 0.009333024057219464,
+   "dscr_year1": 1.481325306153917,
+   "verdict": "Needs work",
+   "verdict_reason": "Meets every hard filter; 4 soft fail(s) or unknown(s): min_going_in_net_yield_on_cost, target_levered_irr, target_equity_multiple, title.",
+   "hard_fails": 0,
+   "soft_fails": 4,
+   "unknown": 1,
+   "failed_tests": [
+    "title",
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 3,
+   "discrepancy_severity": {
+    "high": 2,
+    "medium": 1,
+    "low": 0
+   },
+   "top_discrepancy": {
+    "id": "occupancy_mismatch",
+    "title": "OM occupancy 98.0% vs rent roll 91.4%",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.5107,
+   "duration_s": 109.5,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:44:50+00:00"
+  },
+  {
+   "deal_id": "d01-cedarline-dso",
+   "building_name": "Cedarline Residences",
+   "market_area": "Dubai Silicon Oasis",
+   "location": "Dubai Silicon Oasis (DSO), Dubai",
+   "units": 112,
+   "asking_price_aed": 83000000.0,
+   "walk_away_price_aed": 70060000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.1559036144578313,
+   "going_in_net_yield_on_cost": 0.05806550458675859,
+   "levered_irr_pre_tax": 0.01080499516020831,
+   "dscr_year1": 1.4748478050841571,
+   "verdict": "Needs work",
+   "verdict_reason": "Meets every hard filter; 3 soft fail(s) or unknown(s): min_going_in_net_yield_on_cost, target_levered_irr, target_equity_multiple.",
+   "hard_fails": 0,
+   "soft_fails": 3,
+   "unknown": 0,
+   "failed_tests": [
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 0,
+   "discrepancy_severity": {
+    "high": 0,
+    "medium": 0,
+    "low": 0
+   },
+   "top_discrepancy": null,
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.4115,
+   "duration_s": 80.3,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:30:45+00:00"
+  },
+  {
+   "deal_id": "d11-silverline-dso",
+   "building_name": "Silverline Residences",
+   "market_area": "Dubai Silicon Oasis",
+   "location": "Dubai Silicon Oasis (DSO), Dubai",
+   "units": 90,
+   "asking_price_aed": 72500000.0,
+   "walk_away_price_aed": 60370000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.16731034482758622,
+   "going_in_net_yield_on_cost": 0.06971740981499824,
+   "levered_irr_pre_tax": 0.0028386404297581457,
+   "dscr_year1": 1.7708177334973554,
+   "verdict": "Pass",
+   "verdict_reason": "Fails hard filter(s): no_master_lease_to_related_party.",
+   "hard_fails": 1,
+   "soft_fails": 2,
+   "unknown": 0,
+   "failed_tests": [
+    "no_master_lease_to_related_party",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 4,
+   "discrepancy_severity": {
+    "high": 2,
+    "medium": 2,
+    "low": 0
+   },
+   "top_discrepancy": {
+    "id": "occupancy_mismatch",
+    "title": "OM occupancy 100.0% vs rent roll 85.6%",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.4138,
+   "duration_s": 101.5,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:51:39+00:00"
+  },
+  {
+   "deal_id": "d12-tulip-ic",
+   "building_name": "Tulip Court",
+   "market_area": "International City",
+   "location": "International City Phase 1, China Cluster, Dubai",
+   "units": 26,
+   "asking_price_aed": 11250000.0,
+   "walk_away_price_aed": 8410000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.25244444444444447,
+   "going_in_net_yield_on_cost": 0.05407514210434146,
+   "levered_irr_pre_tax": -0.04197941498801035,
+   "dscr_year1": 1.3739974602580078,
+   "verdict": "Pass",
+   "verdict_reason": "Fails hard filter(s): min_units, min_price_aed.",
+   "hard_fails": 2,
+   "soft_fails": 3,
+   "unknown": 0,
+   "failed_tests": [
+    "min_units",
+    "min_price_aed",
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 2,
+   "discrepancy_severity": {
+    "high": 1,
+    "medium": 1,
+    "low": 0
+   },
+   "top_discrepancy": {
+    "id": "potential_rent_as_income",
+    "title": "OM income AED 1,078,000 vs in-place rent AED 1,006,000",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.4096,
+   "duration_s": 83.6,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:48:07+00:00"
+  },
+  {
+   "deal_id": "d03-sorrel-jvc",
+   "building_name": "Sorrel Heights",
+   "market_area": "JVC",
+   "location": "Jumeirah Village Circle (JVC), Dubai",
+   "units": 170,
+   "asking_price_aed": 192000000.0,
+   "walk_away_price_aed": 133790000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.3031770833333334,
+   "going_in_net_yield_on_cost": 0.0493140573701777,
+   "levered_irr_pre_tax": -0.07172841518894724,
+   "dscr_year1": 1.252522565474468,
+   "verdict": "Pass",
+   "verdict_reason": "Fails hard filter(s): min_dscr_year1.",
+   "hard_fails": 1,
+   "soft_fails": 4,
+   "unknown": 0,
+   "failed_tests": [
+    "min_dscr_year1",
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple",
+    "max_over_rent_share_of_income"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 5,
+   "discrepancy_severity": {
+    "high": 3,
+    "medium": 1,
+    "low": 1
+   },
+   "top_discrepancy": {
+    "id": "occupancy_mismatch",
+    "title": "OM occupancy 97.0% vs rent roll 90.0%",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.5374,
+   "duration_s": 103.5,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:33:28+00:00"
+  },
+  {
+   "deal_id": "d04-kestrel-bb",
+   "building_name": "Kestrel Tower",
+   "market_area": "Business Bay",
+   "location": "Business Bay, Marasi Drive side",
+   "units": 107,
+   "asking_price_aed": 162500000.0,
+   "walk_away_price_aed": 113910000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.29901538461538457,
+   "going_in_net_yield_on_cost": 0.04728783921420236,
+   "levered_irr_pre_tax": -0.0672916792923604,
+   "dscr_year1": 1.2010642839446588,
+   "verdict": "Pass",
+   "verdict_reason": "Fails hard filter(s): min_dscr_year1.",
+   "hard_fails": 1,
+   "soft_fails": 4,
+   "unknown": 0,
+   "failed_tests": [
+    "min_dscr_year1",
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple",
+    "max_over_rent_share_of_income"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 4,
+   "discrepancy_severity": {
+    "high": 3,
+    "medium": 1,
+    "low": 0
+   },
+   "top_discrepancy": {
+    "id": "gross_yield_as_net",
+    "title": "OM 'net' yield 6.8% vs buyer's net 4.7%",
+    "severity": "high"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.5074,
+   "duration_s": 102.8,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:35:12+00:00"
+  },
+  {
+   "deal_id": "d09-aurelia-bb",
+   "building_name": "Aurelia Bay Tower",
+   "market_area": "Business Bay",
+   "location": "Business Bay, Dubai",
+   "units": 96,
+   "asking_price_aed": 131000000.0,
+   "walk_away_price_aed": 96190000,
+   "walk_away_binding_constraint": "levered_irr",
+   "walk_away_discount_to_asking": 0.2657251908396947,
+   "going_in_net_yield_on_cost": 0.04663867522851032,
+   "levered_irr_pre_tax": -0.046212492737144895,
+   "dscr_year1": 1.1845845285902916,
+   "verdict": "Pass",
+   "verdict_reason": "Fails hard filter(s): title, min_dscr_year1.",
+   "hard_fails": 2,
+   "soft_fails": 3,
+   "unknown": 0,
+   "failed_tests": [
+    "title",
+    "min_dscr_year1",
+    "min_going_in_net_yield_on_cost",
+    "target_levered_irr",
+    "target_equity_multiple"
+   ],
+   "underwriting_status": "ok",
+   "discrepancy_count": 2,
+   "discrepancy_severity": {
+    "high": 0,
+    "medium": 1,
+    "low": 1
+   },
+   "top_discrepancy": {
+    "id": "yield_excludes_acquisition_costs",
+    "title": "OM yield 6.8% is on asking price, before 6.2% acquisition costs",
+    "severity": "medium"
+   },
+   "memo_status": "passed",
+   "scanned_om": false,
+   "cost_usd": 0.4113,
+   "duration_s": 90.3,
+   "pipeline_version": "0.2.0",
+   "started_at": "2026-11-21T18:43:19+00:00"
+  }
+ ],
+ "package_index": [
+  {
+   "deal_id": "d01-cedarline-dso",
+   "building_name": "Cedarline Residences",
+   "area": "Dubai Silicon Oasis",
+   "units": 112,
+   "asking_price_aed": 83000000,
+   "broker": "Harbour & Crest Real Estate Advisory",
+   "documents": [
+    "Cedarline_T12_Operating_Statement_Nov25-Oct26.xlsx",
+    "Cedarline_Tenancy_Schedule_31Oct2026.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d02-lantana-ic",
+   "building_name": "Lantana Court",
+   "area": "International City",
+   "units": 94,
+   "asking_price_aed": 36000000,
+   "broker": "Marwah & Stone Capital",
+   "documents": [
+    "Lantana Court - Rent Roll (01.10.2026).xlsx",
+    "Lantana_Court_Income_and_Expense_12m_to_Sep2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d03-sorrel-jvc",
+   "building_name": "Sorrel Heights",
+   "area": "JVC",
+   "units": 170,
+   "asking_price_aed": 192000000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "documents": [
+    "SORREL HEIGHTS RENT ROLL NOV 2026.xlsx",
+    "Sorrel Heights - Income & Expense Summary 12M Sep 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d04-kestrel-bb",
+   "building_name": "Kestrel Tower",
+   "area": "Business Bay",
+   "units": 107,
+   "asking_price_aed": 162500000,
+   "broker": "Meridian Gate Properties",
+   "documents": [
+    "KT_RentRoll_Export_20261031.xlsx",
+    "Kestrel Tower P&L FY Oct25-Sep26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d05-larkspur-barsha",
+   "building_name": "Larkspur Residence",
+   "area": "Al Barsha",
+   "units": 126,
+   "asking_price_aed": 113000000,
+   "broker": "Harbour & Crest Real Estate Advisory",
+   "documents": [
+    "Larkspur Income & Expense Statement FY2026.xlsx",
+    "Larkspur_Residence_Rent_Roll_Oct-2026.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d06-opaline-jvc",
+   "building_name": "Opaline Residence",
+   "area": "JVC",
+   "units": 48,
+   "asking_price_aed": 30500000,
+   "broker": "Saffron Key Realty",
+   "documents": [
+    "Opaline rent roll.xlsx",
+    "Opaline_Residence_T12_Nov2025-Oct2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d07-vireo-dso",
+   "building_name": "Vireo Residences",
+   "area": "Dubai Silicon Oasis",
+   "units": 118,
+   "asking_price_aed": 95000000,
+   "broker": "Meridian Gate Properties",
+   "documents": [
+    "Vireo Residences Tenancy Schedule.xlsx",
+    "Vireo_Operating_Statement_Oct25_Sep26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d08-jade-ic",
+   "building_name": "Jade Court",
+   "area": "International City",
+   "units": 92,
+   "asking_price_aed": 34500000,
+   "broker": "Saffron Key Realty",
+   "documents": [
+    "Jade Court Income Expenses Oct25-Sep26.xlsx",
+    "Jade Court Rent List Oct 26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": true
+  },
+  {
+   "deal_id": "d09-aurelia-bb",
+   "building_name": "Aurelia Bay Tower",
+   "area": "Business Bay",
+   "units": 96,
+   "asking_price_aed": 131000000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "documents": [
+    "Aurelia Bay Tower - Rent Roll Oct 2026.xlsx",
+    "Aurelia Bay Tower Owner Statement 12M Sep 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d10-almehrab-barsha",
+   "building_name": "Al Mehrab Building",
+   "area": "Al Barsha",
+   "units": 70,
+   "asking_price_aed": 75500000,
+   "broker": "Marwah & Stone Capital",
+   "documents": [
+    "Al Mehrab Bldg - Tenancy List Sep 2026.pdf",
+    "Al Mehrab Building - Income Statement 12M Aug 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d11-silverline-dso",
+   "building_name": "Silverline Residences",
+   "area": "Dubai Silicon Oasis",
+   "units": 90,
+   "asking_price_aed": 72500000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "documents": [
+    "Silverline Residences - Tenancy Schedule.xlsx",
+    "Silverline Residences Landlord Statement Oct25-Sep26.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "d12-tulip-ic",
+   "building_name": "Tulip Court",
+   "area": "International City",
+   "units": 26,
+   "asking_price_aed": 11250000,
+   "broker": "Saffron Key Realty",
+   "documents": [
+    "Tulip Court - Operating Statement Nov25-Oct26.xlsx",
+    "om.pdf",
+    "tulip_court_rentroll.csv"
+   ],
+   "scanned_om": false
+  }
+ ],
+ "evals": {
+  "files": [
+   "FAILURES.md",
+   "summary.json"
+  ],
+  "summary": true,
+  "failures": true
+ },
+ "docs": [
+  "BRIEF.md",
+  "research/dubai_conventions.md",
+  "research/practitioner_pain_points.md"
+ ],
+ "walkthrough_gif": "assets/walkthrough.gif"
+}

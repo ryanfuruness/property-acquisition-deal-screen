@@ -271,3 +271,16 @@ def test_missing_opex_is_context_aware():
                                                          absent=["utilities_common", "security_cleaning"],
                                                          rental_income=rr["summary"]["in_place_rent_aed"]))
     assert missing_opex_items(ctx) is None          # strata: the OA service charge covers common areas
+
+
+def test_related_party_from_verified_affiliation_wording_when_model_flag_missing():
+    """A run where the model quoted the tie but left its yes/no blank must still fail the hard filter."""
+    base = {"id": "master_lease_related_party", "detected_by": "rule+model", "related_party": None,
+            "sources": [{"label": "verified quote", "quote": "The operator is a Silverline Group company."}]}
+    assert related_party_flag([base], "unclear", make_om()) == (True, "master_lease")
+    unrelated = dict(base, sources=[{"label": "verified quote", "quote": "Master tenant: Acme Living LLC."}])
+    assert related_party_flag([unrelated], "unclear", make_om()) == (None, "master_lease")
+    third_party = dict(unrelated, related_party=False)
+    assert related_party_flag([third_party], "master_lease_third_party", make_om()) == (False, "master_lease")
+    unverified = dict(base, sources=[{"label": "unverified", "quote": "The operator is a Silverline Group company."}])
+    assert related_party_flag([unverified], "unclear", make_om()) == (None, "master_lease")

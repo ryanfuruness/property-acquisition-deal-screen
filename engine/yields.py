@@ -105,7 +105,9 @@ def recompute_stated_yield(stated_income: float | None, price: float, basis: Any
     shown = stated_yield if stated_yield is not None else reproduced
     buyer = out["buyer_net_on_total_cost"]
     out["gap_vs_stated"] = None if shown is None or buyer is None else buyer - shown
-    basis_text = f"{b['measure']} on {'asking price' if b['on'] == 'asking_price' else 'total cost'}"
+    denominator = 'asking price' if b['on'] == 'asking_price' else 'total cost'
+    basis_text = (f"basis not stated; on {denominator}" if b['measure'] == 'unstated'
+                  else f"{b['measure']} on {denominator}")
     if b["assumed"]:
         basis_text += ", denominator assumed"
     if shown is None:

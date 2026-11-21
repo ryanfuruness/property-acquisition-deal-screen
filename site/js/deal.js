@@ -408,11 +408,11 @@ function uwView(r, { th }) {
     ].filter(([key]) => yc[key]?.value != null);
     const max = Math.max(...rows.map(([key]) => yc[key].value), th.min_going_in_net_yield_on_cost || 0) * 1.12;
     const tgt = th.min_going_in_net_yield_on_cost;
-    ladder = `<p>${esc(yc.summary || "")}</p>
+    ladder = `<p>${esc((yc.summary || "").replace(/\(unstated on /, "(basis not stated; on "))}</p>
       <div class="ladder" role="list">${rows.map(([key, label, cls]) => `<div class="lab" role="listitem">${label}</div>
         <div class="barcell" aria-hidden="true"><div class="bar ${cls}" style="width:${(yc[key].value / max) * 100}%"></div>${tgt ? `<div class="target" style="left:${(tgt / max) * 100}%"></div>` : ""}</div>
         <div class="val">${mcite("oy." + key, pct(yc[key].value))}</div>`).join("")}</div>
-      ${tgt ? `<div class="ladder-foot"><i></i> mandate minimum yield on cost, ${esc(pct(tgt))}. OM basis: ${esc(words(yc.om_basis?.measure))} on ${esc(words(yc.om_basis?.stated_on || yc.om_basis?.on))}${yc.om_basis?.assumed ? " (denominator assumed: the OM does not say)" : ""}.</div>` : ""}`;
+      ${tgt ? `<div class="ladder-foot"><i></i> mandate minimum yield on cost, ${esc(pct(tgt))}. OM basis: ${esc(yc.om_basis?.measure === "unstated" ? "not stated" : words(yc.om_basis?.measure))}, on ${esc(words(yc.om_basis?.stated_on || yc.om_basis?.on))}${yc.om_basis?.assumed ? " (denominator assumed: the OM does not say)" : ""}.</div>` : ""}`;
   }
 
   // sensitivity grid

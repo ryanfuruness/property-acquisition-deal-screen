@@ -747,11 +747,21 @@ def merge(rule_findings: list[dict], model_findings: list[dict]) -> list[dict]:
     return sorted(out, key=lambda d: SEVERITY_ORDER.get(d["severity"], 3))
 
 
+# Verified wording that ties a master tenant to the seller, used when the model's yes/no is missing.
+AFFILIATION_KEYWORDS = ("group company", "affiliate", "affiliated", "subsidiary", "sister company",
+                        "related party", "related company", "under common ownership", "owned by the seller",
+                        "the seller's", "the vendor's")
+
+
 def related_party_flag(discrepancies: list[dict], conclusion: str, om: dict) -> tuple[bool | None, str | None]:
     """(master_lease_related_party, lease_structure) for mandate_fit, from verified evidence only."""
     ml = next((d for d in discrepancies if d["id"] == "master_lease_related_party"), None)
-    if ml and ml.get("related_party") is True and ml["detected_by"] in ("model", "rule+model"):
-        return True, "master_lease"
+    if ml and ml["detected_by"] in ("model", "rule+model"):
+        if ml.get("related_party") is True or conclusion == "master_lease_related_party":
+            return True, "master_lease"
+        quotes = " ".join(s.get("quote") or "" for s in ml["sources"] if s.get("label") == "verified quote")
+        if ml.get("related_party") is None and contains_any(quotes, AFFILIATION_KEYWORDS):
+            return True, "master_lease"
     ls = trusted(om, "lease_structure")
     if ml:
         return (False if conclusion == "master_lease_third_party" else None), "master_lease"
