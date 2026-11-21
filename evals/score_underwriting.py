@@ -1,4 +1,7 @@
-"""Metrics 5 and 6: underwriting outputs and verdict, against the engine run on truth.
+"""Metrics 5 and 6: underwriting inputs (engine on extracted vs true inputs), and verdict.
+
+This does not test the engine: the same engine runs on both sides. The engine's own correctness is
+tested separately (tests/engine and the spreadsheet tie-out in evals/tieout/).
 
 The expected numbers come from :func:`evals.truth.engine_on_truth` (engine.underwrite and
 engine.mandate_fit on ``true_building.engine_inputs`` and ``deal_facts``). The gap measures
@@ -9,7 +12,7 @@ really pays), which is the point: the screen should find them.
 
 from __future__ import annotations
 
-from .common import MISSED, UW_TOL, check, get, is_num, rel_err
+from .common import MISSED, UW_TOL, check, get, is_num, norm_verdict, rel_err
 from .truth import UW_METRICS
 
 SECTION_UW, SECTION_VERDICT = "underwriting", "verdict"
@@ -43,7 +46,7 @@ def score(deal_id: str, truth: dict, run: dict, expected: dict) -> dict:
                             else f"abs error {ae:,.4g}, rel error {re_:+.2%} (tolerance {kind} {tol:g})"
                             if ae is not None and re_ is not None else None,
                             abs_error=ae, rel_error=re_))
-    v_exp, v_got = expected["verdict"], get(run, "mandate_fit", "verdict")
+    v_exp, v_got = norm_verdict(expected["verdict"]), norm_verdict(get(run, "mandate_fit", "verdict"))
     run_tests = {t["name"]: t for t in get(run, "mandate_fit", "tests", default=[]) or []}
     hard_got = sorted(n for n, t in run_tests.items() if t.get("kind") == "hard" and t.get("status") == "fail")
     diffs = []

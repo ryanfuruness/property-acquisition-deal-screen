@@ -1,4 +1,4 @@
-"""Load the mandate and market reference files.
+"""Load the mandate and the screen reference data (areas.yaml).
 
 The engine itself takes plain dicts so that callers (pipeline, tests, the CLI) can
 pass reference data from anywhere; these helpers read the repo's YAML files.

@@ -2,7 +2,6 @@
 
 import copy
 import json
-import math
 import os
 import subprocess
 import sys
@@ -180,47 +179,118 @@ class TestProvenance:
         tags = {d["provenance"] for d in r["metrics"]["noi_year1"]["depends_on"]}
         assert tags == {"document", "default", "mandate", "market"}   # fixture lacks two opex lines
         dscr_inputs = {d["input"] for d in r["metrics"]["dscr_year1"]["depends_on"]}
-        assert {"deal.price_aed", "mandate.underwriting.debt.ltv",
+        assert {"deal.price_aed", "mandate.underwriting.debt.max_ltv", "mandate.underwriting.debt.sizing_dscr",
                 "mandate.underwriting.debt.margin"} <= dscr_inputs
+        exit_inputs = {d["input"] for d in r["metrics"]["exit_yield"]["depends_on"]}
+        assert {"deal.completion_year", "mandate.underwriting.market_view.exit_age_premium_bps",
+                "deal.price_aed"} <= exit_inputs
 
     def test_result_is_json_serialisable(self, jvc_deal, mandate, market):
         json.dumps(underwrite(jvc_deal, mandate, market), allow_nan=False)
 
 
 class TestWalkAway:
-    def _check_boundary(self, deal, mandate, market):
-        r = underwrite(deal, mandate, market)
+    def test_boundary_meets_target_unlevered_irr(self, jvc_deal, mandate, market):
+        r = underwrite(jvc_deal, mandate, market)
         price = v(r, "walk_away_price_aed")
         assert price is not None and price % 10_000 == 0
-        target = mandate["buy_box"]["soft"]["target_levered_irr"]
-        floor = mandate["buy_box"]["hard"]["min_dscr_year1"]
-        at = underwrite({**deal, "price_aed": price}, mandate, market)
-        above = underwrite({**deal, "price_aed": price + 10_000}, mandate, market)
-        assert v(at, "levered_irr_pre_tax") >= target
-        assert v(at, "dscr_year1") >= floor
-        assert v(above, "levered_irr_pre_tax") < target or v(above, "dscr_year1") < floor
-        return r, price
-
-    def test_irr_binds_on_jvc_deal(self, jvc_deal, mandate, market):
-        r, price = self._check_boundary(jvc_deal, mandate, market)
-        assert r["walk_away"]["binding_constraint"] == "levered_irr"
-        target = mandate["buy_box"]["soft"]["target_levered_irr"]
-        assert r["walk_away"]["levered_irr_at_price"]["value"] == pytest.approx(target, abs=2e-4)
-
-    def test_dscr_binds_when_irr_target_is_low(self, jvc_deal, mandate, market):
-        m = copy.deepcopy(mandate)
-        m["buy_box"]["soft"]["target_levered_irr"] = -0.50
-        r, price = self._check_boundary(jvc_deal, m, market)
-        assert r["walk_away"]["binding_constraint"] == "dscr_year1"
-        # Analytic: DSCR = NOI / (LTV x P x loan constant) = 1.30 at the limit.
-        constant = annuity_payment(1.0, 0.068, 20)
-        p_max = v(r, "noi_year1") / (1.30 * 0.45 * constant)
-        assert price == math.floor(p_max / 10_000) * 10_000
+        target = mandate["buy_box"]["soft"]["target_unlevered_irr"]
+        at = underwrite({**jvc_deal, "price_aed": price}, mandate, market)
+        above = underwrite({**jvc_deal, "price_aed": price + 10_000}, mandate, market)
+        assert v(at, "unlevered_irr_pre_tax") >= target > v(above, "unlevered_irr_pre_tax")
+        assert r["walk_away"]["binding_constraint"] == "unlevered_irr"
+        assert r["walk_away"]["unlevered_irr_at_price"]["value"] == pytest.approx(target, abs=2e-4)
+        # Debt is re-sized at the walk-away price.
+        assert r["walk_away"]["loan_at_price"]["value"] == pytest.approx(v(at, "loan_aed"))
 
     def test_walk_away_does_not_depend_on_asking_price(self, jvc_deal, mandate, market):
         a = v(underwrite(jvc_deal, mandate, market), "walk_away_price_aed")
         b = v(underwrite({**jvc_deal, "price_aed": 90_000_000}, mandate, market), "walk_away_price_aed")
         assert a == b
+
+    def test_names_the_assumption_that_moves_it_most(self, jvc_deal, mandate, market):
+        wa = underwrite(jvc_deal, mandate, market)["walk_away"]
+        cases = wa["sensitivity"]["cases"]
+        assert [(c["assumption"], c["case"]) for c in cases] == [
+            ("exit_yield", "-50 bps"), ("exit_yield", "+50 bps"),
+            ("reference_rent_path", "-5%"), ("reference_rent_path", "+5%")]
+        base = wa["price_aed"]["value"]
+        assert cases[0]["price_aed"] > base > cases[1]["price_aed"]
+        assert cases[3]["price_aed"] > base > cases[2]["price_aed"]
+        swings = {}
+        for c in cases:
+            assert c["delta_aed"] == c["price_aed"] - base
+            swings[c["assumption"]] = max(swings.get(c["assumption"], 0), abs(c["delta_aed"]))
+        assert wa["most_sensitive_assumption"] == max(swings, key=swings.get)
+        assert wa["largest_swing_aed"]["value"] == max(swings.values())
+
+
+class TestDebtSizing:
+    def test_ltv_binds_hand_calculated(self, test_mandate, test_market):
+        # Price 500k: 45% LTV = 225,000; NOI 72,389 would support 476,966 at 1.40x, so LTV binds.
+        r = underwrite(single_unit_deal(price=500_000.0), test_mandate, test_market)
+        assert r["debt"]["sizing_constraint"] == "ltv"
+        assert v(r, "loan_aed") == pytest.approx(225_000.0)
+        # 15-year annuity at 6.80%: loan constant 0.1084117; debt service 24,392.64.
+        assert v(r, "annual_debt_service_aed") == pytest.approx(225_000 * 0.10841173618856524)
+        a = r["acquisition_costs"]
+        assert a["transfer_costs"]["value"] == pytest.approx(20_000 + 580 + 4_200 + 10_000 + 500)   # 35,280
+        assert a["mortgage_registration"]["value"] == pytest.approx(0.0025 * 225_000 + 290)         # 852.50
+        assert v(r, "arrangement_fee_aed") == pytest.approx(1_687.5)                                 # 0.75%
+        assert v(r, "equity_aed") == pytest.approx(500_000 + 35_280 + 852.5 + 1_687.5 - 225_000)
+        assert v(r, "dscr_year1") > 1.40
+
+    def test_dscr_binds_and_cover_is_exactly_the_sizing_dscr(self, test_mandate, test_market):
+        r = underwrite(single_unit_deal(price=2_000_000.0), test_mandate, test_market)
+        noi = v(r, "noi_year1")
+        constant = annuity_payment(1.0, 0.068, 15)
+        assert r["debt"]["sizing_constraint"] == "dscr"
+        assert v(r, "loan_aed") == pytest.approx(noi / (1.40 * constant))
+        assert v(r, "loan_aed") < 0.45 * 2_000_000
+        assert v(r, "dscr_year1") == pytest.approx(1.40)
+        assert r["debt"]["loan_at_max_ltv_aed"]["value"] == pytest.approx(900_000)
+
+    def test_amortisation_sensitivity(self, jvc_deal, mandate, market):
+        r = underwrite(jvc_deal, mandate, market)
+        cases = r["debt"]["amortisation_sensitivity"]["cases"]
+        assert [c["amortisation_years"] for c in cases] == [15, 20]
+        base, longer = cases
+        assert base["loan_aed"] == pytest.approx(v(r, "loan_aed"))
+        # A 20-year term has a lower constant, so DSCR-sized debt is larger (or LTV binds).
+        assert longer["loan_aed"] >= base["loan_aed"]
+        assert longer["dscr_year1"] >= 1.40 - 1e-9
+        assert r["debt"]["rate_note"] == mandate["underwriting"]["debt"]["rate_note"]
+        assert r["metrics"]["interest_rate"]["note"] == mandate["underwriting"]["debt"]["rate_note"]
+
+
+class TestExitYieldRule:
+    def test_area_view_when_entry_is_lower(self, test_mandate, test_market):
+        # Entry 72,389 / 1m = 7.24% < Testville 7.50%: exit = 7.50% + 25 bps, no age premium.
+        r = underwrite(single_unit_deal(), test_mandate, test_market)
+        ex = r["exit"]
+        assert ex["base_source"] == "area_house_view" and ex["age_premium_bps"] == 0
+        assert ex["exit_yield"]["value"] == pytest.approx(0.0775)
+        assert ex["building_age_at_exit"] == 2032 - 2020
+
+    def test_never_exit_below_entry(self, test_mandate, test_market):
+        # At 800k the entry yield is 9.05%: exit = 9.05% + 25 bps.
+        r = underwrite(single_unit_deal(price=800_000.0), test_mandate, test_market)
+        entry = v(r, "noi_year1") / 800_000
+        assert r["exit"]["base_source"] == "entry_yield"
+        assert v(r, "exit_yield") == pytest.approx(entry + 0.0025)
+        assert v(r, "entry_yield_on_price") == pytest.approx(entry)
+        assert r["exit"]["summary"].startswith(f"Buy at {entry:.2%}")
+
+    @pytest.mark.parametrize("year, premium", [(2012, 25), (2013, 0), (None, 25)])
+    def test_age_premium_from_20_years_at_exit(self, test_mandate, test_market, year, premium):
+        deal = single_unit_deal()
+        deal["completion_year"] = year
+        if year is None:
+            del deal["completion_year"]
+        r = underwrite(deal, test_mandate, test_market)
+        assert r["exit"]["age_premium_bps"] == premium
+        assert v(r, "exit_yield") == pytest.approx(0.075 + (25 + premium) / 10_000)
+        assert any("exit age premium" in w for w in r["warnings"]) == (year is None)
 
 
 class TestSensitivity:
@@ -277,28 +347,23 @@ class TestDeterminism:
         assert len(digests) == 1
 
 
-def test_acquisition_costs_and_debt_in_result_match_hand_calc(test_mandate, test_market):
-    # Price 50m at 45% LTV: loan 22.5m; mortgage registration 0.25% x 22.5m + 290 = 56,540;
-    # transfer costs 3,054,780 (see test_finance); total 3,111,320.
+def test_acquisition_costs_match_cost_function(test_mandate, test_market):
     r = underwrite(single_unit_deal(price=50_000_000.0), test_mandate, test_market)
-    assert r["acquisition_costs"]["total"]["value"] == pytest.approx(3_111_320.0)
-    assert v(r, "loan_aed") == pytest.approx(22_500_000.0)
-    # 1.068^20 = 3.7275635287; payment = L r f / (f - 1) = 2,090,940.19 (20-year amortisation).
-    assert v(r, "annual_debt_service_aed") == pytest.approx(2_090_940.19, abs=0.01)
-    assert v(r, "arrangement_fee_aed") == pytest.approx(168_750.0)      # 0.75% of the loan
-    assert v(r, "equity_aed") == pytest.approx(50_000_000 + 3_111_320 + 168_750 - 22_500_000)
-    expected = acquisition_costs(50_000_000.0, 22_500_000.0, mandate_acquisition_rates(test_mandate))
-    assert r["acquisition_costs"]["dld_transfer_fee"]["value"] == expected["dld_transfer_fee"]
+    loan = v(r, "loan_aed")
+    expected = acquisition_costs(50_000_000.0, loan, mandate_acquisition_rates(test_mandate))
+    for k in ("dld_transfer_fee", "broker_fee", "mortgage_registration", "transfer_costs", "total"):
+        assert r["acquisition_costs"][k]["value"] == pytest.approx(expected[k])
+    assert r["acquisition_costs"]["transfer_costs"]["value"] == pytest.approx(3_054_780.0)
 
 
-def test_legal_case_counts_as_let_but_earns_nothing_at_start(test_mandate, test_market):
+def test_legal_case_is_not_occupied_and_relets_after_six_months(test_mandate, test_market):
     deal = single_unit_deal()
     deal["units"][0]["status"] = "legal_case"
     r = underwrite(deal, test_mandate, test_market)
-    assert v(r, "occupancy_by_units") == 1.0
-    assert v(r, "in_place_rent_aed") == 85_000
-    # Cash flow: vacant at the start, leases up at the 100,000 market after 1.5 months.
-    assert v(r, "gross_rental_income_year1") == pytest.approx(100_000 - 12_500)
+    assert v(r, "occupancy_by_units") == 0.0
+    assert v(r, "in_place_rent_aed") == 0.0
+    # No rent until resolved: re-let at the 100,000 reference after 6 months.
+    assert v(r, "gross_rental_income_year1") == pytest.approx(50_000)
 
 
 class TestVacancyAllowance:

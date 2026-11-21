@@ -47,11 +47,19 @@ def summary(result: dict, fit: dict | None = None) -> str:
         lines.append(f"  {label:<38}{_fmt(m['value'], m['unit']):>22}")
 
     sections = [
+        ("Decision (unlevered, pre-tax)", [
+            ("Unlevered IRR", "unlevered_irr_pre_tax"),
+            ("Unlevered equity multiple", "unlevered_equity_multiple_pre_tax"),
+            ("Entry yield (Year-1 NOI / price)", "entry_yield_on_price"),
+            ("Exit yield", "exit_yield"),
+            ("Net yield on total cost", "going_in_net_yield_on_cost"),
+            ("Walk-away price", "walk_away_price_aed")]),
         ("Rent roll", [("Units", "unit_count"), ("Occupancy (units)", "occupancy_by_units"),
                        ("In-place rent", "in_place_rent_aed"),
-                       ("Market reference rent (all units)", "market_rent_reference_aed"),
+                       ("Screen reference rent (all units)", "screen_reference_rent_aed"),
                        ("Over-rented share of income", "over_rent_share_of_income"),
-                       ("Max quarterly expiry share", "max_expiry_share_quarter")]),
+                       ("Over-rent cut at renewal/expiry", "over_rent_excess_at_expiry_aed"),
+                       ("Max 3-month expiry share", "max_expiry_share_quarter")]),
         ("Year 1", [("Gross rental income", "gross_rental_income_year1"),
                     ("Effective gross income", "effective_gross_income_year1"),
                     ("Operating costs", "operating_costs_year1"), ("NOI", "noi_year1")]),
@@ -59,43 +67,46 @@ def summary(result: dict, fit: dict | None = None) -> str:
                      ("Price per sq ft BUA", "price_per_sqft_bua"),
                      ("Acquisition costs", "acquisition_costs_aed"),
                      ("Gross yield (in-place rent / price)", "gross_yield_in_place_on_price"),
-                     ("Net yield on price", "going_in_net_yield_on_price"),
-                     ("Net yield on total cost", "going_in_net_yield_on_cost")]),
-        ("Debt", [("Loan", "loan_aed"), ("Interest rate", "interest_rate"),
+                     ("Security deposits (closing credit)", "security_deposits_aed")]),
+        ("Debt (sized to cover)", [("Loan", "loan_aed"), ("LTV", "ltv"), ("Interest rate", "interest_rate"),
                   ("Annual debt service", "annual_debt_service_aed"), ("DSCR Year 1", "dscr_year1"),
-                  ("Interest cover Year 1", "icr_year1"), ("Debt yield Year 1", "debt_yield_year1"),
+                  ("Debt yield Year 1", "debt_yield_year1"),
                   ("Breakeven occupancy (DSCR 1.0)", "breakeven_occupancy_dscr_1")]),
-        ("Exit and returns", [("Exit yield", "exit_yield"), ("Gross exit value", "gross_exit_value_aed"),
-                              ("Unlevered IRR pre-tax", "unlevered_irr_pre_tax"),
-                              ("Unlevered IRR post-tax", "unlevered_irr_post_tax"),
-                              ("Levered IRR pre-tax", "levered_irr_pre_tax"),
-                              ("Levered IRR post-tax", "levered_irr_post_tax"),
-                              ("Levered equity multiple pre-tax", "levered_equity_multiple_pre_tax"),
-                              ("Walk-away price", "walk_away_price_aed")]),
+        ("Secondary returns", [("Levered IRR pre-tax", "levered_irr_pre_tax"),
+                               ("Levered equity multiple pre-tax", "levered_equity_multiple_pre_tax"),
+                               ("Unlevered IRR post-tax (indicative)", "unlevered_irr_post_tax"),
+                               ("Levered IRR post-tax (indicative)", "levered_irr_post_tax")]),
     ]
     for title, rows in sections:
         lines.append(title)
         for label, name in rows:
             row(label, name)
         lines.append("")
+    lines.append(f"  {result['exit']['summary']}")
+    debt = result["debt"]
+    lines.append(f"  Loan sized by {debt['sizing_constraint']}; {debt['rate_note'] or ''}".rstrip("; "))
     wa = result["walk_away"]
     if wa["price_aed"]["value"] is not None:
-        lines.append(f"  Walk-away binds on {wa['binding_constraint']}; "
-                     f"{wa['discount_to_asking']['value']:.1%} below the asking price.")
-        lines.append("")
+        lines.append(f"  Walk-away is {wa['discount_to_asking']['value']:.1%} below asking; most sensitive to "
+                     f"{wa['most_sensitive_label']} (swing AED {wa['largest_swing_aed']['value']:,.0f}).")
+    lines.append("")
 
-    lines.append("Sensitivity: levered IRR pre-tax (rows: market rent shift; columns: exit yield shift)")
+    lines.append("Sensitivity: unlevered IRR pre-tax (rows: reference rent shift; columns: exit yield shift)")
     s = result["sensitivity"]
     lines.append("  " + " " * 10 + "".join(f"{b:+d} bps".rjust(12) for b in s["exit_yield_shifts_bps"]))
     for r in s["rent_shifts"]:
         cells = [c for c in s["cells"] if c["rent_shift"] == r]
-        lines.append(f"  {r:+.0%}".ljust(12) + "".join(_fmt(c["levered_irr_pre_tax"], "ratio").rjust(12)
+        lines.append(f"  {r:+.0%}".ljust(12) + "".join(_fmt(c["unlevered_irr_pre_tax"], "ratio").rjust(12)
                                                      for c in cells))
     lines.append("")
     if result.get("om_yield_check"):
         lines += ["OM yield check", f"  {result['om_yield_check']['summary']}", ""]
     if fit:
         lines.append(f"Mandate fit: {fit['verdict']}  ({fit['reason']})")
+        if fit.get("blocked_on"):
+            lines.append(f"  Blocked on: {', '.join(fit['blocked_on'])}")
+        if fit.get("stop_reason"):
+            lines.append(f"  Stop: {fit['stop_reason']}")
         for t in fit["tests"]:
             lines.append(f"  [{t['status']:<7}] {t['kind']:<4} {t['name']:<42} {t['reason']}")
         lines.append("")

@@ -13,10 +13,11 @@ import re
 from pathlib import Path
 
 from . import score_discrepancies, score_memo, score_om, score_opex, score_rentroll, score_underwriting
-from .common import DEALS_DIR, EVALS_DIR, RESULTS_DIR, RUNS_DIR, ratio
+from .common import DEALS_DIR, EVALS_DIR, RESULTS_DIR, RUNS_DIR, SETS, deal_sets, norm_verdict, ratio, rel_path
 from .truth import engine_on_truth, list_truth_deals, load_truth
 
-SCORER_VERSION = "1.0.0"
+SCORER_VERSION = "1.1.0"
+UW_LABEL = "Underwriting inputs (engine on extracted vs true inputs)"
 
 
 def _hl(value, k=None, n=None, label=""):
@@ -52,7 +53,8 @@ def load_runs(runs_dir: Path, deal_ids: list[str]) -> tuple[dict[str, dict], dic
 
 
 def score_runs(runs_dir: Path = RUNS_DIR, deals_dir: Path = DEALS_DIR, label: str = "unlabelled",
-               deal_ids: list[str] | None = None, runs: dict[str, dict] | None = None) -> dict:
+               deal_ids: list[str] | None = None, runs: dict[str, dict] | None = None,
+               sets: dict[str, str] | None = None) -> dict:
     """Score runs (read from ``runs_dir`` unless given) for every deal with a truth.json."""
     all_deals = deal_ids or list_truth_deals(deals_dir)
     if runs is None:
@@ -68,12 +70,15 @@ def score_runs(runs_dir: Path = RUNS_DIR, deals_dir: Path = DEALS_DIR, label: st
         "label": label,
         "scored_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "scorer_version": SCORER_VERSION,
-        "runs_dir": str(runs_dir),
+        "runs_dir": rel_path(runs_dir),
         "deals_scored": sorted(deals),
+        "deal_sets": {d: (sets if sets is not None else deal_sets(deals_dir)).get(d, "dev") for d in all_deals},
         "deals_not_scored": problems,
         "pipeline_versions": sorted({str(r.get("meta", {}).get("pipeline_version")) for r in runs.values()}),
     }
     res.update(aggregate(deals))
+    res["by_set"] = {s: aggregate({d: v for d, v in deals.items() if res["deal_sets"][d] == s}) for s in SETS}
+    res["headline_by_set"] = {**{s: res["by_set"][s]["headline"] for s in SETS}, "combined": res["headline"]}
     res["deals"] = {d: _strip(s) for d, s in deals.items()}
     res["checks"] = [c for s in deals.values() for c in _all_checks(s)]
     res["misses"] = [c for c in res["checks"] if not c["ok"]]
@@ -196,11 +201,12 @@ def aggregate(deals: dict[str, dict]) -> dict:
         "discrepancy_precision": _hl(disc["precision"], disc["tp"], disc["tp"] + disc["fp"], "Flags that were planted"),
         "false_flags_on_clean_deals": _hl(disc["false_flags_on_clean_deals"], n=len(disc["clean_deals"]),
                                           label="False flags on clean deals"),
-        "underwriting_within_tolerance": _hl(ratio(uw_ok, uw_n), uw_ok, uw_n, "Underwriting outputs within tolerance"),
-        "noi_mean_abs_rel_error": _hl(noi_mare, n=noi_n, label="Year-1 NOI mean abs. relative error"),
-        "walk_away_mean_abs_rel_error": _hl(wa_mare, n=wa_n, label="Walk-away price mean abs. relative error"),
-        "yield_on_cost_mean_abs_error": _hl(yoc_mae, n=yoc_n, label="Yield on cost mean abs. error (ratio)"),
-        "levered_irr_mean_abs_error": _hl(irr_mae, n=irr_n, label="Levered IRR mean abs. error (ratio)"),
+        # Key kept as "underwriting_within_tolerance" for the site; what it measures is the label.
+        "underwriting_within_tolerance": _hl(ratio(uw_ok, uw_n), uw_ok, uw_n, f"{UW_LABEL}: outputs within tolerance"),
+        "noi_mean_abs_rel_error": _hl(noi_mare, n=noi_n, label="Underwriting inputs: Year-1 NOI mean abs. relative error"),
+        "walk_away_mean_abs_rel_error": _hl(wa_mare, n=wa_n, label="Underwriting inputs: walk-away price mean abs. relative error"),
+        "yield_on_cost_mean_abs_error": _hl(yoc_mae, n=yoc_n, label="Underwriting inputs: yield on cost mean abs. error"),
+        "levered_irr_mean_abs_error": _hl(irr_mae, n=irr_n, label="Underwriting inputs: levered IRR mean abs. error"),
         "verdict_agreement": _hl(ratio(verdict_ok, n), verdict_ok, n, "Verdict matches engine on truth"),
         "memo_grounding": _hl(ratio(grounded, nums) if nums else None, grounded, nums, "Memo numbers grounded"),
         "memo_pass_rate": _hl(ratio(memo_pass, n), memo_pass, n, "Memos that passed the number check"),
@@ -236,7 +242,8 @@ def per_deal_brief(res: dict) -> dict:
             "discrepancies": {"tp": len(di["tp"]), "fn": len(di["fn"]), "fp": len(di["fp"])},
             "noi_rel_error": uw["errors"]["noi_year1"]["rel_error"],
             "walk_away_rel_error": uw["errors"]["walk_away_price_aed"]["rel_error"],
-            "verdict": {"expected": uw["verdict_expected"], "got": uw["verdict_got"]},
+            "set": res.get("deal_sets", {}).get(d, "dev"),
+            "verdict": {"expected": norm_verdict(uw["verdict_expected"]), "got": norm_verdict(uw["verdict_got"])},
             "memo": {"status": s["memo"]["summary"]["status"], "grounding": s["memo"]["summary"]["share"]},
             "cost_usd": s["meta"]["summary"]["cost_usd"], "duration_s": s["meta"]["summary"]["duration_s"],
             "pipeline_version": s["meta"]["summary"]["pipeline_version"],
@@ -257,8 +264,12 @@ def write_results(res: dict, results_dir: Path = RESULTS_DIR, evals_dir: Path = 
     entry = {"label": res["label"], "scored_at": res["scored_at"], "results_file": str(path.relative_to(evals_dir.parent))
              if path.is_relative_to(evals_dir.parent) else str(path),
              "pipeline_versions": res["pipeline_versions"], "deals_scored": res["deals_scored"],
-             "headline": {k: v["value"] for k, v in res["headline"].items()}}
-    summary["latest"] = {**entry, "headline_detail": res["headline"], "per_deal": per_deal_brief(res),
+             "headline": {k: v["value"] for k, v in res["headline"].items()},
+             "headline_by_set": {s: {k: v["value"] for k, v in h.items()}
+                                 for s, h in (res.get("headline_by_set") or {}).items()},
+             "deal_sets": res.get("deal_sets", {})}
+    summary["latest"] = {**entry, "headline_detail": res["headline"],
+                         "headline_detail_by_set": res.get("headline_by_set"), "per_deal": per_deal_brief(res),
                          "deals_not_scored": res["deals_not_scored"]}
     if history:
         hist = [h for h in summary.get("history", []) if h.get("label") != res["label"]]
@@ -266,7 +277,15 @@ def write_results(res: dict, results_dir: Path = RESULTS_DIR, evals_dir: Path = 
         summary["history"] = sorted(hist, key=lambda h: h["scored_at"])
     summary["updated_at"] = res["scored_at"]
     summary["note"] = ("Written by `python -m evals score`. latest = most recent scoring; history = one entry per "
-                       "label (re-scoring a label replaces its entry). Metric definitions: evals/README.md.")
+                       "label (re-scoring a label replaces its entry). headline = all scored deals; headline_by_set = "
+                       "dev, heldout and combined. stability = latest `python -m evals stability`. "
+                       "Metric definitions: evals/README.md.")
     summary_path.write_text(json.dumps(summary, indent=1, ensure_ascii=False, default=str))
     (evals_dir / "REPORT.md").write_text(markdown_report(res, summary))
     return path
+
+
+def latest_results_file(results_dir: Path = RESULTS_DIR) -> Path | None:
+    """Most recent scoring results file (stability files excluded)."""
+    files = sorted(p for p in results_dir.glob("*.json") if "_stability_" not in p.name)
+    return files[-1] if files else None

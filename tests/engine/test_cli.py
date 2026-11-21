@@ -23,4 +23,4 @@ def test_summary():
 def test_json_output():
     data = json.loads(run(FIXTURE, "--json"))
     assert data["underwriting"]["metrics"]["unit_count"]["value"] == 60
-    assert data["mandate_fit"]["verdict"] in ("Pursue", "Needs work", "Pass")
+    assert data["mandate_fit"]["verdict"] in ("Pursue", "Needs work", "Decline")

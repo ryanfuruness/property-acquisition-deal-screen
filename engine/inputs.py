@@ -8,12 +8,11 @@ that records each of them with its provenance. See engine/README.md for the
 from __future__ import annotations
 
 import datetime as dt
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from .finance import expiry_month_index, is_finite_number, parse_date
-from .leases import (OCCUPIED_STATUSES, PHYSICALLY_LET_STATUSES, UNIT_STATUSES, LeaseAssumptions,
-                     UnitLease)
+from .leases import OCCUPIED_STATUSES, UNIT_STATUSES, LeaseAssumptions, UnitLease
 from .provenance import PROVENANCE_TAGS, InputRegistry
 
 # Expense categories of the chart of accounts in docs/DESIGN.md.
@@ -28,10 +27,19 @@ LANDLORD_PAYS_SUFFIX = "_if_landlord_pays"
 # Categories exempt from input VAT: a reserve contribution is not a purchase of services.
 VAT_EXEMPT_CATEGORIES = ("sinking_fund",)
 
+# Engine constants that are modelling conventions rather than market numbers. They are
+# documented in engine/README.md; move them into the mandate if the firm wants to own them.
+LEGAL_CASE_RESOLUTION_MONTHS = 6.0
+"""A legal-case unit earns nothing until the case resolves; it then re-lets at the reference."""
+SINKING_FUND_AGE_MULTIPLIERS = ((10, 1.0), (20, 1.5), (None, 2.0))
+"""Scale on the mandate's default sinking fund by building age at the analysis start:
+under 10 years x1.0, 10-19 x1.5, 20 and over x2.0. Unknown age uses the highest band."""
+
 ALLOWED_TOP_LEVEL = {
     "deal_id", "price_aed", "area", "nsa_sqft", "bua_sqft", "units", "opex_aed",
     "opex_includes_vat", "other_income_aed", "chiller_landlord_pays", "om_stated",
-    "provenance", "master_lease", "rent_roll_date",
+    "provenance", "master_lease", "rent_roll_date", "completion_year",
+    "collection_loss_override", "security_deposits_aed",
 }
 
 
@@ -113,7 +121,7 @@ class Context:
     units: list[UnitLease]            # units as the lease model runs them
     rent_roll: list[UnitLease]        # units as stated (empty if a master lease has no rent roll)
     master_lease: MasterLease | None
-    unit_market_rent_ref: list[float]  # as-of market reference rent per unit (no growth)
+    unit_market_rent_ref: list[float]  # as-of screen reference rent per unit (no growth)
     opex: list[OpexLine]
     opex_includes_vat: bool
     other_income: float
@@ -131,16 +139,28 @@ class Context:
     management_pct: float
     vat_on_opex: float
     acq: dict[str, float]
-    ltv: float
+    max_ltv: float
+    sizing_dscr: float
     interest_rate: float
     amortisation_years: int
+    amortisation_years_sensitivity: int | None
+    rate_note: str | None
     arrangement_fee_pct: float
-    exit_yield: float                 # area exit yield plus expansion
+    area_exit_yield: float            # area house-view exit yield (before the rule)
+    exit_expansion_bps: float
+    exit_age_premium_bps: float       # applied premium (0 if the building is younger)
+    exit_age_premium_rule: dict[str, Any]
+    exit_yield_rule: str | None
+    completion_year: int | None
+    building_age_at_exit: int | None
+    security_deposits: float | None
+    marketing_leasing_stated: bool    # the statement states a leasing/marketing line
     selling_costs_pct: float
     tax_rate: float
     tax_threshold: float
-    dscr_floor: float
-    target_levered_irr: float
+    tax_model: str
+    target_unlevered_irr: float
+    over_rent_threshold: float
     warnings: list[str] = field(default_factory=list)
     # names of registry entries, grouped for depends_on lists
     deps: dict[str, list[str]] = field(default_factory=dict)
@@ -190,7 +210,7 @@ def _parse_unit(i: int, u: Any, factors: dict, analysis_start: dt.date, warnings
     rent = _num(u.get("annual_rent_aed"), f"{label}.annual_rent_aed", allow_none=True)
     unit_id = str(u.get("unit", i + 1))
     expiry: int | None = None
-    if status in PHYSICALLY_LET_STATUSES and u.get("lease_end") not in (None, ""):
+    if status in OCCUPIED_STATUSES and u.get("lease_end") not in (None, ""):
         expiry = expiry_month_index(parse_date(u["lease_end"], f"{label}.lease_end"), analysis_start)
     if status in OCCUPIED_STATUSES and rent_required:
         if rent is None or rent <= 0:
@@ -202,7 +222,45 @@ def _parse_unit(i: int, u: Any, factors: dict, analysis_start: dt.date, warnings
     lease_end = (parse_date(u["lease_end"], f"{label}.lease_end").isoformat()
                  if u.get("lease_end") not in (None, "") else None)
     return UnitLease(unit=unit_id, unit_type=unit_type, area_sqft=area_sqft, status=status,
-                     annual_rent_aed=rent, expiry_month=expiry, lease_end=lease_end)
+                     annual_rent_aed=rent, expiry_month=expiry, lease_end=lease_end,
+                     lease_up_downtime=LEGAL_CASE_RESOLUTION_MONTHS if status == "legal_case" else None)
+
+
+def _sinking_fund_multiplier(age: int | None) -> float:
+    """Age band multiplier for the defaulted sinking fund (see SINKING_FUND_AGE_MULTIPLIERS)."""
+    if age is None:
+        return SINKING_FUND_AGE_MULTIPLIERS[-1][1]
+    for upper, mult in SINKING_FUND_AGE_MULTIPLIERS:
+        if upper is None or age < upper:
+            return mult
+    return SINKING_FUND_AGE_MULTIPLIERS[-1][1]
+
+
+def _novate(rent_roll: list[UnitLease], reversion: int, warnings: list[str]) -> list[UnitLease]:
+    """Units at master-lease reversion: sub-tenancies novate to the owner.
+
+    A let unit with a sub-let rent keeps paying it from the reversion month until its own
+    lease end, then rolls normally (a lease that ended before reversion rolls at reversion).
+    A vacant unit, or a let unit with no stated rent, leases up from reversion after the
+    downtime. A legal-case unit re-lets after the legal-case resolution period.
+    """
+    out = []
+    missing = 0
+    for u in rent_roll:
+        if u.status in OCCUPIED_STATUSES and u.annual_rent_aed:
+            expiry = reversion if u.expiry_month is None else max(u.expiry_month, reversion)
+            out.append(replace(u, expiry_month=expiry, income_from_month=reversion))
+        elif u.status == "legal_case":
+            out.append(replace(u, available_month=reversion))
+        else:
+            if u.status in OCCUPIED_STATUSES:
+                missing += 1
+            out.append(replace(u, status="vacant", annual_rent_aed=None, expiry_month=None,
+                               available_month=reversion))
+    if missing:
+        warnings.append(f"{missing} sub-let unit(s) have no stated rent; they are modelled as leasing up "
+                        f"at the reference after the master lease reverts.")
+    return out
 
 
 def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
@@ -241,7 +299,7 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
     try:
         area = _canonical_key(area_raw, list(areas), "area")
     except DealInputError as exc:
-        raise MarketDataError(f"no market reference data for area {area_raw!r}; "
+        raise MarketDataError(f"no screen reference rent for area {area_raw!r}; "
                               f"known areas: {sorted(areas)}") from exc
     reg.add("deal.area", area, "text", deal_tag("area"))
 
@@ -280,9 +338,10 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
         raise MarketDataError(f"areas.{area}.market_rent_aed_psf_1br is missing")
     srcs = area_data.get("sources") or []
     n_base = reg.add(f"market.areas.{area}.market_rent_aed_psf_1br", float(base_psf), "AED/sqft/yr",
-                     "market", "; ".join(srcs) if srcs else None)
+                     "market", "screen reference rent for a 1BR (a proxy, not the RERA index)"
+                     + ("; " + "; ".join(srcs) if srcs else ""))
     if any("UNVERIFIED" in str(s).upper() for s in srcs):
-        warnings.append(f"Market reference rent for {area} is marked UNVERIFIED in areas.yaml.")
+        warnings.append(f"Screen reference rent for {area} is marked UNVERIFIED in areas.yaml.")
     factors = market["unit_type_factors"]
     n_factors = reg.add("market.unit_type_factors", dict(factors), "ratio", "market")
 
@@ -338,21 +397,17 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
                             f"({nsa:,.0f} sqft) by more than 2%.")
     if master is None:
         units = rent_roll
+    elif rent_roll:
+        units = _novate(rent_roll, master.reversion_month, warnings)
     else:
-        # On reversion every unit turns over: vacant from the reversion month, then let at
-        # market after the downtime.
-        basis = rent_roll
-        if not rent_roll:
-            basis = [UnitLease(unit="NSA", unit_type="1br", area_sqft=nsa, status="vacant",
-                                   annual_rent_aed=None, expiry_month=None)]
-            reg.add("deal.units", 1, "units", "default",
-                    "no rent roll: after reversion the whole NSA is modelled as 1BR-equivalent space")
-            if master.reversion_month < (hold_years + 1) * 12:
-                warnings.append("Master lease reverts inside the model horizon and there is no rent roll; "
-                                "the whole NSA is modelled as 1BR-equivalent space after reversion.")
-        units = [UnitLease(unit=u.unit, unit_type=u.unit_type, area_sqft=u.area_sqft, status="vacant",
-                           annual_rent_aed=None, expiry_month=None, available_month=master.reversion_month)
-                 for u in basis]
+        # No unit data: every unit is assumed to turn over at reversion (whole NSA as 1BR space).
+        reg.add("deal.units", 1, "units", "default",
+                "no rent roll: after reversion the whole NSA is modelled as 1BR-equivalent space")
+        if master.reversion_month < (hold_years + 1) * 12:
+            warnings.append("Master lease reverts inside the model horizon and there is no rent roll; "
+                            "every unit is assumed to turn over at reversion (whole NSA as 1BR-equivalent space).")
+        units = [UnitLease(unit="NSA", unit_type="1br", area_sqft=nsa, status="vacant", annual_rent_aed=None,
+                           expiry_month=None, available_month=master.reversion_month)]
     ref_rents = [float(base_psf) * float(factors[u.unit_type]) * u.area_sqft for u in units]
 
     # ---- income and operations -----------------------------------------------------------
@@ -363,6 +418,28 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
                       None if "other_income_aed" in deal_inputs else "not stated; taken as 0")
     vac, n_vac = m(f"{ops}.structural_vacancy", "ratio")
     coll, n_coll = m(f"{ops}.collection_loss", "ratio")
+    if deal_inputs.get("collection_loss_override") is not None:
+        coll = _num(deal_inputs["collection_loss_override"], "collection_loss_override")
+        if not 0.0 <= coll < 1.0:
+            raise DealInputError("collection_loss_override must be a ratio in [0, 1)")
+        n_coll = reg.add("deal.collection_loss_override", coll, "ratio", deal_tag("collection_loss_override"),
+                         "replaces the mandate collection loss (observed collections gap)")
+    deposits = _num(deal_inputs.get("security_deposits_aed"), "security_deposits_aed", allow_none=True)
+    if deposits is not None:
+        if deposits < 0:
+            raise DealInputError("security_deposits_aed must not be negative")
+        reg.add("deal.security_deposits_aed", deposits, "AED", deal_tag("security_deposits_aed"),
+                "tenant deposits assumed by the buyer; a closing credit, not income")
+    cy_raw = deal_inputs.get("completion_year")
+    completion_year: int | None = None
+    if cy_raw is not None:
+        if not is_finite_number(cy_raw) or int(cy_raw) != cy_raw or not 1900 <= cy_raw <= analysis_start.year:
+            raise DealInputError(f"completion_year must be a year no later than {analysis_start.year}, got {cy_raw!r}")
+        completion_year = int(cy_raw)
+    reg.add("deal.completion_year", completion_year, "year",
+            deal_tag("completion_year") if completion_year is not None else "default",
+            None if completion_year is not None else "not stated; age-based rules take the conservative case")
+    age_at_start = analysis_start.year - completion_year if completion_year is not None else None
     mgmt, n_mgmt = m(f"{ops}.property_management_pct_of_egi", "ratio")
     vat, n_vat = m(f"{ops}.input_vat_on_opex_pct", "ratio")
     opex_growth, n_opex_g = m(f"{ops}.opex_growth", "ratio/yr", "applied from year 2; year 1 is the stated budget")
@@ -417,13 +494,23 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
                                 "AED/sqft NSA/yr", "mandate")
             if conditional and chiller is False:
                 continue
-            amount = rate * nsa
+            scale, age_note = 1.0, ""
+            if cat == "sinking_fund":
+                scale = _sinking_fund_multiplier(age_at_start)
+                age_note = (f" x{scale:g} for building age {age_at_start} years" if age_at_start is not None
+                            else f" x{scale:g} (building age unknown: highest age band)")
+                if age_at_start is None:
+                    warnings.append("Completion year unknown; the defaulted sinking fund uses the highest age band.")
+            amount = rate * scale * nsa
             ml_note = "; under the master lease the operator bears it, so it applies from reversion" if master else ""
             opex.append(OpexLine(cat, amount, "default", vatable,
-                                 f"{rate} AED/sqft x {nsa:,.0f} sqft NSA{ml_note}", from_reversion=master is not None))
+                                 f"{rate} AED/sqft{age_note} x {nsa:,.0f} sqft NSA{ml_note}",
+                                 from_reversion=master is not None))
             reg.add(name, amount, "AED/yr", "default",
-                    f"missing from the operating statement; mandate default {rate} AED/sqft NSA{ml_note}")
+                    f"missing from the operating statement; mandate default {rate} AED/sqft NSA{age_note}{ml_note}")
             opex_names += [name, rate_name]
+            if cat == "sinking_fund":
+                opex_names.append("deal.completion_year")
         else:
             opex.append(OpexLine(cat, 0.0, "default", vatable, "no mandate default; taken as 0"))
             reg.add(name, 0.0, "AED/yr", "default", "not stated and no mandate default; taken as 0")
@@ -443,10 +530,17 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
         acq[key] = float(value)
         acq_names.append(name)
     debt = "underwriting.debt"
-    ltv, n_ltv = m(f"{debt}.ltv", "ratio of price")
+    ltv, n_ltv = m(f"{debt}.max_ltv", "ratio of price")
+    sizing_dscr, n_sdscr = m(f"{debt}.sizing_dscr", "x")
     base_rate, n_base_rate = m(f"{debt}.base_rate_3m_eibor", "ratio/yr")
     margin, n_margin = m(f"{debt}.margin", "ratio/yr")
     amort, n_amort = m(f"{debt}.amortisation_years", "years")
+    amort_sens = _mandate_value(mandate, "underwriting").get("debt", {}).get("amortisation_years_sensitivity")
+    if amort_sens is not None:
+        reg.add(f"mandate.{debt}.amortisation_years_sensitivity", amort_sens, "years", "mandate")
+    rate_note = mandate["underwriting"]["debt"].get("rate_note")
+    if rate_note is not None:
+        reg.add(f"mandate.{debt}.rate_note", rate_note, "text", "mandate")
     arr_fee, n_arr = m(f"{debt}.arrangement_fee_pct", "ratio of loan")
 
     mv = "underwriting.market_view"
@@ -456,13 +550,24 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
     n_exit = reg.add(f"mandate.{mv}.exit_net_yield_by_area.{area}", float(exit_by_area[area]),
                      "ratio", "mandate")
     expansion, n_exp = m(f"{mv}.exit_yield_expansion_bps", "bps")
+    exit_rule = mandate["underwriting"]["market_view"].get("exit_yield_rule")
+    if exit_rule is not None:
+        reg.add(f"mandate.{mv}.exit_yield_rule", exit_rule, "text", "mandate")
+    premium, n_prem = m(f"{mv}.exit_age_premium_bps", "bps")
+    premium_from, n_prem_from = m(f"{mv}.exit_age_premium_from_years", "years")
+    age_at_exit = (analysis_start.year + hold_years - completion_year) if completion_year is not None else None
+    if age_at_exit is None:
+        premium_applied = float(premium)
+        warnings.append("Completion year unknown; the exit age premium is applied (conservative).")
+    else:
+        premium_applied = float(premium) if age_at_exit >= premium_from else 0.0
     selling, n_sell = m(f"{mv}.selling_costs_pct", "ratio of gross sale price")
     tax_rate, n_tax = m("underwriting.tax.corporate_tax_rate", "ratio")
     tax_thr, n_thr = m("underwriting.tax.corporate_tax_threshold_aed", "AED/yr")
-    reg.add("mandate.underwriting.tax.model", _mandate_value(mandate, "underwriting.tax.model"),
-            "text", "mandate")
-    dscr_floor, n_dscr = m("buy_box.hard.min_dscr_year1", "x")
-    target_irr, n_tirr = m("buy_box.soft.target_levered_irr", "ratio")
+    tax_model = _mandate_value(mandate, "underwriting.tax.model")
+    reg.add("mandate.underwriting.tax.model", tax_model, "text", "mandate")
+    target_irr, n_tirr = m("buy_box.soft.target_unlevered_irr", "ratio")
+    over_thr, n_over = m("buy_box.soft.over_rent_threshold", "ratio")
 
     # ---- dependency groups -------------------------------------------------------------
     timing = [n_start, n_hold]
@@ -470,6 +575,7 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
                   n_bands, n_notice] + timing
     rent_model = rent_model + deps["master_lease"]
     deps["rent_roll"] = ["deal.units", "deal.area", n_base, n_factors]
+    deps["over_rent"] = deps["rent_roll"] + [n_over]
     deps["rent_model"] = rent_model
     deps["other_income"] = [n_other, n_other_g]
     deps["egi"] = rent_model + [n_other, n_other_g, n_vac, n_coll]
@@ -479,14 +585,15 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
     deps["noi"] = deps["egi"] + [n_mgmt] + deps["opex"] + deps["vat"]
     deps["price"] = ["deal.price_aed"]
     deps["acquisition"] = ["deal.price_aed"] + acq_names[:5]
-    deps["mortgage_registration"] = ["deal.price_aed", n_ltv] + acq_names[5:]
-    deps["loan"] = ["deal.price_aed", n_ltv]
     deps["interest_rate"] = [n_base_rate, n_margin]
-    deps["debt_service"] = deps["loan"] + [n_base_rate, n_margin, n_amort]
+    # The loan is the lower of max LTV and what Year-1 NOI covers at the sizing DSCR.
+    deps["loan"] = ["deal.price_aed", n_ltv, n_sdscr, n_base_rate, n_margin, n_amort] + deps["noi"]
+    deps["mortgage_registration"] = deps["loan"] + acq_names[5:]
+    deps["debt_service"] = list(deps["loan"])
     deps["arrangement_fee"] = deps["loan"] + [n_arr]
-    deps["exit"] = [n_exit, n_exp, n_sell]
+    deps["exit"] = ([n_exit, n_exp, n_prem, n_prem_from, "deal.completion_year", n_sell, "deal.price_aed"]
+                    + deps["noi"])
     deps["tax"] = [n_tax, n_thr, "mandate.underwriting.tax.model"]
-    deps["dscr_floor"] = [n_dscr]
     deps["target_irr"] = [n_tirr]
 
     return Context(
@@ -498,11 +605,18 @@ def build_context(deal_inputs: dict, mandate: dict, market: dict) -> Context:
         chiller_landlord_pays=chiller, om_stated=deal_inputs.get("om_stated"),
         analysis_start=analysis_start, expiry_basis_date=expiry_basis, hold_years=hold_years, lease=lease,
         growth_index=growth_index, structural_vacancy=float(vac), collection_loss=float(coll),
-        management_pct=float(mgmt), vat_on_opex=float(vat), acq=acq, ltv=float(ltv),
+        management_pct=float(mgmt), vat_on_opex=float(vat), acq=acq, max_ltv=float(ltv),
+        sizing_dscr=float(sizing_dscr),
         interest_rate=float(base_rate) + float(margin), amortisation_years=int(amort),
-        arrangement_fee_pct=float(arr_fee),
-        exit_yield=float(exit_by_area[area]) + float(expansion) / 10000.0,
+        amortisation_years_sensitivity=int(amort_sens) if amort_sens is not None else None,
+        rate_note=rate_note, arrangement_fee_pct=float(arr_fee),
+        area_exit_yield=float(exit_by_area[area]), exit_expansion_bps=float(expansion),
+        exit_age_premium_bps=premium_applied,
+        exit_age_premium_rule={"premium_bps": float(premium), "from_years": int(premium_from)},
+        exit_yield_rule=exit_rule, completion_year=completion_year, building_age_at_exit=age_at_exit,
+        security_deposits=deposits,
+        marketing_leasing_stated=stated.get("marketing_leasing") is not None,
         selling_costs_pct=float(selling), tax_rate=float(tax_rate), tax_threshold=float(tax_thr),
-        dscr_floor=float(dscr_floor), target_levered_irr=float(target_irr),
+        tax_model=str(tax_model), target_unlevered_irr=float(target_irr), over_rent_threshold=float(over_thr),
         warnings=warnings, deps=deps,
     )

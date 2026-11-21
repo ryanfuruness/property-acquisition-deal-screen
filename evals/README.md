@@ -4,6 +4,7 @@ Scores each recorded pipeline run (`runs/<deal_id>/run.json`) against the deal's
 
 ```
 python -m evals score [--runs runs/] [--label NAME] [--deal ID ...] [--no-write] [--json]
+python -m evals stability --runs runs/ runs_repeat1/ runs_repeat2/ [--label NAME] [--no-write]
 python -m evals report [evals/results/<file>.json]     # reprint a saved result
 python -m pytest tests/evals
 ```
@@ -12,10 +13,27 @@ python -m pytest tests/evals
 
 | File | Contents |
 |---|---|
-| `evals/results/<UTC timestamp>_<label>.json` | Everything: headline, per-deal detail, every check (`checks`) and every failed check (`misses`). |
-| `evals/summary.json` | `latest` (headline with counts, per-deal brief, deals not scored) and `history`: one entry per label, oldest first, with the headline values. Re-scoring a label replaces its entry. Without `--label` the run is written as `unlabelled` and history is not touched. The site reads this file to show improvement across iterations. |
-| `evals/REPORT.md` | Generated from the latest results: headline, history, per-deal table, OM fields, discrepancies by id, then every miss with deal, item, expected and got. Do not edit it. |
-| `evals/FAILURES.md` | Hand-maintained log: what failed, root cause, fix, effect on metrics. |
+| `evals/results/<UTC timestamp>_<label>.json` | Everything: headline (all deals), `headline_by_set` (dev, heldout, combined), `by_set` detail, per-deal detail, every check (`checks`) and every failed check (`misses`). |
+| `evals/results/<UTC timestamp>_stability_<label>.json` | Written by `stability`: per deal, every run's verdict, discrepancy ids, walk-away price and memo status, and the agreement measures. |
+| `evals/summary.json` | `latest` (headline with counts, `headline_detail_by_set`, per-deal brief with each deal's set, deals not scored), `history` (one entry per label, oldest first, with `headline` and `headline_by_set`; re-scoring a label replaces its entry; without `--label` history is not touched) and `stability` (the latest stability comparison). The site reads this file. |
+| `evals/REPORT.md` | Generated from the latest results: headline with dev and held-out side by side, history, stability, per-deal table, OM fields, discrepancies by id, then every miss with deal, item, expected and got. Do not edit it. |
+| `evals/FAILURES.md` | Hand-maintained log of failures, causes, fixes and effects; how to write entries is below. |
+
+Reports and results use repo-relative paths only.
+
+## Dev and held-out sets
+
+Each deal in `data/deals/index.json` carries `set`: `dev` or `heldout` (missing means `dev`). Held-out deals are generated with a fresh seed and layouts and phrasings not seen during development, and the pipeline is not tuned on them, so the gap between the two columns is the honest estimate of how much of the dev score comes from tuning. Every headline metric is computed three times, on dev deals, held-out deals and all scored deals; the console report, REPORT.md and summary.json show them side by side. A set with no scored deal shows `n/a`, never zero.
+
+## Stability
+
+`python -m evals stability --runs A/ B/ [C/ ...]` reads `<dir>/<deal_id>/run.json` from each directory and compares every deal that has at least two readable runs:
+- **Verdict agreement**: whether all runs give the same verdict (and the modal share); each run's verdict is also compared with the engine's verdict on truth.
+- **Discrepancy agreement**: the set of catalogue ids each run flags, the ids in every run and in only some, and the mean (and minimum) pairwise Jaccard index |A∩B| / |A∪B| (two empty sets agree: 1.0).
+- **Walk-away spread**: minimum and maximum across runs, and (max - min) / median.
+- **Memo**: pass or fail on each run.
+
+Aggregates (dev, held-out, combined): share of deals with a unanimous verdict, share of runs with the right verdict, share of deals with identical discrepancy sets, mean Jaccard, mean and worst walk-away spread, memo pass rate over all runs. Stability says nothing about correctness on its own: a pipeline can be stably wrong, which is why the verdict-vs-truth line is there.
 
 A deal with no run.json, or an unreadable one, is listed under "not scored" and left out of every aggregate (never counted as zero or as a pass).
 
@@ -78,17 +96,42 @@ Severity is not scored, and a detection counts only if its id is the planted id.
 - `master_lease_related_party` / `occupancy_mismatch`: a 100%-leased master lease explains the gap but they are separate findings; d11 plants both.
 - `title_check` for a strata title (d09): the catalogue defines `title_check` as non-freehold or nationality-restricted; strata is neither, so it is a false positive against the planted list. The verdict metric is where a strata hard fail is credited.
 
-### 5. Underwriting
+### 5. Underwriting inputs (engine on extracted vs true inputs)
+This metric does **not** test the engine: the same engine runs on both sides, so it measures only whether the inputs the screen extracted from the documents lead to the same answers as the true inputs. The engine's own correctness is tested separately, by its unit tests (`tests/engine`) and by an independent spreadsheet tie-out (`evals/tieout/`). The headline key stays `underwriting_within_tolerance` so the site keeps working; its label says what it is.
+
 For each deal the scorer runs `engine.underwrite(true_building.engine_inputs, mandate, market)` itself (the inputs carry `rent_roll_date`) and compares the run's `underwriting.outputs.metrics` with it: **Year-1 NOI** (`noi_year1`), **yield on cost** (`going_in_net_yield_on_cost`), **levered IRR** (`levered_irr_pre_tax`) and **walk-away price** (`walk_away_price_aed`). Each gets absolute and relative error (run minus truth) and a within-tolerance flag: NOI and walk-away within 2%, yield on cost within 0.10 points, levered IRR within 0.50 points. The headline gives the share within tolerance and the mean absolute error of each. The gap includes legitimate document-versus-truth differences (a statement that omits a cost the owner pays): that is what is being measured, how close the screen lands to the true building from the broker's papers. A run that could not underwrite misses all four.
 
 ### 6. Verdict
-`expected_verdict` in truth.json is null by design. The scorer computes it with `engine.mandate_fit(true_building.deal_facts, <engine result on truth>, mandate)` and compares the run's `mandate_fit.verdict`. The note lists every mandate test whose status (pass, fail, unknown) differs between truth and run, which is usually the root cause.
+Verdicts are Pursue, Needs work and Decline. Engine v2 renamed "Pass" (do not proceed) to "Decline"; the scorer reads either from runs, truth computations and old results files and always writes "Decline". `expected_verdict` in truth.json is null by design. The scorer computes it with `engine.mandate_fit(true_building.deal_facts, <engine result on truth>, mandate)` and compares the run's `mandate_fit.verdict`. The note lists every mandate test whose status (pass, fail, unknown) differs between truth and run, which is usually the root cause.
 
 ### 7. Memo grounding
 The scorer re-runs the pipeline's own memo checker (`pipeline.memo.tokens` and `_compare`, the code that decides whether a memo ships) on the run's memo and fact sheet, counting numbers instead of errors: **grounding** = numbers that carry an anchor to a fact-sheet key and match that fact at the precision written / all numbers, summed over deals. For a failed memo the rejected draft is scored. Anchors naming no fact are listed as misses. The checker is the pipeline's code at scoring time, not at run time: if it has changed since the run, the recheck can disagree with the run's recorded status, and the `memo status` miss says so (`agrees_with_run_status` in the results). **Memo pass rate** = runs whose memo status is `passed`. If the pipeline's checker cannot be imported the scorer falls back to the run's recorded check and says so in `method`.
 
 ### 8. Cost and time
 From `run.meta`: `cost_usd`, `duration_s`, tokens, models, pipeline version, per deal; the headline gives mean per deal and total cost. Costs are the pipeline's own estimate at its assumed list prices.
+
+## Failure log
+
+`evals/FAILURES.md` records each failure found, newest first. To add an entry:
+
+1. Score a labelled run: `python -m evals score --label <label>`. Labels should say what changed (`v0.1.1-asking-rent-remarks`).
+2. Open `evals/REPORT.md`, section "Misses". Pick one miss, or a group with the same cause.
+3. Confirm it is real before logging it: open `data/deals/<deal>/truth.json`, `runs/<deal>/run.json` and the document itself. If the scorer is wrong (a rule that expects something the document does not show, a normalisation bug), fix the scorer instead, and log that too, with "scorer" as the component.
+4. Write the entry with the fields in the template. *Root cause* names the stage (ingest, extract, verify, rent roll, opex, reconcile, review, underwriting inputs, memo, scorer) and the mechanism, not the symptom.
+5. After the fix, re-score under a new label and fill in *Effect on metrics* with before and after numbers from the two results files (the history in `evals/summary.json`, plus the specific checks), for dev and held-out separately where both exist. Note any metric that got worse.
+6. A miss that is accepted, not fixed (for example a design decision such as "the screen never decides title"), gets an entry with *Fix: none, accepted* and the reason.
+
+```
+### <short title>
+- Run label: <label the failure was seen in> (results file: evals/results/<file>.json)
+- Deals / items: <deal ids and check items, as in REPORT.md>
+- What failed: <expected vs got, in one or two lines>
+- Root cause: <stage and mechanism; how it was confirmed>
+- Fix: <change, file(s), commit or PR>; or "none, accepted: <reason>"
+- Effect on metrics: <label before -> label after: metric a x -> y, metric b x -> y; any regressions>
+```
+
+Held-out deals: log their failures like any other, but do not tune the pipeline on them; a fix motivated by a held-out failure should be stated as such, and the held-out column after it is no longer clean.
 
 ## Changing the scorer
 

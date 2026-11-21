@@ -11,12 +11,24 @@ from __future__ import annotations
 from typing import Any
 
 from .costs import acquisition_costs, mandate_acquisition_rates
+from .finance import annuity_payment
 
 MEASURES = ("gross", "net", "unstated")
 DENOMINATORS = ("asking_price", "total_cost", "unstated")
 # The OM's figure is taken as reproduced if our recomputation is within this many
 # percentage points (OMs usually round yields to one decimal place).
 DEFAULT_TOLERANCE = 0.0005
+
+
+def mandate_loan(mandate: dict, price: float, noi_year1: float | None = None) -> float:
+    """Loan the mandate allows at ``price``: min(max LTV x price, NOI / (sizing DSCR x loan constant))."""
+    debt = mandate["underwriting"]["debt"]
+    at_ltv = float(debt["max_ltv"]) * price
+    if noi_year1 is None or "sizing_dscr" not in debt:
+        return at_ltv
+    rate = float(debt["base_rate_3m_eibor"]) + float(debt["margin"])
+    constant = annuity_payment(1.0, rate, int(debt["amortisation_years"]))
+    return min(at_ltv, max(0.0, noi_year1 / (float(debt["sizing_dscr"]) * constant)))
 
 
 def normalise_basis(basis: Any) -> dict[str, Any]:
@@ -75,7 +87,7 @@ def recompute_stated_yield(stated_income: float | None, price: float, basis: Any
     """
     b = normalise_basis(basis)
     if acquisition_costs_aed is None and mandate is not None:
-        loan = float(mandate["underwriting"]["debt"]["ltv"]) * price
+        loan = mandate_loan(mandate, price, noi_year1)
         acquisition_costs_aed = acquisition_costs(price, loan, mandate_acquisition_rates(mandate))["total"]
     total_cost = price + acquisition_costs_aed if acquisition_costs_aed is not None else None
 

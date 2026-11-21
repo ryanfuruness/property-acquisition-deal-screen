@@ -290,10 +290,15 @@ def test_not_underwritten(truths, perfect):
 
 
 def test_expected_verdicts_are_computed_not_read():
+    import engine
+    from evals.common import norm_verdict
     t = load_truth("d02-lantana-ic")
     assert t["expected_verdict"] is None
-    assert engine_on_truth(t)["verdict"] == "Pursue"
-    assert engine_on_truth(load_truth("d09-aurelia-bb"))["hard_fails"] == ["min_dscr_year1", "title"]
+    m, k = engine.load_mandate(), engine.load_market()
+    direct = engine.mandate_fit(t["true_building"]["deal_facts"],
+                                engine.underwrite(t["true_building"]["engine_inputs"], m, k), m)["verdict"]
+    assert engine_on_truth(t)["verdict"] == norm_verdict(direct) in ("Pursue", "Needs work", "Decline")
+    assert "title" in engine_on_truth(load_truth("d09-aurelia-bb"))["hard_fails"]   # strata: hard fail on title
 
 
 def test_memo_grounding(truths, perfect):
@@ -340,3 +345,136 @@ def test_cli_scores_a_runs_directory(perfect, tmp_path, capsys):
     assert "d06-opaline-jvc        unit_count: expected 48, got 47 [wrong]" in out
     assert "d01-cedarline-dso (unreadable run.json" in out
     assert "Deals scored" in out
+
+
+# ---------------------------------------------------------------------------- sets, verdict labels, paths
+
+
+def test_deal_sets_default_to_dev(tmp_path):
+    from evals.common import deal_sets
+    assert set(deal_sets().values()) <= {"dev", "heldout"}
+    (tmp_path / "index.json").write_text(json.dumps({"deals": [
+        {"deal_id": "a"}, {"deal_id": "b", "set": "heldout"}, {"deal_id": "c", "set": "dev"},
+        {"deal_id": "d", "set": None}]}))
+    assert deal_sets(tmp_path) == {"a": "dev", "b": "heldout", "c": "dev", "d": "dev"}
+
+
+def test_headline_by_set(perfect, truths):
+    runs = copy.deepcopy(perfect)
+    sets = {d: "dev" for d in ALL_DEALS} | {"d02-lantana-ic": "heldout", "d09-aurelia-bb": "heldout"}
+    runs["d09-aurelia-bb"]["extracted"]["om"]["unit_count"]["value"] = 95     # one OM miss, held-out only
+    res = score_runs(runs=runs, label="sets", sets=sets)
+    hb = res["headline_by_set"]
+    assert hb["dev"]["deals_scored"]["value"] == len(ALL_DEALS) - 2 and hb["heldout"]["deals_scored"]["value"] == 2
+    assert hb["dev"]["om_field_accuracy"]["value"] == 1.0
+    n_held = hb["heldout"]["om_field_accuracy"]["n"]
+    assert hb["heldout"]["om_field_accuracy"]["k"] == n_held - 1
+    assert hb["combined"] is res["headline"]
+    assert hb["combined"]["om_field_accuracy"]["k"] == hb["combined"]["om_field_accuracy"]["n"] - 1
+    from evals.report import markdown_report, text_report
+    md, txt = markdown_report(res), text_report(res)
+    assert "| metric | dev | held-out | combined |" in md
+    assert "held-out" in txt.splitlines()[next(i for i, l in enumerate(txt.splitlines()) if l.startswith("HEADLINE")) + 1]
+    assert "| d09-aurelia-bb | heldout |" in md
+
+
+def test_empty_heldout_set_is_na_not_zero(perfect):
+    res = score_runs(runs={"d01-cedarline-dso": perfect["d01-cedarline-dso"]}, label="x", sets={})
+    assert res["headline_by_set"]["heldout"]["deals_scored"]["value"] == 0
+    assert res["headline_by_set"]["heldout"]["om_field_accuracy"]["value"] is None
+    from evals.report import headline_rows
+    header, rows = headline_rows(res)
+    assert header == ["metric", "dev", "held-out", "combined"] and rows[1][2] == "n/a"
+
+
+def test_verdict_pass_read_as_decline(truths, perfect):
+    from evals.common import norm_verdict
+    assert norm_verdict("Pass") == "Decline" and norm_verdict("Pursue") == "Pursue"
+    d = "d12-tulip-ic"                     # 26 units: fails the minimum-size hard filter
+    assert engine_on_truth(truths[d])["verdict"] == "Decline"
+    run = copy.deepcopy(perfect[d])
+    run["mandate_fit"]["verdict"] = "Pass"
+    s = score_deal(d, truths[d], run)["underwriting"]["summary"]
+    assert s["verdict_ok"] and s["verdict_got"] == "Decline"
+    run["mandate_fit"]["verdict"] = "Decline"
+    assert score_deal(d, truths[d], run)["underwriting"]["summary"]["verdict_ok"]
+
+
+def test_reports_have_no_absolute_paths(perfect, tmp_path, capsys):
+    from evals.common import REPO_ROOT
+    from evals.report import markdown_report, text_report
+    runs = tmp_path / "runs"
+    (runs / "d06-opaline-jvc").mkdir(parents=True)
+    (runs / "d06-opaline-jvc" / "run.json").write_text(json.dumps(perfect["d06-opaline-jvc"], default=str))
+    res = score_runs(runs_dir=runs, label="p")
+    for text in (markdown_report(res), text_report(res), json.dumps({k: res[k] for k in ("runs_dir",)})):
+        assert str(tmp_path) not in text and str(REPO_ROOT) not in text
+    res = score_runs(runs_dir=REPO_ROOT / "runs", label="p", runs={})
+    assert res["runs_dir"] == "runs"
+
+
+# ---------------------------------------------------------------------------- stability
+
+
+def _write_runs(base: Path, runs: dict) -> Path:
+    for d, r in runs.items():
+        (base / d).mkdir(parents=True, exist_ok=True)
+        (base / d / "run.json").write_text(json.dumps(r, default=str))
+    return base
+
+
+def test_stability(perfect, tmp_path):
+    from evals.stability import jaccard, run_stability, stability_block
+    from evals.report import stability_markdown, stability_text
+    assert jaccard(set(), set()) == 1.0 and jaccard({"a", "b"}, {"b", "c"}) == pytest.approx(1 / 3)
+    ids = ["d03-sorrel-jvc", "d08-jade-ic", "d12-tulip-ic"]
+    a = _write_runs(tmp_path / "a", {d: perfect[d] for d in ids})
+    rep = {d: copy.deepcopy(perfect[d]) for d in ids[:2]}
+    r3 = rep["d03-sorrel-jvc"]
+    r3["discrepancies"] = [x for x in r3["discrepancies"] if x["id"] != "over_rented_vs_market"] + [
+        {"id": "title_check"}, {"id": "other_om_claim"}]                        # {o,p,y,v} vs {o,p,y,t}: 3/5
+    r3["underwriting"]["outputs"]["metrics"]["walk_away_price_aed"]["value"] *= 1.10
+    r3["mandate_fit"]["verdict"] = "Needs work"
+    r3["memo"]["status"] = "failed"
+    rep["d08-jade-ic"]["mandate_fit"]["verdict"] = "Pursue"
+    b = _write_runs(tmp_path / "b", rep)
+    res = run_stability([a, b], sets={"d08-jade-ic": "heldout"})
+    by = {d["deal_id"]: d for d in res["deals"]}
+    assert set(by) == {"d03-sorrel-jvc", "d08-jade-ic"}
+    assert res["deals_not_compared"] == {"d12-tulip-ic": "1 readable run(s)"} | {
+        d: "0 readable run(s)" for d in ALL_DEALS if d not in ids}
+    s3 = by["d03-sorrel-jvc"]
+    assert s3["verdicts"] == ["Decline", "Needs work"] and not s3["verdict_unanimous"]
+    assert s3["discrepancy_jaccard_mean"] == 0.6
+    assert s3["discrepancies_in_some_runs"] == ["over_rented_vs_market", "title_check"]
+    assert s3["walk_away_spread_aed"] == pytest.approx(s3["walk_away_min"] * 0.10)
+    assert s3["memo_passed"] == [True, False] and s3["verdict_correct_runs"] == 1
+    assert by["d08-jade-ic"]["verdict_unanimous"] and by["d08-jade-ic"]["discrepancy_jaccard_mean"] == 1.0
+    agg = res["aggregate"]
+    assert agg["deals"] == 2 and agg["runs"] == 4
+    assert agg["verdict_unanimous"]["value"] == 0.5 and agg["verdict_correct_runs"]["k"] == 3
+    assert agg["discrepancy_jaccard_mean"]["value"] == 0.8
+    assert agg["memo_pass_rate"]["k"] == 3
+    assert res["aggregate_by_set"]["heldout"]["deals"] == 1 and res["aggregate_by_set"]["dev"]["deals"] == 1
+    block = stability_block(res)
+    md, txt = "\n".join(stability_markdown(block)), stability_text(block)
+    assert "## Stability" in md and "Decline, Needs work (Decline)" in md and str(tmp_path) not in md + txt
+
+
+def test_stability_cli_writes_summary_and_report(perfect, tmp_path, monkeypatch, capsys):
+    import evals.stability as st
+    evals_dir = tmp_path / "evals"
+    (evals_dir / "results").mkdir(parents=True)
+    write_results(score_runs(runs={"d01-cedarline-dso": perfect["d01-cedarline-dso"]}, label="base"),
+                  evals_dir / "results", evals_dir)
+    a = _write_runs(tmp_path / "a", {"d01-cedarline-dso": perfect["d01-cedarline-dso"]})
+    b = _write_runs(tmp_path / "b", {"d01-cedarline-dso": perfect["d01-cedarline-dso"]})
+    res = st.run_stability([a, b], label="rep")
+    st.write_stability(res, evals_dir / "results", evals_dir)
+    summ = json.loads((evals_dir / "summary.json").read_text())
+    assert summ["stability"]["aggregate"]["verdict_unanimous"]["value"] == 1.0
+    assert summ["latest"]["label"] == "base" and [h["label"] for h in summ["history"]] == ["base"]
+    assert "## Stability (repeated runs)" in (evals_dir / "REPORT.md").read_text()
+    from evals.scorer import latest_results_file
+    assert "_stability_" not in latest_results_file(evals_dir / "results").name
+    assert cli(["stability", "--runs", str(a), "--no-write"]) == 2

@@ -12,7 +12,7 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from .common import DEALS_DIR
+from .common import DEALS_DIR, norm_verdict
 
 UW_METRICS = ("noi_year1", "going_in_net_yield_on_cost", "levered_irr_pre_tax", "walk_away_price_aed")
 
@@ -42,7 +42,7 @@ def engine_on_truth(truth: dict) -> dict:
     fit = engine.mandate_fit(tb["deal_facts"], uw, mandate)
     return {
         "metrics": {k: uw["metrics"][k]["value"] for k in UW_METRICS},
-        "verdict": fit["verdict"],
+        "verdict": norm_verdict(fit["verdict"]),
         "reason": fit["reason"],
         "hard_fails": sorted(t["name"] for t in fit["tests"] if t["kind"] == "hard" and t["status"] == "fail"),
         "soft_fails": sorted(t["name"] for t in fit["tests"] if t["kind"] == "soft" and t["status"] == "fail"),

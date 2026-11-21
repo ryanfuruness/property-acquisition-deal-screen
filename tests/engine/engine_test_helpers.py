@@ -27,4 +27,5 @@ def single_unit_deal(rent: float = 85000.0, lease_end: str = "2027-06-30",
         "opex_aed": all_opex_stated(),
         "other_income_aed": 0.0,
         "chiller_landlord_pays": False,
+        "completion_year": 2020,          # 7 years old at the start: no exit age premium, sinking fund x1.0
     }

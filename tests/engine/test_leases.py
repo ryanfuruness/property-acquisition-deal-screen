@@ -42,7 +42,7 @@ class TestReraBands:
         assert got_rule == rule
 
     def test_over_rented_resets_to_market(self):
-        assert renewal_rent(120_000, 100_000, BANDS) == (100_000, "over_rented_reset_to_market")
+        assert renewal_rent(120_000, 100_000, BANDS) == (100_000, "over_rented_reset_to_reference")
 
     def test_increase_never_exceeds_market(self):
         # 99,000 is 1% below: 0%. A hypothetical generous band still caps at market.
@@ -71,7 +71,7 @@ class TestSingleUnitRenewal:
         s = model_unit(unit(120_000), MARKET, assumptions(p=1.0))
         assert year(s.rent, 0) == pytest.approx(60_000 + 50_000)
         assert year(s.rent, 1) == pytest.approx(100_000)
-        assert s.events[0]["renewal_rule"] == "over_rented_reset_to_market"
+        assert s.events[0]["renewal_rule"] == "over_rented_reset_to_reference"
 
     def test_no_increase_inside_notice_window(self):
         # Expires at month 1 (31 Jan 2027): too soon to serve 90 days' notice.
@@ -110,12 +110,41 @@ class TestTurnover:
         expected = 42_500 + 0.7 * 44_625 + 0.3 * (50_000 - 12_500)
         assert year(s.rent, 0) == pytest.approx(expected)          # 84,987.50
         assert sum(s.leasing_fees[:12]) == pytest.approx(0.3 * 4_166.6667, abs=1e-3)
-        assert s.events[0]["blended_rent"] == pytest.approx(0.7 * 89_250 + 0.3 * 100_000)
+        assert s.events[0]["expected_rent_after"] == pytest.approx(0.7 * 89_250 + 0.3 * 100_000)
+
+    def test_rera_band_applies_to_each_tenants_own_rent_not_a_blend(self):
+        # After the first expiry: 70% chance the tenant renewed at 89,250, 30% a new tenant at
+        # 100,000. At the second expiry the renewed tenant (10.75% below) gets +5% to 93,712.50
+        # and the new tenant (at the reference) stays at 100,000. A blended 92,475 would have
+        # been 7.5% below and got no increase.
+        s = model_unit(unit(85_000), MARKET, assumptions(p=0.7))
+        second = s.events[1]
+        rules = {round(t["current_rent"]): t["renewal_rule"] for t in second["tenant_states"]}
+        assert rules == {89_250: "rera_band_5pct", 100_000: "at_reference"}
+        first_half = 0.5 * (0.7 * 89_250 + 0.3 * 100_000)
+        renewals = 0.5 * (0.49 * 93_712.5 + 0.21 * 100_000)
+        turnover = 0.3 * 100_000 / 12 * (6 - 1.5)
+        assert year(s.rent, 1) == pytest.approx(first_half + renewals + turnover)       # 90,947.06
+        assert year(s.rent, 1) == pytest.approx(90_947.0625)
+
+    def test_turnover_relets_at_reference_uncapped(self):
+        # A tenant 50% below the reference may only get +20% on renewal; a re-let is at the reference.
+        s = model_unit(unit(50_000), MARKET, assumptions(p=0.0))
+        assert s.events[0]["turnover_rent"] == 100_000
+        assert year(s.rent, 1) == pytest.approx(100_000 / 2 + 100_000 / 12 * (6 - 1.5))
 
     def test_notice_served_turns_over(self):
         s = model_unit(unit(90_000, status="notice_served"), MARKET, assumptions(p=0.7))
         assert s.events[0]["renewal_probability"] == 0.0
         assert year(s.rent, 0) == pytest.approx(82_500)
+
+    def test_legal_case_unit_relets_after_resolution_period(self):
+        legal = UnitLease(unit="L1", unit_type="1br", area_sqft=1000, status="legal_case", annual_rent_aed=90_000,
+                          expiry_month=None, lease_up_downtime=6.0)
+        s = model_unit(legal, MARKET, assumptions(p=0.7))
+        assert sum(s.rent[:6]) == 0.0
+        assert year(s.rent, 0) == pytest.approx(100_000 / 2)
+        assert s.leasing_fees[6] == pytest.approx(100_000 / 12 * 0.5)
 
     def test_vacant_unit_leases_up_after_downtime(self):
         s = model_unit(unit(None, expiry=None, status="vacant"), MARKET, assumptions(p=0.7))

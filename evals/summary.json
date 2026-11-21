@@ -360,8 +360,8 @@
   },
   {
    "label": "v0.3.0-final-uncached",
-   "scored_at": "2026-11-21T18:53:27+00:00",
-   "results_file": "evals/results/20261121T185327Z_v0.3.0-final-uncached.json",
+   "scored_at": "2026-11-21T19:10:28+00:00",
+   "results_file": "evals/results/20261121T191028Z_v0.3.0-final-uncached.json",
    "pipeline_versions": [
     "0.2.0"
    ],
@@ -408,13 +408,119 @@
     "cost_usd_per_deal": 0.4491,
     "cost_usd_total": 5.3891,
     "duration_s_per_deal": 94.9
+   },
+   "headline_by_set": {
+    "dev": {
+     "deals_scored": 12,
+     "om_field_accuracy": 1.0,
+     "om_trusted_accuracy": 0.9933,
+     "om_citation_valid": 0.9918,
+     "om_citation_page_match": 0.9795,
+     "rent_roll_unit_recall": 1.0,
+     "rent_roll_unit_precision": 1.0,
+     "rent_roll_summary_rows_as_units": 0,
+     "rent_roll_unit_field_accuracy": 1.0,
+     "rent_roll_totals_accuracy": 1.0,
+     "rent_roll_in_place_rent_ok": 1.0,
+     "rent_roll_occupancy_ok": 1.0,
+     "opex_category_accuracy": 0.9843,
+     "opex_period_ok": 1.0,
+     "discrepancy_recall": 1.0,
+     "discrepancy_precision": 1.0,
+     "false_flags_on_clean_deals": 0,
+     "underwriting_within_tolerance": 0.9792,
+     "noi_mean_abs_rel_error": 0.0012,
+     "walk_away_mean_abs_rel_error": 0.0012,
+     "yield_on_cost_mean_abs_error": 7e-05,
+     "levered_irr_mean_abs_error": 0.00051,
+     "verdict_agreement": 0.9167,
+     "memo_grounding": 1.0,
+     "memo_pass_rate": 1.0,
+     "cost_usd_per_deal": 0.4491,
+     "cost_usd_total": 5.3891,
+     "duration_s_per_deal": 94.9
+    },
+    "heldout": {
+     "deals_scored": 0,
+     "om_field_accuracy": null,
+     "om_trusted_accuracy": null,
+     "om_citation_valid": null,
+     "om_citation_page_match": null,
+     "rent_roll_unit_recall": null,
+     "rent_roll_unit_precision": null,
+     "rent_roll_summary_rows_as_units": 0,
+     "rent_roll_unit_field_accuracy": null,
+     "rent_roll_totals_accuracy": null,
+     "rent_roll_in_place_rent_ok": null,
+     "rent_roll_occupancy_ok": null,
+     "opex_category_accuracy": null,
+     "opex_period_ok": null,
+     "discrepancy_recall": null,
+     "discrepancy_precision": null,
+     "false_flags_on_clean_deals": 0,
+     "underwriting_within_tolerance": null,
+     "noi_mean_abs_rel_error": null,
+     "walk_away_mean_abs_rel_error": null,
+     "yield_on_cost_mean_abs_error": null,
+     "levered_irr_mean_abs_error": null,
+     "verdict_agreement": null,
+     "memo_grounding": null,
+     "memo_pass_rate": null,
+     "cost_usd_per_deal": null,
+     "cost_usd_total": null,
+     "duration_s_per_deal": null
+    },
+    "combined": {
+     "deals_scored": 12,
+     "om_field_accuracy": 1.0,
+     "om_trusted_accuracy": 0.9933,
+     "om_citation_valid": 0.9918,
+     "om_citation_page_match": 0.9795,
+     "rent_roll_unit_recall": 1.0,
+     "rent_roll_unit_precision": 1.0,
+     "rent_roll_summary_rows_as_units": 0,
+     "rent_roll_unit_field_accuracy": 1.0,
+     "rent_roll_totals_accuracy": 1.0,
+     "rent_roll_in_place_rent_ok": 1.0,
+     "rent_roll_occupancy_ok": 1.0,
+     "opex_category_accuracy": 0.9843,
+     "opex_period_ok": 1.0,
+     "discrepancy_recall": 1.0,
+     "discrepancy_precision": 1.0,
+     "false_flags_on_clean_deals": 0,
+     "underwriting_within_tolerance": 0.9792,
+     "noi_mean_abs_rel_error": 0.0012,
+     "walk_away_mean_abs_rel_error": 0.0012,
+     "yield_on_cost_mean_abs_error": 7e-05,
+     "levered_irr_mean_abs_error": 0.00051,
+     "verdict_agreement": 0.9167,
+     "memo_grounding": 1.0,
+     "memo_pass_rate": 1.0,
+     "cost_usd_per_deal": 0.4491,
+     "cost_usd_total": 5.3891,
+     "duration_s_per_deal": 94.9
+    }
+   },
+   "deal_sets": {
+    "d01-cedarline-dso": "dev",
+    "d02-lantana-ic": "dev",
+    "d03-sorrel-jvc": "dev",
+    "d04-kestrel-bb": "dev",
+    "d05-larkspur-barsha": "dev",
+    "d06-opaline-jvc": "dev",
+    "d07-vireo-dso": "dev",
+    "d08-jade-ic": "dev",
+    "d09-aurelia-bb": "dev",
+    "d10-almehrab-barsha": "dev",
+    "d11-silverline-dso": "dev",
+    "d12-tulip-ic": "dev"
    }
   }
  ],
  "latest": {
   "label": "v0.3.0-final-uncached",
-  "scored_at": "2026-11-21T18:53:27+00:00",
-  "results_file": "evals/results/20261121T185327Z_v0.3.0-final-uncached.json",
+  "scored_at": "2026-11-21T19:10:28+00:00",
+  "results_file": "evals/results/20261121T191028Z_v0.3.0-final-uncached.json",
   "pipeline_versions": [
    "0.2.0"
   ],
@@ -461,6 +567,112 @@
    "cost_usd_per_deal": 0.4491,
    "cost_usd_total": 5.3891,
    "duration_s_per_deal": 94.9
+  },
+  "headline_by_set": {
+   "dev": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9795,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 0.9843,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 1.0,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 1.0,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.4491,
+    "cost_usd_total": 5.3891,
+    "duration_s_per_deal": 94.9
+   },
+   "heldout": {
+    "deals_scored": 0,
+    "om_field_accuracy": null,
+    "om_trusted_accuracy": null,
+    "om_citation_valid": null,
+    "om_citation_page_match": null,
+    "rent_roll_unit_recall": null,
+    "rent_roll_unit_precision": null,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": null,
+    "rent_roll_totals_accuracy": null,
+    "rent_roll_in_place_rent_ok": null,
+    "rent_roll_occupancy_ok": null,
+    "opex_category_accuracy": null,
+    "opex_period_ok": null,
+    "discrepancy_recall": null,
+    "discrepancy_precision": null,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": null,
+    "noi_mean_abs_rel_error": null,
+    "walk_away_mean_abs_rel_error": null,
+    "yield_on_cost_mean_abs_error": null,
+    "levered_irr_mean_abs_error": null,
+    "verdict_agreement": null,
+    "memo_grounding": null,
+    "memo_pass_rate": null,
+    "cost_usd_per_deal": null,
+    "cost_usd_total": null,
+    "duration_s_per_deal": null
+   },
+   "combined": {
+    "deals_scored": 12,
+    "om_field_accuracy": 1.0,
+    "om_trusted_accuracy": 0.9933,
+    "om_citation_valid": 0.9918,
+    "om_citation_page_match": 0.9795,
+    "rent_roll_unit_recall": 1.0,
+    "rent_roll_unit_precision": 1.0,
+    "rent_roll_summary_rows_as_units": 0,
+    "rent_roll_unit_field_accuracy": 1.0,
+    "rent_roll_totals_accuracy": 1.0,
+    "rent_roll_in_place_rent_ok": 1.0,
+    "rent_roll_occupancy_ok": 1.0,
+    "opex_category_accuracy": 0.9843,
+    "opex_period_ok": 1.0,
+    "discrepancy_recall": 1.0,
+    "discrepancy_precision": 1.0,
+    "false_flags_on_clean_deals": 0,
+    "underwriting_within_tolerance": 0.9792,
+    "noi_mean_abs_rel_error": 0.0012,
+    "walk_away_mean_abs_rel_error": 0.0012,
+    "yield_on_cost_mean_abs_error": 7e-05,
+    "levered_irr_mean_abs_error": 0.00051,
+    "verdict_agreement": 0.9167,
+    "memo_grounding": 1.0,
+    "memo_pass_rate": 1.0,
+    "cost_usd_per_deal": 0.4491,
+    "cost_usd_total": 5.3891,
+    "duration_s_per_deal": 94.9
+   }
+  },
+  "deal_sets": {
+   "d01-cedarline-dso": "dev",
+   "d02-lantana-ic": "dev",
+   "d03-sorrel-jvc": "dev",
+   "d04-kestrel-bb": "dev",
+   "d05-larkspur-barsha": "dev",
+   "d06-opaline-jvc": "dev",
+   "d07-vireo-dso": "dev",
+   "d08-jade-ic": "dev",
+   "d09-aurelia-bb": "dev",
+   "d10-almehrab-barsha": "dev",
+   "d11-silverline-dso": "dev",
+   "d12-tulip-ic": "dev"
   },
   "headline_detail": {
    "deals_scored": {
@@ -569,31 +781,31 @@
     "value": 0.9792,
     "k": 47,
     "n": 48,
-    "label": "Underwriting outputs within tolerance"
+    "label": "Underwriting inputs (engine on extracted vs true inputs): outputs within tolerance"
    },
    "noi_mean_abs_rel_error": {
     "value": 0.0012,
     "k": null,
     "n": 12,
-    "label": "Year-1 NOI mean abs. relative error"
+    "label": "Underwriting inputs: Year-1 NOI mean abs. relative error"
    },
    "walk_away_mean_abs_rel_error": {
     "value": 0.0012,
     "k": null,
     "n": 12,
-    "label": "Walk-away price mean abs. relative error"
+    "label": "Underwriting inputs: walk-away price mean abs. relative error"
    },
    "yield_on_cost_mean_abs_error": {
     "value": 7e-05,
     "k": null,
     "n": 12,
-    "label": "Yield on cost mean abs. error (ratio)"
+    "label": "Underwriting inputs: yield on cost mean abs. error"
    },
    "levered_irr_mean_abs_error": {
     "value": 0.00051,
     "k": null,
     "n": 12,
-    "label": "Levered IRR mean abs. error (ratio)"
+    "label": "Underwriting inputs: levered IRR mean abs. error"
    },
    "verdict_agreement": {
     "value": 0.9167,
@@ -632,6 +844,518 @@
     "label": "Time per deal (s)"
    }
   },
+  "headline_detail_by_set": {
+   "dev": {
+    "deals_scored": {
+     "value": 12,
+     "k": null,
+     "n": null,
+     "label": "Deals scored"
+    },
+    "om_field_accuracy": {
+     "value": 1.0,
+     "k": 297,
+     "n": 297,
+     "label": "OM fields correct"
+    },
+    "om_trusted_accuracy": {
+     "value": 0.9933,
+     "k": 295,
+     "n": 297,
+     "label": "OM fields correct and verified"
+    },
+    "om_citation_valid": {
+     "value": 0.9918,
+     "k": 242,
+     "n": 244,
+     "label": "Citations valid"
+    },
+    "om_citation_page_match": {
+     "value": 0.9795,
+     "k": 239,
+     "n": 244,
+     "label": "Cited page = truth page"
+    },
+    "rent_roll_unit_recall": {
+     "value": 1.0,
+     "k": 1149,
+     "n": 1149,
+     "label": "Rent-roll units found"
+    },
+    "rent_roll_unit_precision": {
+     "value": 1.0,
+     "k": 1149,
+     "n": 1149,
+     "label": "Parsed rows that are real units"
+    },
+    "rent_roll_summary_rows_as_units": {
+     "value": 0,
+     "k": null,
+     "n": null,
+     "label": "Summary rows counted as units"
+    },
+    "rent_roll_unit_field_accuracy": {
+     "value": 1.0,
+     "k": 5667,
+     "n": 5667,
+     "label": "Unit fields correct (matched units)"
+    },
+    "rent_roll_totals_accuracy": {
+     "value": 1.0,
+     "k": 120,
+     "n": 120,
+     "label": "Rent-roll totals correct"
+    },
+    "rent_roll_in_place_rent_ok": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "In-place rent within 0.5%"
+    },
+    "rent_roll_occupancy_ok": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "Occupancy within 0.5%"
+    },
+    "opex_category_accuracy": {
+     "value": 0.9843,
+     "k": 125,
+     "n": 127,
+     "label": "Statement categories within 0.5%"
+    },
+    "opex_period_ok": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "Statement period and annualisation right"
+    },
+    "discrepancy_recall": {
+     "value": 1.0,
+     "k": 29,
+     "n": 29,
+     "label": "Planted discrepancies found"
+    },
+    "discrepancy_precision": {
+     "value": 1.0,
+     "k": 29,
+     "n": 29,
+     "label": "Flags that were planted"
+    },
+    "false_flags_on_clean_deals": {
+     "value": 0,
+     "k": null,
+     "n": 2,
+     "label": "False flags on clean deals"
+    },
+    "underwriting_within_tolerance": {
+     "value": 0.9792,
+     "k": 47,
+     "n": 48,
+     "label": "Underwriting inputs (engine on extracted vs true inputs): outputs within tolerance"
+    },
+    "noi_mean_abs_rel_error": {
+     "value": 0.0012,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: Year-1 NOI mean abs. relative error"
+    },
+    "walk_away_mean_abs_rel_error": {
+     "value": 0.0012,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: walk-away price mean abs. relative error"
+    },
+    "yield_on_cost_mean_abs_error": {
+     "value": 7e-05,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: yield on cost mean abs. error"
+    },
+    "levered_irr_mean_abs_error": {
+     "value": 0.00051,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: levered IRR mean abs. error"
+    },
+    "verdict_agreement": {
+     "value": 0.9167,
+     "k": 11,
+     "n": 12,
+     "label": "Verdict matches engine on truth"
+    },
+    "memo_grounding": {
+     "value": 1.0,
+     "k": 837,
+     "n": 837,
+     "label": "Memo numbers grounded"
+    },
+    "memo_pass_rate": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "Memos that passed the number check"
+    },
+    "cost_usd_per_deal": {
+     "value": 0.4491,
+     "k": null,
+     "n": 12,
+     "label": "Cost per deal (USD)"
+    },
+    "cost_usd_total": {
+     "value": 5.3891,
+     "k": null,
+     "n": 12,
+     "label": "Cost, all deals (USD)"
+    },
+    "duration_s_per_deal": {
+     "value": 94.9,
+     "k": null,
+     "n": 12,
+     "label": "Time per deal (s)"
+    }
+   },
+   "heldout": {
+    "deals_scored": {
+     "value": 0,
+     "k": null,
+     "n": null,
+     "label": "Deals scored"
+    },
+    "om_field_accuracy": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "OM fields correct"
+    },
+    "om_trusted_accuracy": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "OM fields correct and verified"
+    },
+    "om_citation_valid": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Citations valid"
+    },
+    "om_citation_page_match": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Cited page = truth page"
+    },
+    "rent_roll_unit_recall": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Rent-roll units found"
+    },
+    "rent_roll_unit_precision": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Parsed rows that are real units"
+    },
+    "rent_roll_summary_rows_as_units": {
+     "value": 0,
+     "k": null,
+     "n": null,
+     "label": "Summary rows counted as units"
+    },
+    "rent_roll_unit_field_accuracy": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Unit fields correct (matched units)"
+    },
+    "rent_roll_totals_accuracy": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Rent-roll totals correct"
+    },
+    "rent_roll_in_place_rent_ok": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "In-place rent within 0.5%"
+    },
+    "rent_roll_occupancy_ok": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Occupancy within 0.5%"
+    },
+    "opex_category_accuracy": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Statement categories within 0.5%"
+    },
+    "opex_period_ok": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Statement period and annualisation right"
+    },
+    "discrepancy_recall": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Planted discrepancies found"
+    },
+    "discrepancy_precision": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Flags that were planted"
+    },
+    "false_flags_on_clean_deals": {
+     "value": 0,
+     "k": null,
+     "n": 0,
+     "label": "False flags on clean deals"
+    },
+    "underwriting_within_tolerance": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Underwriting inputs (engine on extracted vs true inputs): outputs within tolerance"
+    },
+    "noi_mean_abs_rel_error": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Underwriting inputs: Year-1 NOI mean abs. relative error"
+    },
+    "walk_away_mean_abs_rel_error": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Underwriting inputs: walk-away price mean abs. relative error"
+    },
+    "yield_on_cost_mean_abs_error": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Underwriting inputs: yield on cost mean abs. error"
+    },
+    "levered_irr_mean_abs_error": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Underwriting inputs: levered IRR mean abs. error"
+    },
+    "verdict_agreement": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Verdict matches engine on truth"
+    },
+    "memo_grounding": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Memo numbers grounded"
+    },
+    "memo_pass_rate": {
+     "value": null,
+     "k": 0,
+     "n": 0,
+     "label": "Memos that passed the number check"
+    },
+    "cost_usd_per_deal": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Cost per deal (USD)"
+    },
+    "cost_usd_total": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Cost, all deals (USD)"
+    },
+    "duration_s_per_deal": {
+     "value": null,
+     "k": null,
+     "n": 0,
+     "label": "Time per deal (s)"
+    }
+   },
+   "combined": {
+    "deals_scored": {
+     "value": 12,
+     "k": null,
+     "n": null,
+     "label": "Deals scored"
+    },
+    "om_field_accuracy": {
+     "value": 1.0,
+     "k": 297,
+     "n": 297,
+     "label": "OM fields correct"
+    },
+    "om_trusted_accuracy": {
+     "value": 0.9933,
+     "k": 295,
+     "n": 297,
+     "label": "OM fields correct and verified"
+    },
+    "om_citation_valid": {
+     "value": 0.9918,
+     "k": 242,
+     "n": 244,
+     "label": "Citations valid"
+    },
+    "om_citation_page_match": {
+     "value": 0.9795,
+     "k": 239,
+     "n": 244,
+     "label": "Cited page = truth page"
+    },
+    "rent_roll_unit_recall": {
+     "value": 1.0,
+     "k": 1149,
+     "n": 1149,
+     "label": "Rent-roll units found"
+    },
+    "rent_roll_unit_precision": {
+     "value": 1.0,
+     "k": 1149,
+     "n": 1149,
+     "label": "Parsed rows that are real units"
+    },
+    "rent_roll_summary_rows_as_units": {
+     "value": 0,
+     "k": null,
+     "n": null,
+     "label": "Summary rows counted as units"
+    },
+    "rent_roll_unit_field_accuracy": {
+     "value": 1.0,
+     "k": 5667,
+     "n": 5667,
+     "label": "Unit fields correct (matched units)"
+    },
+    "rent_roll_totals_accuracy": {
+     "value": 1.0,
+     "k": 120,
+     "n": 120,
+     "label": "Rent-roll totals correct"
+    },
+    "rent_roll_in_place_rent_ok": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "In-place rent within 0.5%"
+    },
+    "rent_roll_occupancy_ok": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "Occupancy within 0.5%"
+    },
+    "opex_category_accuracy": {
+     "value": 0.9843,
+     "k": 125,
+     "n": 127,
+     "label": "Statement categories within 0.5%"
+    },
+    "opex_period_ok": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "Statement period and annualisation right"
+    },
+    "discrepancy_recall": {
+     "value": 1.0,
+     "k": 29,
+     "n": 29,
+     "label": "Planted discrepancies found"
+    },
+    "discrepancy_precision": {
+     "value": 1.0,
+     "k": 29,
+     "n": 29,
+     "label": "Flags that were planted"
+    },
+    "false_flags_on_clean_deals": {
+     "value": 0,
+     "k": null,
+     "n": 2,
+     "label": "False flags on clean deals"
+    },
+    "underwriting_within_tolerance": {
+     "value": 0.9792,
+     "k": 47,
+     "n": 48,
+     "label": "Underwriting inputs (engine on extracted vs true inputs): outputs within tolerance"
+    },
+    "noi_mean_abs_rel_error": {
+     "value": 0.0012,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: Year-1 NOI mean abs. relative error"
+    },
+    "walk_away_mean_abs_rel_error": {
+     "value": 0.0012,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: walk-away price mean abs. relative error"
+    },
+    "yield_on_cost_mean_abs_error": {
+     "value": 7e-05,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: yield on cost mean abs. error"
+    },
+    "levered_irr_mean_abs_error": {
+     "value": 0.00051,
+     "k": null,
+     "n": 12,
+     "label": "Underwriting inputs: levered IRR mean abs. error"
+    },
+    "verdict_agreement": {
+     "value": 0.9167,
+     "k": 11,
+     "n": 12,
+     "label": "Verdict matches engine on truth"
+    },
+    "memo_grounding": {
+     "value": 1.0,
+     "k": 837,
+     "n": 837,
+     "label": "Memo numbers grounded"
+    },
+    "memo_pass_rate": {
+     "value": 1.0,
+     "k": 12,
+     "n": 12,
+     "label": "Memos that passed the number check"
+    },
+    "cost_usd_per_deal": {
+     "value": 0.4491,
+     "k": null,
+     "n": 12,
+     "label": "Cost per deal (USD)"
+    },
+    "cost_usd_total": {
+     "value": 5.3891,
+     "k": null,
+     "n": 12,
+     "label": "Cost, all deals (USD)"
+    },
+    "duration_s_per_deal": {
+     "value": 94.9,
+     "k": null,
+     "n": 12,
+     "label": "Time per deal (s)"
+    }
+   }
+  },
   "per_deal": {
    "d01-cedarline-dso": {
     "om_accuracy": 1.0,
@@ -646,6 +1370,7 @@
     },
     "noi_rel_error": 0.0,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
      "expected": "Needs work",
      "got": "Needs work"
@@ -671,6 +1396,7 @@
     },
     "noi_rel_error": 2.1131161593763966e-15,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
      "expected": "Pursue",
      "got": "Pursue"
@@ -696,9 +1422,10 @@
     },
     "noi_rel_error": 2.4077704759734236e-15,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
-     "expected": "Pass",
-     "got": "Pass"
+     "expected": "Decline",
+     "got": "Decline"
     },
     "memo": {
      "status": "passed",
@@ -721,9 +1448,10 @@
     },
     "noi_rel_error": 2.0539100108698796e-15,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
-     "expected": "Pass",
-     "got": "Pass"
+     "expected": "Decline",
+     "got": "Decline"
     },
     "memo": {
      "status": "passed",
@@ -746,6 +1474,7 @@
     },
     "noi_rel_error": 0.014477139195692792,
     "walk_away_rel_error": 0.014936285773971172,
+    "set": "dev",
     "verdict": {
      "expected": "Needs work",
      "got": "Needs work"
@@ -771,6 +1500,7 @@
     },
     "noi_rel_error": -1.8008420546864417e-05,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
      "expected": "Needs work",
      "got": "Needs work"
@@ -796,6 +1526,7 @@
     },
     "noi_rel_error": -1.2774199646689438e-05,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
      "expected": "Needs work",
      "got": "Needs work"
@@ -821,6 +1552,7 @@
     },
     "noi_rel_error": 2.9421798049390767e-05,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
      "expected": "Pursue",
      "got": "Pursue"
@@ -846,9 +1578,10 @@
     },
     "noi_rel_error": 0.0,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
-     "expected": "Pass",
-     "got": "Pass"
+     "expected": "Decline",
+     "got": "Decline"
     },
     "memo": {
      "status": "passed",
@@ -871,8 +1604,9 @@
     },
     "noi_rel_error": -7.965097970699301e-16,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
-     "expected": "Pass",
+     "expected": "Decline",
      "got": "Needs work"
     },
     "memo": {
@@ -896,9 +1630,10 @@
     },
     "noi_rel_error": 0.0,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
-     "expected": "Pass",
-     "got": "Pass"
+     "expected": "Decline",
+     "got": "Decline"
     },
     "memo": {
      "status": "passed",
@@ -921,9 +1656,10 @@
     },
     "noi_rel_error": -2.521320881941995e-15,
     "walk_away_rel_error": 0.0,
+    "set": "dev",
     "verdict": {
-     "expected": "Pass",
-     "got": "Pass"
+     "expected": "Decline",
+     "got": "Decline"
     },
     "memo": {
      "status": "passed",
@@ -936,6 +1672,6 @@
   },
   "deals_not_scored": {}
  },
- "updated_at": "2026-11-21T18:53:27+00:00",
- "note": "Written by `python -m evals score`. latest = most recent scoring; history = one entry per label (re-scoring a label replaces its entry). Metric definitions: evals/README.md."
+ "updated_at": "2026-11-21T19:10:28+00:00",
+ "note": "Written by `python -m evals score`. latest = most recent scoring; history = one entry per label (re-scoring a label replaces its entry). headline = all scored deals; headline_by_set = dev, heldout and combined. stability = latest `python -m evals stability`. Metric definitions: evals/README.md."
 }

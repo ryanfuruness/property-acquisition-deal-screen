@@ -134,3 +134,43 @@ def summarise_checks(checks: list[dict]) -> dict:
     n = len(checks)
     ok = sum(1 for c in checks if c["ok"])
     return {"n": n, "correct": ok, "accuracy": ratio(ok, n)}
+
+
+# ---------------------------------------------------------------------------- paths, verdicts, deal sets
+
+SETS = ("dev", "heldout")
+
+
+def rel_path(p) -> str:
+    """Repo-relative path for reports (never an absolute local path)."""
+    from pathlib import Path
+    s = str(p)
+    try:
+        return str(Path(s).resolve().relative_to(REPO_ROOT))
+    except (ValueError, OSError):
+        return s if not Path(s).is_absolute() else Path(s).name
+
+
+# Engine v2 renames the verdict "Pass" (do not proceed) to "Decline". Old runs and old results
+# say "Pass"; the scorer reads both and always writes "Decline".
+VERDICT_ALIASES = {"Pass": "Decline"}
+
+
+def norm_verdict(v):
+    return VERDICT_ALIASES.get(v, v) if isinstance(v, str) else v
+
+
+def deal_sets(deals_dir=None) -> dict[str, str]:
+    """deal_id -> 'dev' | 'heldout' from data/deals/index.json; a missing ``set`` means dev."""
+    import json
+    from pathlib import Path
+    p = Path(deals_dir or DEALS_DIR) / "index.json"
+    try:
+        idx = json.loads(p.read_text())
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for d in idx.get("deals", []):
+        s = str(d.get("set") or "dev").strip().lower().replace("-", "").replace("_", "")
+        out[d["deal_id"]] = "heldout" if s in ("heldout", "holdout") else "dev"
+    return out

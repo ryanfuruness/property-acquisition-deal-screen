@@ -1,10 +1,18 @@
-"""Apply the mandate's buy box to a deal: Pursue / Needs work / Pass, with one record per test.
+"""Apply the mandate's buy box to a deal: Pursue / Needs work / Decline, one record per test.
 
 Each filter in ``mandate.buy_box`` maps to exactly one test below. A filter in the
 mandate with no test here raises an error, so the mandate and the code cannot drift
-apart unnoticed. A test whose fact or metric is unknown gets status ``unknown``;
-unknown counts as a soft fail (never a pass), even for a hard filter, because the
-screen cannot clear a deal on something it has not seen.
+apart unnoticed (``over_rent_threshold`` is a parameter of the over-rent test, not a test).
+
+A test whose fact or metric is unknown gets status ``unknown`` and never passes:
+
+* an unknown **hard** test blocks the deal: the verdict is at best Needs work, and the
+  test is named in ``blocked_on`` (for example a title the documents do not establish);
+* an unknown **soft** test counts as a soft miss.
+
+A failed hard test declines the deal. Returns are still computed and reported, but they
+are not decisive: soft-test records are marked ``decisive: false`` and ``stop_reason``
+says why, so a memo stops at the hard failure.
 """
 
 from __future__ import annotations
@@ -26,6 +34,10 @@ def _aed(x: float) -> str:
     return f"AED {x:,.0f}"
 
 
+def _unknown_effect(kind: str) -> str:
+    return "blocks the verdict until known" if kind == "hard" else "counts as a soft miss"
+
+
 def _engine_value(uw_result: dict | None, name: str) -> Any:
     if not uw_result:
         return None
@@ -44,7 +56,7 @@ def _record(name: str, kind: str, threshold: Any, actual: Any, passed: bool | No
 
 def _membership(name: str, kind: str, allowed: list, actual: Any, label: str) -> dict:
     if actual in (None, ""):
-        return _record(name, kind, allowed, None, None, f"{label} unknown; counts as a soft fail.", "deal_facts")
+        return _record(name, kind, allowed, None, None, f"{label} unknown; {_unknown_effect(kind)}.", "deal_facts")
     norm = {str(a).strip().lower(): a for a in allowed}
     ok = str(actual).strip().lower() in norm
     reason = (f"{label} {actual!r} is in the mandate." if ok
@@ -55,7 +67,7 @@ def _membership(name: str, kind: str, allowed: list, actual: Any, label: str) ->
 def _bound(name: str, kind: str, threshold: float, actual: Any, label: str,
            fmt: Callable[[float], str], minimum: bool, source: str) -> dict:
     if actual is None:
-        return _record(name, kind, threshold, None, None, f"{label} unknown; counts as a soft fail.", source)
+        return _record(name, kind, threshold, None, None, f"{label} unknown; {_unknown_effect(kind)}.", source)
     ok = actual >= threshold if minimum else actual <= threshold
     word = "at least" if minimum else "at most"
     verdict = "meets" if ok else "misses"
@@ -105,7 +117,9 @@ def mandate_fit(deal_facts: dict, uw_result: dict | None, mandate: dict) -> dict
     mandate:
         The parsed ``mandate.yaml``.
 
-    Returns ``{"verdict", "reason", "hard_fails", "soft_fails", "unknown", "tests"}``.
+    Returns ``{"verdict", "reason", "hard_fails", "soft_fails", "unknown", "blocked_on",
+    "stop_reason", "tests"}``. ``blocked_on`` lists the names of unknown hard tests;
+    ``stop_reason`` is ``None`` unless a hard test failed.
     """
     facts = deal_facts or {}
     hard = mandate["buy_box"]["hard"]
@@ -116,9 +130,11 @@ def mandate_fit(deal_facts: dict, uw_result: dict | None, mandate: dict) -> dict
     handled_hard = {"asset_type", "title", "areas", "min_units", "max_units", "min_price_aed",
                     "max_price_aed", "min_completion_year", "min_dscr_year1",
                     "no_master_lease_to_related_party"}
-    handled_soft = {"min_going_in_net_yield_on_cost", "target_levered_irr", "target_equity_multiple",
-                    "min_occupancy", "max_lease_expiry_share_in_any_quarter",
-                    "max_over_rent_share_of_income"}
+    handled_soft = {"min_going_in_net_yield_on_cost", "target_unlevered_irr",
+                    "target_unlevered_equity_multiple", "min_occupancy",
+                    "max_lease_expiry_share_in_any_quarter", "max_over_rent_share_of_income"}
+    soft_parameters = {"over_rent_threshold"}
+    soft = {k: v for k, v in soft.items() if k not in soft_parameters}
     missing = (set(hard) - handled_hard) | (set(soft) - handled_soft)
     if missing:
         raise ValueError(f"mandate filters with no implemented test: {sorted(missing)}")
@@ -159,7 +175,7 @@ def mandate_fit(deal_facts: dict, uw_result: dict | None, mandate: dict) -> dict
         flag, src = _related_party_master_lease(facts, uw_result)
         if flag is None:
             tests.append(_record("no_master_lease_to_related_party", "hard", False, None, None,
-                                 "Lease structure or master tenant relationship unknown; counts as a soft fail.",
+                                 f"Lease structure or master tenant relationship unknown; {_unknown_effect('hard')}.",
                                  src))
         else:
             tests.append(_record("no_master_lease_to_related_party", "hard", False, flag, not flag,
@@ -169,12 +185,14 @@ def mandate_fit(deal_facts: dict, uw_result: dict | None, mandate: dict) -> dict
     # ---- soft filters ----------------------------------------------------------------------
     soft_specs = (
         ("min_going_in_net_yield_on_cost", "going_in_net_yield_on_cost", "Going-in net yield on cost", _pct, True),
-        ("target_levered_irr", "levered_irr_pre_tax", "Levered IRR (pre-tax)", _pct, True),
-        ("target_equity_multiple", "levered_equity_multiple_pre_tax", "Levered equity multiple (pre-tax)", _x, True),
+        ("target_unlevered_irr", "unlevered_irr_pre_tax", "Unlevered IRR (pre-tax)", _pct, True),
+        ("target_unlevered_equity_multiple", "unlevered_equity_multiple_pre_tax",
+         "Unlevered equity multiple (pre-tax)", _x, True),
         ("min_occupancy", "occupancy_by_units", "Occupancy by units", _pct, True),
         ("max_lease_expiry_share_in_any_quarter", "max_expiry_share_quarter",
          "Largest 3-month lease expiry share (12 months from the rent roll date)", _pct, False),
-        ("max_over_rent_share_of_income", "over_rent_share_of_income", "Over-rented share of income", _pct, False),
+        ("max_over_rent_share_of_income", "over_rent_share_of_income",
+         "Share of income let above the reference by more than the threshold", _pct, False),
     )
     for key, metric_name, label, fmt, minimum in soft_specs:
         if key in soft:
@@ -183,28 +201,40 @@ def mandate_fit(deal_facts: dict, uw_result: dict | None, mandate: dict) -> dict
 
     # ---- verdict -----------------------------------------------------------------------------
     hard_fails = [t for t in tests if t["kind"] == "hard" and t["status"] == FAIL]
+    blocked = [t for t in tests if t["kind"] == "hard" and t["status"] == UNKNOWN]
     unknown = [t for t in tests if t["status"] == UNKNOWN]
-    soft_fails = [t for t in tests if t["kind"] == "soft" and t["status"] == FAIL] + unknown
+    soft_fails = [t for t in tests if t["kind"] == "soft" and t["status"] in (FAIL, UNKNOWN)]
+    stop_reason = None
 
-    if rules.get("pass_if_any_hard_fails", True) and hard_fails:
-        verdict = "Pass"
-        reason = "Fails hard filter(s): " + ", ".join(t["name"] for t in hard_fails) + "."
+    if rules.get("decline_if_any_hard_fails", True) and hard_fails:
+        verdict = "Decline"
+        names = ", ".join(t["name"] for t in hard_fails)
+        reason = f"Fails hard filter(s): {names}."
+        stop_reason = f"Declined on hard filter(s): {names}. Returns are shown for reference but are not decisive."
+    elif blocked:
+        verdict = "Needs work"
+        reason = ("Blocked on unknown hard filter(s): " + ", ".join(t["name"] for t in blocked)
+                  + (f"; {len(soft_fails)} soft miss(es) or unknown(s)." if soft_fails else "."))
     elif len(soft_fails) <= rules.get("pursue_if_soft_fails_at_most", 0):
         verdict = "Pursue"
         reason = "Meets every hard filter and every soft filter." if not soft_fails else \
-            f"Meets every hard filter; {len(soft_fails)} soft fail(s) within the allowance."
+            f"Meets every hard filter; {len(soft_fails)} soft miss(es) within the allowance."
     elif rules.get("needs_work_otherwise", True):
         verdict = "Needs work"
-        reason = (f"Meets every hard filter; {len(soft_fails)} soft fail(s) or unknown(s): "
+        reason = (f"Meets every hard filter; {len(soft_fails)} soft miss(es) or unknown(s): "
                   + ", ".join(t["name"] for t in soft_fails) + ".")
     else:
-        verdict = "Pass"
-        reason = "Soft fails exceed the allowance and the mandate has no 'needs work' outcome."
+        verdict = "Decline"
+        reason = "Soft misses exceed the allowance and the mandate has no 'needs work' outcome."
+    for t in tests:
+        t["decisive"] = not (hard_fails and t["kind"] == "soft")
     return {
         "verdict": verdict,
         "reason": reason,
         "hard_fails": len(hard_fails),
         "soft_fails": len(soft_fails),
         "unknown": len(unknown),
+        "blocked_on": [t["name"] for t in blocked],
+        "stop_reason": stop_reason,
         "tests": tests,
     }

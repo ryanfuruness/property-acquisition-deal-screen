@@ -46,10 +46,12 @@ class TestGrowth:
 
 class TestExitGainTax:
     def test_gain_taxed_in_sale_year(self, test_mandate, test_market):
-        # Bought at AED 500k, the unit sells for about AED 0.9m: a taxable gain.
-        r = underwrite(single_unit_deal(price=500_000.0), test_mandate, test_market)
+        # Reference rents grow 12% a year, so the unit bought at AED 1m sells well above cost.
+        m = copy.deepcopy(test_mandate)
+        m["underwriting"]["market_view"]["rent_growth_by_year"] = {"default": [0.12] * 6}
+        r = underwrite(single_unit_deal(price=1_000_000.0), m, test_market)
         net_sale = v(r, "net_sale_proceeds_aed")
-        gain = net_sale - (500_000 + r["acquisition_costs"]["total"]["value"])
+        gain = net_sale - (1_000_000 + r["acquisition_costs"]["total"]["value"])
         assert v(r, "exit_gain_levered_aed") == pytest.approx(gain)
         assert gain > 0
         noi5 = line(r, "noi")[4]
@@ -64,7 +66,7 @@ class TestExitGainTax:
         assert rc["tax_levered"]["values"][1:5] == [0.0] * 4
         # Unlevered gain is measured against price + transfer costs (no mortgage registration).
         transfer = r["acquisition_costs"]["transfer_costs"]["value"]
-        expected_u = 0.09 * max(0.0, noi5 + net_sale - (500_000 + transfer) - 375_000)
+        expected_u = 0.09 * max(0.0, noi5 + net_sale - (1_000_000 + transfer) - 375_000)
         assert rc["tax_unlevered"]["values"][5] == pytest.approx(expected_u)
 
     def test_loss_on_sale_offsets_income(self, jvc_deal, mandate, market):
@@ -116,21 +118,35 @@ class TestExpiryWindows:
 
 
 class TestMasterLease:
-    def test_income_until_reversion_then_units_turn_over(self, test_mandate, test_market):
-        r = underwrite(with_master(single_unit_deal()), test_mandate, test_market)
-        master_income = 90_000 / 2                                # Jan-Jun
-        unit_rent = 100_000 / 12 * (6 - 1.5)                      # re-let from July after 1.5 months
+    def test_income_until_reversion_then_sub_tenancies_novate(self, test_mandate, test_market):
+        # Two 1,000 sqft units under a master lease to 30 Jun 2027: one sub-let at 85,000 to
+        # 31 Mar 2028, one vacant. At reversion the let unit keeps paying 85,000 until its own
+        # lease end; the vacant unit leases up at the 100,000 reference after 1.5 months.
+        deal = single_unit_deal(lease_end="2028-03-31")
+        deal["nsa_sqft"] = 2000
+        deal["units"].append({"unit": "A2", "unit_type": "1br", "area_sqft": 1000, "status": "vacant"})
+        r = underwrite(with_master(deal), test_mandate, test_market)
+        master_income = 90_000 / 2                                 # Jan-Jun
+        novated = 85_000 / 2                                       # Jul-Dec at the sub-let rent
+        leased_up = 100_000 / 12 * (6 - 1.5)
         assert line(r, "master_lease_income")[0] == pytest.approx(master_income)
-        assert line(r, "gross_rental_income")[0] == pytest.approx(unit_rent)
-        # Vacancy allowance on unit rent only (5% = 1,875) is less than the 12,500 of
-        # lease-up downtime already modelled, so no top-up. Collection loss on everything.
-        assert line(r, "vacancy_allowance")[0] == pytest.approx(0.05 * unit_rent)
-        assert line(r, "downtime_loss")[0] == pytest.approx(100_000 / 12 * 1.5)
-        assert line(r, "structural_vacancy")[0] == 0.0
-        assert line(r, "collection_loss")[0] == pytest.approx(0.01 * (master_income + unit_rent))
-        assert line(r, "leasing_fees")[0] == pytest.approx(100_000 / 12 * 0.5)
-        assert line(r, "master_lease_income")[1] == 0.0
+        assert line(r, "gross_rental_income")[0] == pytest.approx(novated + leased_up)
+        # The sub-let lease rolls at its own end (Apr 2028): +5% under the RERA band.
+        assert line(r, "gross_rental_income")[1] == pytest.approx(85_000 / 4 + 89_250 * 3 / 4 + 100_000 / 2 + 100_000 / 2)
+        assert r["master_lease"]["reversion_basis"] == "novation"
         assert r["master_lease"]["reversion_date"] == "2027-07-01"
+        # Structural vacancy on unit rent only; downtime 12,500 vs allowance 5% of unit rent.
+        allowance = 0.05 * (novated + leased_up)
+        assert line(r, "structural_vacancy")[0] == pytest.approx(max(0.0, allowance - 12_500))
+        assert line(r, "leasing_fees")[0] == pytest.approx(100_000 / 12 * 0.5)
+
+    def test_without_unit_data_every_unit_turns_over(self, test_mandate, test_market):
+        deal = with_master(single_unit_deal())
+        del deal["units"]
+        r = underwrite(deal, test_mandate, test_market)
+        assert r["master_lease"]["reversion_basis"] == "all_turnover"
+        assert line(r, "gross_rental_income")[0] == pytest.approx(100_000 / 12 * (6 - 1.5))
+        assert any("turn over at reversion" in w for w in r["warnings"])
 
     def test_long_master_lease_has_no_structural_vacancy(self, test_mandate, test_market):
         r = underwrite(with_master(single_unit_deal(), lease_end="2035-12-31"), test_mandate, test_market)
@@ -140,11 +156,14 @@ class TestMasterLease:
             90_000 * 0.99 * (1 - 0.05 * 1.05) - 5_000 * 1.05)       # mgmt + VAT, stated opex + VAT
 
     def test_rent_roll_statistics_follow_the_master_lease(self, test_mandate, test_market):
-        r = underwrite(with_master(single_unit_deal(status="vacant"), annual_rent_aed=110_000),
+        r = underwrite(with_master(single_unit_deal(status="vacant"), annual_rent_aed=115_000),
                        test_mandate, test_market)
         assert v(r, "occupancy_by_units") == 1.0
-        assert v(r, "in_place_rent_aed") == 110_000
-        assert v(r, "over_rent_share_of_income") == 1.0          # above the 100,000 market reference
+        assert v(r, "in_place_rent_aed") == 115_000
+        assert v(r, "over_rent_share_of_income") == 1.0          # more than 10% above the 100,000 reference
+        r2 = underwrite(with_master(single_unit_deal(status="vacant"), annual_rent_aed=110_000),
+                        test_mandate, test_market)
+        assert v(r2, "over_rent_share_of_income") == 0.0         # exactly at the 10% threshold: not over-rented
         assert v(r, "max_expiry_share_quarter") == 1.0           # all income rolls in 2027-Q3
 
     def test_default_opex_applies_only_after_reversion(self, test_mandate, test_market):
@@ -162,6 +181,7 @@ class TestMasterLease:
         r = underwrite(deal, test_mandate, test_market)
         assert v(r, "unit_count") is None
         assert any("1BR-equivalent" in w for w in r["warnings"])
+        assert r["master_lease"]["reversion_basis"] == "all_turnover"
         assert line(r, "master_lease_income")[2] == pytest.approx(45_000.0)
         assert line(r, "gross_rental_income")[2] > 0
 
