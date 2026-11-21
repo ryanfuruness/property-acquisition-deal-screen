@@ -12,3 +12,8 @@ __pycache__/
 
 # os
 .DS_Store
+
+# pipeline: replay cache and ledger temp files (run.json, pages and _ledger.json are kept)
+runs/*/.model_cache/
+runs/_ledger.lock
+runs/_ledger.tmp

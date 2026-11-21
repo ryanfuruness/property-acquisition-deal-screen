@@ -41,7 +41,7 @@ def test_unstated_denominator_assumed_asking_price():
 def test_underwrite_includes_om_check(jvc_deal, mandate, market):
     r = underwrite(jvc_deal, mandate, market)
     chk = r["om_yield_check"]
-    assert chk["gross_on_price"]["value"] == pytest.approx(4_300_000 / 47_000_000)
+    assert chk["stated_income_on_price"]["value"] == pytest.approx(4_300_000 / 47_000_000)
     assert chk["buyer_net_on_total_cost"]["value"] == pytest.approx(
         r["metrics"]["going_in_net_yield_on_cost"]["value"])
     assert chk["reproduces_stated"] is False    # 4.3m / 47m = 9.15%, the OM prints 8.27%

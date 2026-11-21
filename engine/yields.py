@@ -97,8 +97,8 @@ def recompute_stated_yield(stated_income: float | None, price: float, basis: Any
         "total_cost_aed": total_cost,
         "reproduced_on_om_basis": reproduced,
         "reproduces_stated": reproduces,
-        "gross_on_price": ratio(stated_income, price),
-        "gross_on_total_cost": ratio(stated_income, total_cost),
+        "stated_income_on_price": ratio(stated_income, price),
+        "stated_income_on_total_cost": ratio(stated_income, total_cost),
         "buyer_net_on_price": ratio(noi_year1, price),
         "buyer_net_on_total_cost": ratio(noi_year1, total_cost),
     }

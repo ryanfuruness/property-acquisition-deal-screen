@@ -401,8 +401,8 @@ function uwView(r, { th }) {
     const rows = [
       ["stated_yield", "<b>OM headline</b>, as printed", "om"],
       ["reproduced_on_om_basis", "Reproduced on the OM's own basis", ""],
-      ["gross_on_price", "Gross, in-place rent on price", ""],
-      ["gross_on_total_cost", "Gross, on price plus costs", ""],
+      ["stated_income_on_price", "OM income on price", ""],
+      ["stated_income_on_total_cost", "OM income on price plus costs", ""],
       ["buyer_net_on_price", "Net (Year-1 NOI) on price", ""],
       ["buyer_net_on_total_cost", "<b>Buyer's basis</b>: net on price plus costs", "buyer"],
     ].filter(([key]) => yc[key]?.value != null);
