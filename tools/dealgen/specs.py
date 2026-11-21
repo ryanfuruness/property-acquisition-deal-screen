@@ -36,7 +36,7 @@ def plan(*groups):
 DEALS = [
     # ------------------------------------------------------------------ D01 clean, DSO
     dict(
-        deal_id="d01-cedarline-dso", seed=1101, name="Cedarline Residences",
+        deal_id="d01-cedarline-dso", seed=1101, name_slot=0, name="Cedarline Residences",
         area="Dubai Silicon Oasis", sub_community="Dubai Silicon Oasis (Cedre side, near Silicon Central)",
         plot="665-0412", plot_area_sqft=32830, tenure="freehold", title="single_title",
         seller="Cedarline Properties Investment L.L.C",
@@ -60,7 +60,7 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D02 clean, IC phase 2
     dict(
-        deal_id="d02-lantana-ic", seed=1202, name="Lantana Court",
+        deal_id="d02-lantana-ic", seed=1202, name_slot=1, name="Lantana Court",
         area="International City", sub_community="International City Phase 2 (Warsan First)",
         plot="616-0938", plot_area_sqft=21530, tenure="freehold", title="single_title",
         seller="Private owner (individual)",
@@ -74,18 +74,19 @@ DEALS = [
         occupancy=0.958, company_share=0.36,
         tenancy_mix={"sitting": 0.55, "new": 0.45}, ratios={"sitting": (0.85, 0.98), "new": (0.95, 1.0)},
         under_renewal=2, notice_served=1,
-        mgmt_fee_pct=0.05, other_income_pct=0.006, t12_income_factor=0.987,
-        broker="marwah_stone", price_basis="in_place", broker_gross_yield=0.1061,
+        mgmt_fee_pct=0.04, other_income_pct=0.006, t12_income_factor=0.987,
+        opex={"scale": {"fm_contract": 0.8, "security": 0.8, "cleaning": 0.8, "repairs_general": 0.8, "dewa_common": 0.85}},
+        broker="marwah_stone", price_basis="in_place", broker_gross_yield=0.1104,
         rent_roll={"fmt": "xlsx", "layout": "grouped_by_type", "file": "Lantana Court - Rent Roll (01.10.2026).xlsx"},
         stmt={"fmt": "pdf", "layout": "annual_comparative", "vocab": "accountant",
               "file": "Lantana_Court_Income_and_Expense_12m_to_Sep2026.pdf",
               "title": "Income & Expense Statement - 12 months to 30 September 2026"},
         om_file="om.pdf", upside=None, plant=[], motivated=True,
-        describe="Clean International City Phase 2 building offered by a motivated seller (~10.6% gross on in-place); honestly documented and priced to clear the mandate. Expected Pursue; false-flag control.",
+        describe="Clean International City Phase 2 building offered by a motivated seller (~11% gross on in-place, lean opex); honestly documented and priced to clear the mandate. Expected Pursue; false-flag control.",
     ),
     # ------------------------------------------------------------------ D03 JVC over-rented, overpriced
     dict(
-        deal_id="d03-sorrel-jvc", seed=1303, name="Sorrel Heights",
+        deal_id="d03-sorrel-jvc", seed=1303, name_slot=2, name="Sorrel Heights",
         area="JVC", sub_community="Jumeirah Village Circle, District 14",
         plot="681-7316", plot_area_sqft=27120, tenure="freehold", title="single_title",
         seller="Sorrel Real Estate Development L.L.C",
@@ -98,7 +99,7 @@ DEALS = [
         roll_date=date(2026, 11, 15), t12_end=date(2026, 9, 1),
         occupancy=0.90, vacant_retail=1, company_share=0.22,
         tenancy_mix={"peak": 0.40, "new": 0.28, "sitting": 0.32},
-        ratios={"peak": (1.06, 1.16), "new": (0.88, 0.96), "sitting": (0.86, 0.99)},
+        ratios={"peak": (1.12, 1.20), "new": (0.88, 0.96), "sitting": (0.86, 0.99)},
         under_renewal=3, notice_served=4,
         mgmt_fee_pct=0.05, other_income_pct=0.007, t12_income_factor=1.004,
         broker="dunecrest", price_basis="stated", broker_gross_yield=0.0735,
@@ -113,7 +114,7 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D04 Business Bay, chiller-free, 'net' yield
     dict(
-        deal_id="d04-kestrel-bb", seed=1404, name="Kestrel Tower",
+        deal_id="d04-kestrel-bb", seed=1404, name_slot=3, name="Kestrel Tower",
         area="Business Bay", sub_community="Business Bay, Marasi Drive side",
         plot="366-2185", plot_area_sqft=16240, tenure="freehold", title="single_title",
         seller="Kestrel Holdings Ltd (offshore SPV)",
@@ -141,18 +142,18 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D05 Barsha Heights, RERA upside, annualised
     dict(
-        deal_id="d05-larkspur-barsha", seed=1505, name="Larkspur Residence",
-        area="Al Barsha", sub_community="Barsha Heights (TECOM), Al Barsha",
-        dld_area="Al Thanyah First (Barsha Heights)",
-        plot="376-1148", plot_area_sqft=19870, tenure="freehold", title="single_title",
+        deal_id="d05-larkspur-barsha", seed=1505, name_slot=4, name="Larkspur Residence",
+        area="Al Barsha South", sub_community="Arjan, Al Barsha South",
+        dld_area="Al Barsha South Third",
+        plot="673-1148", plot_area_sqft=19870, tenure="freehold", title="single_title",
         seller="Larkspur Investments L.L.C",
-        completion_year=2011, floors_label="B+G+2P+14", res_floors=14,
+        completion_year=2016, floors_label="B+G+2P+14", res_floors=14,
         floor_plan=plan(("1br", [828.6, 845.0]), ("2br", [1288.4]), ("studio", [520.4]),
                         ("1br", [861.9, 880.3]), ("2br", [1336.1]), ("1br", [905.7]), ("2br", [1392.5])),
         efficiency=0.68, parking=150, lifts=4, chiller="landlord_district",
         roll_date=date(2026, 10, 31), t12_end=date(2026, 9, 1),
         occupancy=0.952, company_share=0.30,
-        tenancy_mix={"sitting": 0.66, "new": 0.34}, ratios={"sitting": (0.75, 0.92), "new": (0.94, 1.00)},
+        tenancy_mix={"sitting": 0.55, "new": 0.45}, ratios={"sitting": (0.93, 1.02), "new": (0.95, 1.01)},
         assumed_rent_change_yoy=-0.03, under_renewal=2, notice_served=2,
         mgmt_fee_pct=0.045, other_income_pct=0.010, t12_income_factor=0.985,
         opex_patterns={"insurance": ("multi", None, (5, 11)), "lift_amc": ("once", 10, None),
@@ -162,13 +163,13 @@ DEALS = [
         stmt={"fmt": "xlsx", "layout": "ytd_annualised", "vocab": "institutional",
               "file": "Larkspur Income & Expense Statement FY2026.xlsx",
               "title": "Income & Expense Statement FY2026"},
-        om_file="om.pdf", upside="exceeds_rera",
+        om_file="om.pdf", upside="exceeds_rera", upside_claim_pct=0.17,
         plant=[6, 13],
-        describe="Barsha Heights tower, institutional OM: claims ~15% reversion on 2027 renewals that RERA bands do not allow, and 'FY2026' opex is Jan-Sep annualised. Near miss.",
+        describe="Arjan (Al Barsha South) tower, institutional OM: claims ~17% income uplift within 12 months although passing rents already sit at the screen reference (renewals 0%, re-lets add ~1%); 'FY2026' opex is Jan-Sep annualised. Near miss.",
     ),
     # ------------------------------------------------------------------ D06 old JVC, messy roll, arrears
     dict(
-        deal_id="d06-opaline-jvc", seed=1606, name="Opaline Residence",
+        deal_id="d06-opaline-jvc", seed=1606, name_slot=5, name="Opaline Residence",
         area="JVC", sub_community="Jumeirah Village Circle, District 11",
         plot="681-2093", plot_area_sqft=14410, tenure="freehold", title="single_title",
         seller="Private owner (individual)",
@@ -193,7 +194,7 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D07 DSO, lease-up cluster, sq m roll
     dict(
-        deal_id="d07-vireo-dso", seed=1707, name="Vireo Residences",
+        deal_id="d07-vireo-dso", seed=1707, name_slot=6, name="Vireo Residences",
         area="Dubai Silicon Oasis", sub_community="Dubai Silicon Oasis, near Dubai-Al Ain Road",
         plot="665-1187", plot_area_sqft=30140, tenure="freehold", title="single_title",
         seller="Vireo Developments L.L.C",
@@ -224,7 +225,7 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D08 IC phase 1, scanned OM
     dict(
-        deal_id="d08-jade-ic", seed=1808, name="Jade Court",
+        deal_id="d08-jade-ic", seed=1808, name_slot=7, name="Jade Court",
         area="International City", sub_community="International City Phase 1, England Cluster",
         plot="616-0217", plot_area_sqft=19380, tenure="freehold", title="single_title",
         seller="Private owner (individual)",
@@ -239,18 +240,18 @@ DEALS = [
         under_renewal=2, notice_served=1,
         mgmt_fee_pct=None, other_income_pct=0.003, t12_income_factor=0.98,
         opex={"drop": ["insurance", "sinking", "marketing"]},
-        broker="saffron_key", price_basis="stated", broker_gross_yield=0.1133,
+        broker="saffron_key", price_basis="stated", broker_gross_yield=0.1160,
         rent_roll={"fmt": "xlsx", "layout": "owner_simple2", "file": "Jade Court Rent List Oct 26.xlsx"},
         stmt={"fmt": "xlsx", "layout": "annual_simple", "vocab": "owner",
               "file": "Jade Court Income Expenses Oct25-Sep26.xlsx",
               "title": "Statement of Income and Expenses 01/10/2025 - 30/09/2026"},
         om_file="om.pdf", scanned_om=True, upside=None, motivated=True,
         plant=[2, 4, 7],
-        describe="Owner-run International City Phase 1 building sold urgently, OM received as a scan: income includes vacant units at asking rent and the statement has no management fee, insurance or reserve. Still clears the mandate once corrected: discrepancies are not an automatic no. Expected Pursue.",
+        describe="Owner-run International City Phase 1 building sold urgently (~11% gross), OM received as a scan: income includes vacant units at asking rent and the statement has no management fee, insurance or reserve. Corrected, it is a near miss on unlevered IRR. Expected Needs work.",
     ),
     # ------------------------------------------------------------------ D09 Business Bay strata (hard fail)
     dict(
-        deal_id="d09-aurelia-bb", seed=1909, name="Aurelia Bay Tower",
+        deal_id="d09-aurelia-bb", seed=1909, name_slot=8, name="Aurelia Bay Tower",
         area="Business Bay", sub_community="Business Bay, Al Abraj Street",
         plot="366-0754", plot_area_sqft=14980, tenure="freehold", title="strata",
         seller="Aurelia Capital Investments L.L.C",
@@ -275,8 +276,9 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D10 Al Barsha 1 non-freehold (hard fail)
     dict(
-        deal_id="d10-almehrab-barsha", seed=2010, name="Al Mehrab Building",
-        area="Al Barsha", sub_community="Al Barsha 1, behind Mall of the Emirates",
+        deal_id="d10-almehrab-barsha", seed=2010, name_slot=9, name="Al Mehrab Building",
+        area="Al Barsha 1", ref_area="Al Barsha South", loc_key="Al Barsha 1", names_like="Al Barsha South",
+        sub_community="Al Barsha 1, behind Mall of the Emirates",
         dld_area="Al Barsha First",
         plot="373-4471", plot_area_sqft=15060, tenure="non_freehold", title="single_title",
         nationality_restriction="UAE and GCC nationals (and entities wholly owned by them)",
@@ -300,11 +302,11 @@ DEALS = [
         om_file="om.pdf", upside=None,
         plant=[1, 16],
         hard_fail="title: non-freehold plot in Al Barsha 1, ownership restricted to UAE/GCC nationals; mandate requires freehold single title (flag for legal check)",
-        describe="Older Al Barsha 1 building whose OM never says freehold; plot is nationality-restricted. Occupancy quoted from June. Hard fail on title, for legal confirmation.",
+        describe="Older Al Barsha 1 building whose OM never says freehold; the plot is nationality-restricted and the area is outside the mandate. Occupancy quoted from June. Declines on area and title (title for legal confirmation).",
     ),
     # ------------------------------------------------------------------ D11 DSO master lease to related party (hard fail)
     dict(
-        deal_id="d11-silverline-dso", seed=2111, name="Silverline Residences",
+        deal_id="d11-silverline-dso", seed=2111, name_slot=10, name="Silverline Residences",
         area="Dubai Silicon Oasis", sub_community="Dubai Silicon Oasis, near RIT Dubai campus",
         plot="665-0893", plot_area_sqft=24660, tenure="freehold", title="single_title",
         seller="Silverline Real Estate Investments L.L.C",
@@ -335,7 +337,7 @@ DEALS = [
     ),
     # ------------------------------------------------------------------ D12 IC too small (hard fail)
     dict(
-        deal_id="d12-tulip-ic", seed=2213, name="Tulip Court",
+        deal_id="d12-tulip-ic", seed=2213, name_slot=11, name="Tulip Court",
         area="International City", sub_community="International City Phase 1, China Cluster",
         plot="616-0461", plot_area_sqft=8610, tenure="freehold", title="single_title",
         seller="Private owner (individual)",
@@ -360,3 +362,6 @@ DEALS = [
         describe="Small International City Phase 1 G+3 with two shops; income stated incl. vacant units at asking. Hard fail on size and price.",
     ),
 ]
+
+
+from .specs_heldout import HELDOUT  # noqa: E402,F401

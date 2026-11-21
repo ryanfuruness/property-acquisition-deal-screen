@@ -21,7 +21,7 @@ def r_price(x):
 # --------------------------------------------------------------------------- statement vocabularies
 COOLING_LABEL = {
     "Business Bay": "District cooling - Empower (capacity & consumption)",
-    "Al Barsha": "District cooling - Empower (capacity & consumption)",
+    "Al Barsha South": "District cooling (capacity & consumption)",
     "Dubai Silicon Oasis": "District cooling charges (capacity & consumption)",
 }
 VOCAB = {
@@ -93,6 +93,8 @@ ITEM_ORDER = ["fm_contract", "lift_amc", "fire_safety", "repairs_general", "pest
 def statement_lines(spec, b):
     """Statement lines as presented (labels merged per vocabulary), monthly values from the true T-12."""
     vocab = dict(VOCAB[spec["stmt"]["vocab"]])
+    if b.get("master_lease"):
+        vocab["_rent_res"] = f"Master lease rent - {b['master_lease']['tenant']}"
     if vocab.get("cooling") is None and "cooling" in b["opex_items"]:
         vocab["cooling"] = COOLING_LABEL.get(b["area"], "District cooling charges")
     if b["chiller_arrangement"] == "landlord_plant" and spec["stmt"]["vocab"] in ("institutional", "pm_company"):
@@ -153,10 +155,43 @@ def statement_doc(spec, b):
         doc["period"] = {"start": months[idx[0]].isoformat(), "end": date(months[-1].year, 9, 30).isoformat(),
                          "months_covered": 9, "annualised": True, "annualisation_factor": "12/9",
                          "presented_as": "FY2026"}
+    elif lay == "comparative_budget" and spec["stmt"].get("forecast"):
+        rng = random.Random(spec["seed"] + 78)
+        yr = months[-1].year
+        idx = [i for i, m in enumerate(months) if m.year == yr]
+        n_act = len(idx)
+        n_bud = 12 - n_act
+        for ln in income + expenses:
+            act = sum(ln["monthly"][i] for i in idx)
+            if ln["category"] == "rental_income":
+                share = ln["total"] / max(1, sum(x["total"] for x in income if x["category"] == "rental_income"))
+                bud = int(round(b["in_place_rent_aed"] * share / 12 * n_bud))   # budget assumes full collection
+            elif ln["category"] == "other_income":
+                bud = int(round(act / n_act * n_bud))
+            else:
+                # budget for the rest of the year: last year's same months, trimmed (budgets are optimistic)
+                rest = [i for i, m in enumerate(months) if m.year == yr - 1 and m.month > months[-1].month]
+                bud = int(round(sum(ln["monthly"][i] for i in rest) * 0.85))
+            ln["actual_ytd"] = act
+            ln["budget_rest"] = bud
+            ln["stated"] = act + bud
+            if ln["category"] == "rental_income":   # FY2025 collections were normal; arrears built up in 2026
+                share = ln["total"] / max(1, sum(x["total"] for x in income if x["category"] == "rental_income"))
+                ln["prior"] = int(round(b["in_place_rent_aed"] * share * rng.uniform(0.93, 0.97) / 10) * 10)
+            else:
+                ln["prior"] = int(round(ln["total"] * rng.uniform(0.93, 1.06) / 10) * 10)
+            ln["budget_next"] = int(round(ln["stated"] * rng.uniform(0.98, 1.05) / 10) * 10)
+        doc["period"] = {"start": months[idx[0]].isoformat(), "end": f"{yr}-12-31", "months_covered": n_act,
+                         "actual_months": n_act, "budget_months": n_bud, "annualised": True,
+                         "annualisation_method": f"{n_act} months actual + {n_bud} months budget", "presented_as": f"FY{yr}F"}
     else:
         for ln in income + expenses:
             ln["stated"] = ln["total"]
         rng = random.Random(spec["seed"] + 77)
+        if lay == "comparative_budget":
+            for ln in income + expenses:
+                ln["prior"] = int(round(ln["total"] * rng.uniform(0.93, 1.06) / 10) * 10)
+                ln["budget_next"] = int(round(ln["total"] * rng.uniform(0.97, 1.04) / 10) * 10)
         if lay == "annual_comparative":
             for ln in income + expenses:
                 ln["prior"] = int(round(ln["total"] * rng.uniform(0.92, 1.07) / 10) * 10)
@@ -211,7 +246,8 @@ def om_facts(spec, b, stmt, rr, mandate):
         rent, basis = potential, "potential"
     else:
         rent, basis = in_place, "in_place"
-    style = {"harbour_crest": 1, "marwah_stone": 1, "meridian_gate": 10000, "saffron_key": 1000, "dunecrest": 10000}[br]
+    style = {"harbour_crest": 1, "marwah_stone": 1, "meridian_gate": 10000, "saffron_key": 1000, "dunecrest": 10000,
+             "qamar": 1000, "tessellate": 1}[br]
     rent_stated = int(round(rent / style) * style)
     om["annual_rent"] = {"value": rent_stated, "basis": basis,
                          "basis_as_labelled": "unstated" if basis == "potential" else "in_place"}
@@ -225,7 +261,7 @@ def om_facts(spec, b, stmt, rr, mandate):
     costs = price * (acq["dld_transfer_fee_pct"] + acq["broker_fee_pct"] * (1 + acq["broker_fee_vat_pct"])) + acq["dld_admin_aed"] + acq["trustee_fee_aed"]
     om["opex_stated_aed"] = None
     om["noi_stated_aed"] = None
-    if br in ("harbour_crest", "marwah_stone"):
+    if br in ("harbour_crest", "marwah_stone", "tessellate"):
         noi = rent_stated + other - opex_stmt
         om["opex_stated_aed"] = opex_stmt
         om["other_income_stated_aed"] = other
@@ -235,6 +271,20 @@ def om_facts(spec, b, stmt, rr, mandate):
         om["yield"] = {"value": round(noi / (price + costs), 4), "label": "Net Initial Yield", "basis": "net",
                        "on": "total_cost"}
         om["gross_yield_on_price"] = round(rent_stated / price, 4)
+    elif br == "qamar":
+        comm = sum(ln["stated"] for ln in stmt["expenses"] if ln["category"] == "service_charge")
+        comm = max(int(round(comm / 1000) * 1000), 120000)
+        g = rent_stated / price
+        om["yields_all"] = [{"label": "Gross yield (in-place rent / asking price)", "value": round(g, 4), "measure": "gross", "on": "asking_price"}]
+        if 3 in plant:
+            om["opex_stated_aed"] = comm
+            nv = round((rent_stated - comm) / price, 4)
+            om["yields_all"].append({"label": "Net yield (after service & community charges)", "value": nv, "measure": "net", "on": "asking_price"})
+            om["yield"] = {"value": nv, "label": "Net yield", "basis": "net", "on": "asking_price",
+                           "deduction_label": "service & community charges"}
+        else:
+            om["yield"] = {"value": round(g, 4), "label": "Gross yield", "basis": "gross", "on": "asking_price"}
+        om["yields_all"].append({"label": "Price per sq ft (NSA)", "value": int(round(price / b["nsa_sqft"])), "measure": "psf", "on": "nsa"})
     elif 3 in plant:
         deduction = int(round(sum(ln["stated"] for ln in stmt["expenses"] if ln["category"] in ("service_charge",)) / 1000) * 1000)
         deduction = max(deduction, 150000)
@@ -251,7 +301,7 @@ def om_facts(spec, b, stmt, rr, mandate):
         om["price_psf"] = {"value": int(round(price / b["bua_sqft"])), "basis": "bua", "basis_labelled": False}
     elif br == "dunecrest":
         om["price_psf"] = {"value": int(round(price / b["bua_sqft"])), "basis": "bua", "basis_labelled": True}
-    elif br in ("harbour_crest", "marwah_stone", "meridian_gate"):
+    elif br in ("harbour_crest", "marwah_stone", "meridian_gate", "qamar", "tessellate"):
         om["price_psf"] = {"value": int(round(price / b["nsa_sqft"])), "basis": "nsa", "basis_labelled": True}
     else:
         om["price_psf"] = None
@@ -279,11 +329,13 @@ def om_facts(spec, b, stmt, rr, mandate):
         om["_upside"] = {"kind": "compliant", "units_more_than_20pct_below_index": n20}
     elif spec.get("upside") == "exceeds_rera":
         occ = [u for u in b["units"] if u["status"] in OCC_LIKE]
-        under = [u for u in occ if u["annual_rent_aed"] < u["market_rent_aed"]]
-        mtm = sum(u["market_rent_aed"] - u["annual_rent_aed"] for u in under)
-        mtm = int(round(mtm / 50000) * 50000)
-        avg_gap = 1 - sum(u["annual_rent_aed"] for u in under) / sum(u["market_rent_aed"] for u in under)
+        claim_pct = spec["upside_claim_pct"]
+        claimed = int(round(in_place * claim_pct / 50000) * 50000)
+        supportable = sum(max(0, u["market_rent_aed"] - u["annual_rent_aed"]) for u in occ)
         allowed = rera_allowed_uplift(b["units"], bands)
-        om["_upside"] = {"kind": "exceeds_rera", "claimed_uplift_aed": mtm, "claimed_uplift_pct": round(mtm / in_place, 3),
-                         "avg_gap_under_rented": round(avg_gap, 3), "rera_allowed": allowed}
+        om["_upside"] = {"kind": "exceeds_rera", "claimed_uplift_aed": claimed, "claimed_uplift_pct": round(claimed / in_place, 3),
+                         "comparables_gap_claimed": round(claim_pct - 0.02, 2),
+                         "supportable_at_screen_reference_aed": int(supportable),
+                         "supportable_pct": round(supportable / in_place, 4),
+                         "rera_allowed": allowed}
     return om

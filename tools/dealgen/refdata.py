@@ -13,54 +13,57 @@ NAME_GROUPS = {
     "indian": (
         ["Rahul", "Priya", "Arjun", "Sneha", "Vikram", "Anjali", "Rohan", "Kavya", "Suresh", "Deepa",
          "Nikhil", "Meera", "Arun", "Lakshmi", "Sanjay", "Pooja", "Kiran", "Ravi", "Divya", "Manoj",
-         "Abhishek", "Shalini", "Vivek", "Neha", "Ajith", "Bindu"],
+         "Abhishek", "Shalini", "Vivek", "Neha", "Ajith", "Bindu", "Harish", "Swati", "Gaurav", "Ritu", "Pradeep", "Ananya", "Venkat", "Sunita", "Ashwin", "Nisha", "Rajesh", "Preeti"],
         ["Menon", "Sharma", "Nair", "Iyer", "Kapoor", "Reddy", "Pillai", "Desai", "Joshi", "Kulkarni",
          "Bhat", "Rao", "Verma", "Shetty", "Krishnan", "Mathew", "Varghese", "Gupta", "Malhotra",
-         "Chandran", "Thomas", "Kurian", "Agarwal", "Banerjee"]),
+         "Chandran", "Thomas", "Kurian", "Agarwal", "Banerjee", "Saxena", "Bhatia", "Chopra", "Pandey", "Hegde", "Sinha", "Naidu", "Ghosh", "Mehta", "Patil", "Dutta", "Kamath"]),
     "pakistani": (
         ["Imran", "Ayesha", "Bilal", "Sana", "Usman", "Hina", "Faisal", "Zainab", "Hamza", "Mariam",
-         "Kashif", "Nadia", "Asad", "Rabia", "Waqas", "Saima"],
+         "Kashif", "Nadia", "Asad", "Rabia", "Waqas", "Saima", "Danish", "Farah", "Adeel", "Mehwish", "Zeeshan", "Sadia", "Junaid", "Amna"],
         ["Qureshi", "Siddiqui", "Malik", "Chaudhry", "Butt", "Sheikh", "Abbasi", "Raza", "Mirza",
-         "Hashmi", "Khalid", "Anwar", "Iqbal", "Javed"]),
+         "Hashmi", "Khalid", "Anwar", "Iqbal", "Javed", "Ashraf", "Bhatti", "Rana", "Tariq", "Aslam", "Zafar", "Haider", "Naqvi"]),
     "filipino": (
         ["Maria", "Jose", "Angelica", "Mark", "Kristine", "John Paul", "Rowena", "Jerome", "Lovely",
-         "Ramon", "Cherry", "Arnel", "Jocelyn", "Rodel"],
+         "Ramon", "Cherry", "Arnel", "Jocelyn", "Rodel", "Marites", "Ferdinand", "Rhea", "Christian", "Joy", "Edgardo"],
         ["Santos", "Reyes", "Cruz", "Bautista", "Ocampo", "Garcia", "Mendoza", "Villanueva",
-         "Dela Cruz", "Aquino", "Ramos", "Navarro", "Manalo", "Pascual"]),
+         "Dela Cruz", "Aquino", "Ramos", "Navarro", "Manalo", "Pascual", "Castillo", "Domingo", "Salazar", "Tolentino", "Galang", "Soriano"]),
     "levantine": (
         ["Omar", "Layla", "Khaled", "Rania", "Tarek", "Dina", "Yousef", "Hala", "Samer", "Nour", "Rami",
-         "Lina", "Fadi", "Maya", "Hassan", "Reem", "Ziad", "Joelle"],
+         "Lina", "Fadi", "Maya", "Hassan", "Reem", "Ziad", "Joelle", "Bassam", "Rola", "Nabil", "Carla", "Walid", "Sana"],
         ["Haddad", "Khoury", "Nasser", "Saleh", "Mansour", "Aziz", "Hamdan", "Barakat", "Sabbagh",
-         "Darwish", "Najjar", "Kanaan", "Shami", "Awad", "Tannous", "Hijazi"]),
+         "Darwish", "Najjar", "Kanaan", "Shami", "Awad", "Tannous", "Hijazi", "Abboud", "Rizk", "Ghanem", "Saad", "Bitar", "Frem"]),
     "egyptian": (
         ["Ahmed", "Mona", "Mahmoud", "Yasmin", "Mostafa", "Heba", "Karim", "Noha", "Sherif", "Dalia",
-         "Amr", "Rasha"],
+         "Amr", "Rasha", "Tamer", "Ghada", "Hesham", "Marwa", "Wael", "Inas"],
         ["Abdelrahman", "El-Sayed", "Fahmy", "Ibrahim", "Shalaby", "Gamal", "Zaki", "Fouad", "Hegazy",
-         "Soliman", "Ragab", "Lotfy"]),
+         "Soliman", "Ragab", "Lotfy", "Mansy", "Kamel", "Sabry", "Ezzat", "Naguib", "Hafez"]),
     "european": (
         ["James", "Sophie", "Thomas", "Emma", "Daniel", "Charlotte", "Lukas", "Anna", "Marco", "Giulia",
-         "Pierre", "Claire", "Oliver", "Hannah", "Stefan", "Elena", "Niall", "Freya"],
+         "Pierre", "Claire", "Oliver", "Hannah", "Stefan", "Elena", "Niall", "Freya", "Matteo", "Ingrid", "Henrik", "Aoife", "Pieter", "Leonie", "Rafael", "Margot"],
         ["Whitfield", "Hartley", "Becker", "Moreau", "Rossi", "Kowalski", "Lindqvist", "Fischer",
          "Brennan", "Dubois", "Novak", "Russo", "Ashworth", "Keller", "Marchetti", "Holm", "Doyle",
-         "Vermeulen"]),
+         "Vermeulen", "Lindgren", "Varga", "Sorensen", "Quinn", "Bauer", "Leclerc", "Costa", "Janssen"]),
     "russian": (
         ["Dmitry", "Anastasia", "Sergey", "Ekaterina", "Alexei", "Olga", "Ivan", "Natalia", "Pavel",
-         "Yulia", "Maxim", "Daria"],
+         "Yulia", "Maxim", "Daria", "Kirill", "Svetlana", "Andrei", "Irina", "Nikolai", "Vera"],
         ["Volkov", "Morozov", "Sokolov", "Petrov", "Orlov", "Kuznetsov", "Lebedev", "Pavlov",
-         "Smirnov", "Belov", "Egorov", "Zaitsev"]),
+         "Smirnov", "Belov", "Egorov", "Zaitsev", "Fedorov", "Romanov", "Vasiliev", "Popov", "Gromov", "Titov"]),
     "chinese": (
-        ["Wei", "Li Na", "Jun", "Mei", "Hao", "Xiu Ying", "Chen", "Ying", "Lei", "Fang", "Bo", "Lan"],
-        ["Zhang", "Wang", "Liu", "Chen", "Yang", "Huang", "Zhao", "Wu", "Zhou", "Xu", "Lin", "He"]),
+        ["Wei", "Li Na", "Jun", "Mei", "Hao", "Xiu Ying", "Chen", "Ying", "Lei", "Fang", "Bo", "Lan", "Tao", "Qing", "Rui", "Ming", "Hui", "Jie", "Yan", "Ping", "Xin", "Kai", "Ling", "Song"],
+        ["Zhang", "Wang", "Liu", "Chen", "Yang", "Huang", "Zhao", "Wu", "Zhou", "Xu", "Lin", "He", "Sun", "Ma", "Zhu", "Hu", "Guo", "Luo", "Gao", "Zheng", "Liang", "Xie", "Tang", "Han"]),
     "african": (
         ["Chinedu", "Amina", "Kwame", "Grace", "Tendai", "Fatou", "Samuel", "Esther", "Joseph",
-         "Blessing", "Emeka", "Wanjiru"],
+         "Blessing", "Emeka", "Wanjiru", "Ifeoma", "Kofi", "Nia", "Tunde", "Abena", "Musa", "Zawadi", "Yaw", "Chipo", "Obinna"],
         ["Okafor", "Mensah", "Mwangi", "Diallo", "Banda", "Adeyemi", "Otieno", "Kamau", "Asante",
-         "Ndlovu", "Eze", "Owusu"]),
+         "Ndlovu", "Eze", "Owusu", "Nwosu", "Boateng", "Njoroge", "Sesay", "Phiri", "Achebe", "Ochieng", "Koroma", "Moyo", "Tetteh"]),
     "srilankan": (
-        ["Nuwan", "Dilani", "Kasun", "Chamari", "Ruwan", "Ishara"],
-        ["Perera", "Fernando", "Silva", "Jayasinghe", "Wickramasinghe", "Bandara"]),
+        ["Nuwan", "Dilani", "Kasun", "Chamari", "Ruwan", "Ishara", "Pradeep", "Sanduni", "Thilina", "Nadeesha", "Lahiru", "Kumari"],
+        ["Perera", "Fernando", "Silva", "Jayasinghe", "Wickramasinghe", "Bandara", "Gunawardena", "Rathnayake", "Dissanayake", "Herath", "Senanayake", "Ekanayake"]),
 }
 FEMALE_FIRST = {
+    "Qing", "Hui", "Yan", "Ling", "Ifeoma", "Nia", "Abena", "Zawadi", "Chipo", "Sanduni", "Nadeesha", "Kumari",
+    "Swati", "Ritu", "Ananya", "Sunita", "Nisha", "Preeti", "Farah", "Mehwish", "Sadia", "Amna", "Marites", "Rhea", "Joy",
+    "Rola", "Carla", "Sana", "Ghada", "Marwa", "Inas", "Ingrid", "Aoife", "Leonie", "Margot", "Svetlana", "Irina", "Vera",
     "Priya", "Sneha", "Anjali", "Kavya", "Deepa", "Meera", "Lakshmi", "Pooja", "Divya", "Shalini",
     "Neha", "Bindu", "Ayesha", "Sana", "Hina", "Zainab", "Mariam", "Nadia", "Rabia", "Saima", "Maria",
     "Angelica", "Kristine", "Rowena", "Lovely", "Cherry", "Jocelyn", "Layla", "Rania", "Dina", "Hala",
@@ -79,11 +82,24 @@ AREA_NATIONALITY_WEIGHTS = {
                            "european": 1, "russian": 2, "african": 12, "chinese": 18, "srilankan": 7},
     "Business Bay": {"indian": 20, "pakistani": 6, "filipino": 5, "levantine": 14, "egyptian": 8,
                      "european": 22, "russian": 15, "african": 4, "chinese": 4, "srilankan": 2},
-    "Al Barsha": {"indian": 22, "pakistani": 8, "filipino": 8, "levantine": 18, "egyptian": 14,
+    "Al Barsha South": {"indian": 22, "pakistani": 8, "filipino": 8, "levantine": 18, "egyptian": 14,
                   "european": 14, "russian": 8, "african": 4, "chinese": 2, "srilankan": 2},
 }
 
-COMPANY_PREFIX = [
+COMPANY_WORD_A = [
+    "Amber", "Azure", "Cedar", "Coral", "Cobalt", "Copper", "Falcon", "Granite", "Indigo", "Ivory", "Jasmine", "Juniper",
+    "Laurel", "Lotus", "Maple", "Marble", "Onyx", "Opal", "Orchid", "Palm", "Pearl", "Pine", "Quartz", "Raven", "Ruby",
+    "Sable", "Sandstone", "Sapphire", "Scarlet", "Silver", "Slate", "Sterling", "Summit", "Teal", "Topaz", "Willow",
+    "Zephyr", "Alder", "Birch", "Bronze", "Canyon", "Citrine", "Delta", "Ember", "Fjord", "Garnet", "Harbor", "Iris",
+]
+COMPANY_WORD_B = [
+    "Ridge", "Point", "Bay", "Line", "Gate", "Field", "Arc", "Peak", "Grove", "Path", "Bridge", "Tide", "Vale", "Wharf",
+    "Haven", "Crown", "Spire", "Wave", "Link", "Sky", "Horizon", "Compass", "Anchor", "Forge", "Meadow",
+]
+SHOP_TYPES = ["Supermarket L.L.C", "Pharmacy L.L.C", "Laundry Services", "Cafe L.L.C", "Mobile Phones Repairing",
+              "Grocery", "Dental Clinic L.L.C", "Gents Salon", "Restaurant L.L.C", "Ladies Beauty Salon", "Car Care",
+              "Bakery L.L.C", "Optics L.L.C", "Stationery Trading", "Tailoring", "Pet Supplies Trading"]
+COMPANY_PREFIX_UNUSED = [
     "Bluewave", "Northstar", "Crescent Line", "Silverleaf", "Al Fajr Al Jadeed", "Greenfield Arc", "Summit Peak",
     "Redwood Gulf", "Desert Lantern", "Pearl Coast", "Zenith Arc", "Horizon Point", "Sapphire Line", "Ironbridge",
     "Gulfway", "Seabreeze", "Palmyra Star", "Cobalt Ridge", "Starline", "Amberley", "Al Muntaha Al Thahabi",
@@ -187,6 +203,34 @@ BROKERS = {
         ],
         "confidential": "Confidential. Information provided by the owner; buyer to verify.",
     },
+    "qamar": {
+        "name": "Qamar & Partners Real Estate Brokerage L.L.C",
+        "short": "Qamar & Partners",
+        "division": "Investment Advisory - Income Assets",
+        "orn": "ORN 51174",
+        "address": "Suite 1907, Lakeside Tower B, Dubai Silicon Oasis, Dubai, UAE",
+        "phone": "+971 4 000 3360",
+        "web": "www.qamarpartners.example",
+        "contacts": [
+            ("Hisham El-Qamar", "Partner, Investment Advisory", "BRN 40552", "+971 50 000 7713", "hisham@qamarpartners.example"),
+            ("Ruth Okonkwo-Hale", "Associate, Research & Valuation", "BRN 67021", "+971 55 000 3349", "ruth.oh@qamarpartners.example"),
+        ],
+        "confidential": "This document is confidential and is issued for the sole use of the recipient. It may not be copied or circulated.",
+    },
+    "tessellate": {
+        "name": "Tessellate Property Advisors",
+        "short": "Tessellate",
+        "division": "Residential Capital Markets",
+        "orn": "ORN 48806",
+        "address": "Floor 6, Gate Avenue South Annex, DIFC, Dubai, UAE",
+        "phone": "+971 4 000 9182",
+        "web": "www.tessellate-pa.example",
+        "contacts": [
+            ("Oskar Lindell", "Head of Residential Capital Markets", "BRN 59930", "+971 52 000 4471", "oskar.lindell@tessellate-pa.example"),
+            ("Mira Haddadin", "Analyst", "BRN 68815", "+971 56 000 2206", "mira.haddadin@tessellate-pa.example"),
+        ],
+        "confidential": "Confidential. For discussion with prospective purchasers only.",
+    },
 }
 
 # ---------------------------------------------------------------------------
@@ -234,15 +278,33 @@ LOCATION = {
                    ("Sheikh Zayed Road (E11)", "4 min"), ("Dubai Mall / Downtown Dubai", "5 min"),
                    ("DIFC", "8 min"), ("Dubai International Airport (DXB)", "15 min")],
     },
-    "Al Barsha": {
-        "dld_area": "Al Barsha",
-        "intro": ("Al Barsha is an established central district between Sheikh Zayed Road and Al Khail Road, "
-                  "anchored by Mall of the Emirates and the Red Line metro. Its residential stock ranges from "
-                  "mid-rise buildings in Al Barsha 1 to the high-rise towers of Barsha Heights (TECOM), which "
-                  "serve employees of Dubai Internet City, Dubai Media City and Al Barsha's hotels."),
+    "Al Barsha South": {
+        "dld_area": "Al Barsha South Third (Arjan)",
+        "intro": ("Arjan, in Al Barsha South, is a freehold community of mid- and high-rise residential buildings off Umm "
+                  "Suqeim Road (D63), between Al Khail Road (E44) and Sheikh Mohammed Bin Zayed Road (E311). It draws "
+                  "tenants priced out of Al Barsha and Barsha Heights, with quick access to Mall of the Emirates, Dubai "
+                  "Hills and the Dubai Miracle Garden leisure cluster."),
+        "access": [("Umm Suqeim Road (D63)", "2 min"), ("Al Khail Road (E44)", "5 min"),
+                   ("Sheikh Mohammed Bin Zayed Road (E311)", "6 min"), ("Dubai Miracle Garden", "4 min"),
+                   ("Mall of the Emirates", "12 min"), ("Dubai Marina", "18 min"), ("Downtown Dubai", "22 min")],
+    },
+    "Al Barsha 1": {
+        "dld_area": "Al Barsha First",
+        "intro": ("Al Barsha is an established central district between Sheikh Zayed Road and Al Khail Road, anchored by "
+                  "Mall of the Emirates and the Red Line metro. Al Barsha 1 is a mature neighbourhood of mid-rise "
+                  "residential buildings and villas serving families and hotel, retail and office staff."),
         "access": [("Sheikh Zayed Road (E11)", "3 min"), ("Mall of the Emirates", "6 min"),
-                   ("Dubai Internet City Metro Station", "7 min"), ("Al Khail Road (E44)", "6 min"),
+                   ("Mall of the Emirates Metro Station", "8 min"), ("Al Khail Road (E44)", "6 min"),
                    ("Dubai Marina", "12 min"), ("Downtown Dubai", "18 min")],
+    },
+    "Dubai Sports City": {
+        "dld_area": "Al Hebiah Fourth",
+        "intro": ("Dubai Sports City is a freehold master community built around stadiums, academies and the Els Club "
+                  "golf course, between Sheikh Mohammed Bin Zayed Road (E311) and Hessa Street. Its mid-rise apartment "
+                  "buildings let to young professionals and families looking for value close to JVC and Motor City."),
+        "access": [("Sheikh Mohammed Bin Zayed Road (E311)", "4 min"), ("Hessa Street", "3 min"),
+                   ("Al Khail Road (E44)", "8 min"), ("Kings' College Hospital", "9 min"),
+                   ("Dubai Marina", "20 min"), ("Downtown Dubai", "25 min")],
     },
 }
 

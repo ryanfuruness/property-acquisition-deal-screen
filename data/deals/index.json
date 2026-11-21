@@ -1,6 +1,10 @@
 {
  "generated_by": "tools/generate_deals.py",
- "generator_version": "1.0.0",
+ "generator_version": "2.0.0",
+ "sets": {
+  "dev": "12 deals used to build and tune the pipeline",
+  "heldout": "8 deals with unseen brokers, layouts and phrasings; for measuring generalisation only"
+ },
  "note": "Synthetic documents for demonstration. All properties, brokers, people and companies are fictional.",
  "discrepancy_catalogue": {
   "1": "occupancy_mismatch",
@@ -23,11 +27,12 @@
  "deals": [
   {
    "deal_id": "d01-cedarline-dso",
+   "set": "dev",
    "building_name": "Cedarline Residences",
    "area": "Dubai Silicon Oasis",
    "sub_community": "Dubai Silicon Oasis (Cedre side, near Silicon Central)",
    "units": 112,
-   "asking_price_aed": 83000000,
+   "asking_price_aed": 84500000,
    "broker": "Harbour & Crest Real Estate Advisory",
    "planted_discrepancies": [],
    "expected_hard_filter_result": "pass",
@@ -41,15 +46,16 @@
   },
   {
    "deal_id": "d02-lantana-ic",
+   "set": "dev",
    "building_name": "Lantana Court",
    "area": "International City",
    "sub_community": "International City Phase 2 (Warsan First)",
    "units": 94,
-   "asking_price_aed": 36000000,
+   "asking_price_aed": 35000000,
    "broker": "Marwah & Stone Capital",
    "planted_discrepancies": [],
    "expected_hard_filter_result": "pass",
-   "tests": "Clean International City Phase 2 building offered by a motivated seller (~10.6% gross on in-place); honestly documented and priced to clear the mandate. Expected Pursue; false-flag control.",
+   "tests": "Clean International City Phase 2 building offered by a motivated seller (~11% gross on in-place, lean opex); honestly documented and priced to clear the mandate. Expected Pursue; false-flag control.",
    "documents": [
     "Lantana Court - Rent Roll (01.10.2026).xlsx",
     "Lantana_Court_Income_and_Expense_12m_to_Sep2026.pdf",
@@ -59,11 +65,12 @@
   },
   {
    "deal_id": "d03-sorrel-jvc",
+   "set": "dev",
    "building_name": "Sorrel Heights",
    "area": "JVC",
    "sub_community": "Jumeirah Village Circle, District 14",
    "units": 170,
-   "asking_price_aed": 192000000,
+   "asking_price_aed": 194000000,
    "broker": "Dunecrest Real Estate Brokers L.L.C",
    "planted_discrepancies": [
     "occupancy_mismatch",
@@ -82,11 +89,12 @@
   },
   {
    "deal_id": "d04-kestrel-bb",
+   "set": "dev",
    "building_name": "Kestrel Tower",
    "area": "Business Bay",
    "sub_community": "Business Bay, Marasi Drive side",
    "units": 107,
-   "asking_price_aed": 162500000,
+   "asking_price_aed": 164500000,
    "broker": "Meridian Gate Properties",
    "planted_discrepancies": [
     "gross_yield_as_net",
@@ -105,18 +113,19 @@
   },
   {
    "deal_id": "d05-larkspur-barsha",
+   "set": "dev",
    "building_name": "Larkspur Residence",
-   "area": "Al Barsha",
-   "sub_community": "Barsha Heights (TECOM), Al Barsha",
+   "area": "Al Barsha South",
+   "sub_community": "Arjan, Al Barsha South",
    "units": 126,
-   "asking_price_aed": 113000000,
+   "asking_price_aed": 125500000,
    "broker": "Harbour & Crest Real Estate Advisory",
    "planted_discrepancies": [
     "upside_exceeds_rera_cap",
     "annualised_partial_period"
    ],
    "expected_hard_filter_result": "pass",
-   "tests": "Barsha Heights tower, institutional OM: claims ~15% reversion on 2027 renewals that RERA bands do not allow, and 'FY2026' opex is Jan-Sep annualised. Near miss.",
+   "tests": "Arjan (Al Barsha South) tower, institutional OM: claims ~17% income uplift within 12 months although passing rents already sit at the screen reference (renewals 0%, re-lets add ~1%); 'FY2026' opex is Jan-Sep annualised. Near miss.",
    "documents": [
     "Larkspur Income & Expense Statement FY2026.xlsx",
     "Larkspur_Residence_Rent_Roll_Oct-2026.xlsx",
@@ -126,11 +135,12 @@
   },
   {
    "deal_id": "d06-opaline-jvc",
+   "set": "dev",
    "building_name": "Opaline Residence",
    "area": "JVC",
    "sub_community": "Jumeirah Village Circle, District 11",
    "units": 48,
-   "asking_price_aed": 30500000,
+   "asking_price_aed": 31000000,
    "broker": "Saffron Key Realty",
    "planted_discrepancies": [
     "yield_excludes_acquisition_costs",
@@ -149,11 +159,12 @@
   },
   {
    "deal_id": "d07-vireo-dso",
+   "set": "dev",
    "building_name": "Vireo Residences",
    "area": "Dubai Silicon Oasis",
    "sub_community": "Dubai Silicon Oasis, near Dubai-Al Ain Road",
    "units": 118,
-   "asking_price_aed": 95000000,
+   "asking_price_aed": 95500000,
    "broker": "Meridian Gate Properties",
    "planted_discrepancies": [
     "yield_excludes_acquisition_costs",
@@ -172,11 +183,12 @@
   },
   {
    "deal_id": "d08-jade-ic",
+   "set": "dev",
    "building_name": "Jade Court",
    "area": "International City",
    "sub_community": "International City Phase 1, England Cluster",
    "units": 92,
-   "asking_price_aed": 34500000,
+   "asking_price_aed": 34000000,
    "broker": "Saffron Key Realty",
    "planted_discrepancies": [
     "potential_rent_as_income",
@@ -184,7 +196,7 @@
     "missing_opex_items"
    ],
    "expected_hard_filter_result": "pass",
-   "tests": "Owner-run International City Phase 1 building sold urgently, OM received as a scan: income includes vacant units at asking rent and the statement has no management fee, insurance or reserve. Still clears the mandate once corrected: discrepancies are not an automatic no. Expected Pursue.",
+   "tests": "Owner-run International City Phase 1 building sold urgently (~11% gross), OM received as a scan: income includes vacant units at asking rent and the statement has no management fee, insurance or reserve. Corrected, it is a near miss on unlevered IRR. Expected Needs work.",
    "documents": [
     "Jade Court Income Expenses Oct25-Sep26.xlsx",
     "Jade Court Rent List Oct 26.xlsx",
@@ -194,11 +206,12 @@
   },
   {
    "deal_id": "d09-aurelia-bb",
+   "set": "dev",
    "building_name": "Aurelia Bay Tower",
    "area": "Business Bay",
    "sub_community": "Business Bay, Al Abraj Street",
    "units": 96,
-   "asking_price_aed": 131000000,
+   "asking_price_aed": 131500000,
    "broker": "Dunecrest Real Estate Brokers L.L.C",
    "planted_discrepancies": [
     "yield_excludes_acquisition_costs"
@@ -214,18 +227,19 @@
   },
   {
    "deal_id": "d10-almehrab-barsha",
+   "set": "dev",
    "building_name": "Al Mehrab Building",
-   "area": "Al Barsha",
+   "area": "Al Barsha 1",
    "sub_community": "Al Barsha 1, behind Mall of the Emirates",
    "units": 70,
-   "asking_price_aed": 75500000,
+   "asking_price_aed": 76500000,
    "broker": "Marwah & Stone Capital",
    "planted_discrepancies": [
     "occupancy_mismatch",
     "title_check"
    ],
    "expected_hard_filter_result": "fail",
-   "tests": "Older Al Barsha 1 building whose OM never says freehold; plot is nationality-restricted. Occupancy quoted from June. Hard fail on title, for legal confirmation.",
+   "tests": "Older Al Barsha 1 building whose OM never says freehold; the plot is nationality-restricted and the area is outside the mandate. Occupancy quoted from June. Declines on area and title (title for legal confirmation).",
    "documents": [
     "Al Mehrab Bldg - Tenancy List Sep 2026.pdf",
     "Al Mehrab Building - Income Statement 12M Aug 2026.pdf",
@@ -235,6 +249,7 @@
   },
   {
    "deal_id": "d11-silverline-dso",
+   "set": "dev",
    "building_name": "Silverline Residences",
    "area": "Dubai Silicon Oasis",
    "sub_community": "Dubai Silicon Oasis, near RIT Dubai campus",
@@ -257,11 +272,12 @@
   },
   {
    "deal_id": "d12-tulip-ic",
+   "set": "dev",
    "building_name": "Tulip Court",
    "area": "International City",
    "sub_community": "International City Phase 1, China Cluster",
    "units": 26,
-   "asking_price_aed": 11250000,
+   "asking_price_aed": 11000000,
    "broker": "Saffron Key Realty",
    "planted_discrepancies": [
     "potential_rent_as_income",
@@ -273,6 +289,187 @@
     "Tulip Court - Operating Statement Nov25-Oct26.xlsx",
     "om.pdf",
     "tulip_court_rentroll.csv"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h01-almond-ic",
+   "set": "heldout",
+   "building_name": "Almond Court",
+   "area": "International City",
+   "sub_community": "International City Phase 2 (Warsan First), Block C",
+   "units": 91,
+   "asking_price_aed": 33000000,
+   "broker": "Qamar & Partners Real Estate Brokerage L.L.C",
+   "planted_discrepancies": [
+    "occupancy_mismatch",
+    "gross_yield_as_net",
+    "yield_excludes_acquisition_costs"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "International City Phase 2 building in a dense, text-heavy OM quoting several yields: 'net yield' deducts only community charges, occupancy '99% let' vs 94.5% on the roll, yields on asking. Once corrected it still clears the mandate.",
+   "documents": [
+    "Almond Court - Rent Schedule 31-10-2026.xlsx",
+    "Almond Court - Statement of Income and Expenditure Nov25-Oct26.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h02-halden-dso",
+   "set": "heldout",
+   "building_name": "Halden Residences",
+   "area": "Dubai Silicon Oasis",
+   "sub_community": "Dubai Silicon Oasis, Axis Residence quarter",
+   "units": 112,
+   "asking_price_aed": 85000000,
+   "broker": "Tessellate Property Advisors",
+   "planted_discrepancies": [],
+   "expected_hard_filter_result": "pass",
+   "tests": "Clean DSO building from a minimalist broker whose key tables are images (no text layer); statement is a two-year comparative with a budget column. False-flag control on unseen formats.",
+   "documents": [
+    "HR_rentroll_30Sep26.xlsx",
+    "Halden Residences - Actual vs Budget.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h03-bramble-jvc",
+   "set": "heldout",
+   "building_name": "Bramble Heights",
+   "area": "JVC",
+   "sub_community": "Jumeirah Village Circle, District 16",
+   "units": 122,
+   "asking_price_aed": 146000000,
+   "broker": "Meridian Gate Properties",
+   "planted_discrepancies": [
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs",
+    "over_rented_vs_market",
+    "upside_exceeds_rera_cap"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "2023 JVC block: OM headline is 'gross rental income (100% occupancy)', claims ~12% uplift from re-basing rents although most income is already above the screen reference; rent roll split across two sheets.",
+   "documents": [
+    "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+    "Bramble_Heights_unit_listing_export.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h04-corvina-bb",
+   "set": "heldout",
+   "building_name": "Corvina Tower",
+   "area": "Business Bay",
+   "sub_community": "Business Bay, Bay Avenue side",
+   "units": 105,
+   "asking_price_aed": 152500000,
+   "broker": "Harbour & Crest Real Estate Advisory",
+   "planted_discrepancies": [
+    "area_basis_confusion",
+    "rent_roll_does_not_foot",
+    "expired_lease_counted_occupied",
+    "expiry_concentration"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "New Business Bay tower leased up in one wave (most rent expires Feb-Apr 2027); PDF rent roll flows across pages with an area column headed 'sq ft' that holds square metres, a total that does not foot and units without Ejari.",
+   "documents": [
+    "Corvina Tower - Income Statement 12m Sep 2026 vs Sep 2025.pdf",
+    "Corvina Tower rent roll export 31.10.2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h05-tamarind-barsha",
+   "set": "heldout",
+   "building_name": "Tamarind Residence",
+   "area": "Al Barsha South",
+   "sub_community": "Arjan, Al Barsha South",
+   "units": 116,
+   "asking_price_aed": 104500000,
+   "broker": "Tessellate Property Advisors",
+   "planted_discrepancies": [
+    "unit_mix_mismatch",
+    "collections_gap",
+    "annualised_partial_period"
+   ],
+   "expected_hard_filter_result": "pass",
+   "tests": "Arjan building: 'FY2026F' is 8 months actual plus 4 months budget at full collection; actual collections run ~20% below the roll; OM unit mix is the developer's (117 vs 116 let). OM tables are images.",
+   "documents": [
+    "Tamarind Residence - FY2025 vs FY2026F vs Budget 2027.xlsx",
+    "TamarindResidence_RR_20260915.xlsx",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h06-oryxlane-dso",
+   "set": "heldout",
+   "building_name": "Oryx Lane Residences",
+   "area": "Dubai Silicon Oasis",
+   "sub_community": "Dubai Silicon Oasis, Silicon Avenue",
+   "units": 96,
+   "asking_price_aed": 74500000,
+   "broker": "Qamar & Partners Real Estate Brokerage L.L.C",
+   "planted_discrepancies": [
+    "yield_excludes_acquisition_costs",
+    "master_lease_related_party"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "DSO building whose income is an 'income assurance agreement': a 3-year whole-building lease to the seller's own management company at ~15% over what it collects. Declines on the related-party test.",
+   "documents": [
+    "Oryx Lane - tenancy and income assurance schedule.xlsx",
+    "Oryx Lane Residences - Landlord Statement 12m Sep 2026.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": false
+  },
+  {
+   "deal_id": "h07-cypress-ic",
+   "set": "heldout",
+   "building_name": "Cypress House",
+   "area": "International City",
+   "sub_community": "International City Phase 1, Morocco Cluster",
+   "units": 84,
+   "asking_price_aed": 31500000,
+   "broker": "Saffron Key Realty",
+   "planted_discrepancies": [
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs",
+    "missing_opex_items",
+    "expired_lease_counted_occupied"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "2006 International City Phase 1 building; OM arrives as a skewed, low-contrast photocopy. Income includes vacant units at asking, owner's costs omit management/insurance/reserve, expired and unregistered leases shown as occupied. Declines on completion year.",
+   "documents": [
+    "Cypress House income expense 2025-26.xlsx",
+    "Cypress House tenants list.pdf",
+    "om.pdf"
+   ],
+   "scanned_om": true
+  },
+  {
+   "deal_id": "h08-fennel-dsc",
+   "set": "heldout",
+   "building_name": "Fennel Court",
+   "area": "Dubai Sports City",
+   "sub_community": "Dubai Sports City, Canal Residence side",
+   "units": 84,
+   "asking_price_aed": 61000000,
+   "broker": "Dunecrest Real Estate Brokers L.L.C",
+   "planted_discrepancies": [
+    "occupancy_mismatch",
+    "yield_excludes_acquisition_costs"
+   ],
+   "expected_hard_filter_result": "fail",
+   "tests": "Dubai Sports City building (outside the mandate areas, so there is no screen reference): OM shows 98% occupancy against 91.7% on the roll and ROI on asking. Declines on area.",
+   "documents": [
+    "Fennel Court T12 Oct25-Sep26.pdf",
+    "fennel_court_rentroll_oct26.csv",
+    "om.pdf"
    ],
    "scanned_om": false
   }

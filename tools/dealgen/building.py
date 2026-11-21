@@ -71,26 +71,60 @@ def weighted_choice(rng, weights: dict):
     return keys[-1]
 
 
-def person_name(rng, area):
-    grp = weighted_choice(rng, refdata.AREA_NATIONALITY_WEIGHTS[area])
-    firsts, lasts = refdata.NAME_GROUPS[grp]
-    first = rng.choice(firsts)
-    last = rng.choice(lasts)
-    if grp == "russian" and first in refdata.FEMALE_FIRST and last.endswith(("ov", "ev", "in")):
-        last = last + "a"
-    if grp == "chinese":
-        return f"{last} {first}" if rng.random() < 0.5 else f"{first} {last}"
-    return f"{first} {last}"
+N_SLOTS = 24  # disjoint name slots: one per deal (dev and held-out), so no name recurs across buildings
 
 
-def company_name(rng, area, used):
-    for _ in range(50):
-        sfx = rng.choice(refdata.COMPANY_SUFFIX_BY_AREA.get(area, refdata.COMPANY_SUFFIX_DEFAULT))
-        nm = f"{rng.choice(refdata.COMPANY_PREFIX)} {rng.choice(refdata.COMPANY_ACTIVITY)} {sfx}"
-        if nm not in used:
-            used.add(nm)
-            return nm
-    raise RuntimeError("company names exhausted")
+class NamePool:
+    """Deterministic, per-deal disjoint pools of person, company and shop names.
+
+    Every deal has a fixed `name_slot`; pools are built from a fixed seed and sliced by slot, so a
+    name can appear in one building only, even when deals are generated one at a time."""
+
+    def __init__(self, slot, area, rng):
+        g = random.Random(20261121)
+        self.rng = rng
+        self.area = area
+        self.people = {}
+        for grp, (firsts, lasts) in refdata.NAME_GROUPS.items():
+            combos = [(f, l) for f in firsts for l in lasts]
+            g.shuffle(combos)
+            size = len(combos) // N_SLOTS
+            self.people[grp] = combos[slot * size:(slot + 1) * size]
+        pairs = [(a, b) for a in refdata.COMPANY_WORD_A for b in refdata.COMPANY_WORD_B]
+        g.shuffle(pairs)
+        size = len(pairs) // N_SLOTS
+        mine = pairs[slot * size:(slot + 1) * size]
+        # one word-pair is used once per deal, and word A at most once per deal
+        seen, uniq = set(), []
+        for a, b in mine:
+            if a not in seen:
+                seen.add(a)
+                uniq.append(f"{a} {b}")
+        self.shops = uniq[:8]
+        self.companies = uniq[8:]
+        g.shuffle(self.companies)
+
+    def person(self):
+        for _ in range(40):
+            grp = weighted_choice(self.rng, refdata.AREA_NATIONALITY_WEIGHTS[self.area])
+            if self.people[grp]:
+                break
+        else:
+            grp = max(self.people, key=lambda k: len(self.people[k]))
+        first, last = self.people[grp].pop(self.rng.randrange(len(self.people[grp])))
+        if grp == "russian" and first in refdata.FEMALE_FIRST and last.endswith(("ov", "ev", "in")):
+            last = last + "a"
+        if grp == "chinese":
+            return f"{last} {first}" if self.rng.random() < 0.5 else f"{first} {last}"
+        return f"{first} {last}"
+
+    def company(self):
+        pfx = self.companies.pop()
+        sfx = self.rng.choice(refdata.COMPANY_SUFFIX_BY_AREA.get(self.area, refdata.COMPANY_SUFFIX_DEFAULT))
+        return f"{pfx} {self.rng.choice(refdata.COMPANY_ACTIVITY)} {sfx}"
+
+    def shop(self):
+        return f"{self.shops.pop()} {self.rng.choice(refdata.SHOP_TYPES)}"
 
 
 def ejari_no(rng, start: date):
@@ -102,7 +136,9 @@ def ejari_no(rng, start: date):
 def build_true_building(spec, mandate, market):
     rng = random.Random(spec["seed"])
     area = spec["area"]
-    am = market["areas"][area]
+    ref_area = spec.get("ref_area", area)
+    am = market["areas"][ref_area]
+    names = NamePool(spec["name_slot"], spec.get("names_like", area if area in refdata.AREA_NATIONALITY_WEIGHTS else "JVC"), rng)
     factors = market["unit_type_factors"]
     psf_1br = am["market_rent_aed_psf_1br"]
     fall = -(am["rent_change_yoy"] if am["rent_change_yoy"] is not None else spec.get("assumed_rent_change_yoy", -0.03))
@@ -133,7 +169,6 @@ def build_true_building(spec, mandate, market):
         vac |= set(rng.sample(ret_idx, spec["vacant_retail"]))
 
     # ---- company blocks (corporate leases taking several units)
-    used_companies = set()
     occ_res = [i for i in res_idx if i not in vac]
     rng.shuffle(occ_res)
     company_of = {}
@@ -141,7 +176,7 @@ def build_true_building(spec, mandate, market):
     k = 0
     while k < n_company_units:
         block = rng.choice([1, 1, 1, 2, 2, 3, 4, 6]) if spec.get("company_blocks", True) else 1
-        nm = company_name(rng, area, used_companies)
+        nm = names.company()
         for i in occ_res[k:k + block]:
             company_of[i] = nm
         k += block
@@ -153,8 +188,6 @@ def build_true_building(spec, mandate, market):
     peak_lo, peak_hi = ratios.get("peak", (1.08, 1.20))
 
     window = spec.get("start_window")  # (start, end, share)
-    retail_tenants = list(refdata.RETAIL_TENANTS)
-    rng.shuffle(retail_tenants)
 
     for i, u in enumerate(units):
         u["chiller"] = spec["chiller"]
@@ -170,7 +203,7 @@ def build_true_building(spec, mandate, market):
             start = start.replace(day=1)
             ratio = rng.uniform(0.86, 1.02)
             cat = "retail"
-            tenant = retail_tenants.pop()
+            tenant = names.shop()
             ttype = "company"
         else:
             yrs = 1
@@ -195,7 +228,7 @@ def build_true_building(spec, mandate, market):
             if i in company_of:
                 tenant, ttype = company_of[i], "company"
             else:
-                tenant, ttype = person_name(rng, area), "individual"
+                tenant, ttype = names.person(), "individual"
         while lease_end_for(start, yrs) < roll_date + timedelta(days=3):
             start = add_months(start, 1)
         end = lease_end_for(start, yrs)
@@ -270,8 +303,9 @@ def build_true_building(spec, mandate, market):
     other_income = r1000(in_place * spec.get("other_income_pct", 0.008))
 
     b = {
-        "name": spec["name"], "area": area, "sub_community": spec.get("sub_community"),
-        "dld_area": refdata.LOCATION[area]["dld_area"] if not spec.get("dld_area") else spec["dld_area"],
+        "name": spec["name"], "area": area, "ref_area": ref_area, "loc_key": spec.get("loc_key", area),
+        "sub_community": spec.get("sub_community"),
+        "dld_area": refdata.LOCATION[spec.get("loc_key", area)]["dld_area"] if not spec.get("dld_area") else spec["dld_area"],
         "plot_number": spec["plot"], "plot_area_sqft": spec.get("plot_area_sqft"),
         "tenure": spec["tenure"], "title": spec["title"],
         "nationality_restriction": spec.get("nationality_restriction"),

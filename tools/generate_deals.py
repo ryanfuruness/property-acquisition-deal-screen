@@ -34,12 +34,12 @@ from dealgen.building import ITEM_CATEGORY, build_true_building, load_refs, roun
 from dealgen.package import om_facts, statement_doc  # noqa: E402
 from dealgen.render_om import build_om  # noqa: E402
 from dealgen.render_rentroll import (write_master_xlsx, write_rentroll_csv, write_rentroll_pdf,  # noqa: E402
-                                     write_rentroll_xlsx)
+                                     write_rentroll_pdf_spanning, write_rentroll_xlsx, write_split_xlsx)
 from dealgen.render_stmt import write_stmt_pdf, write_stmt_xlsx  # noqa: E402
 from dealgen.scan import scan_pdf  # noqa: E402
-from dealgen.specs import CATALOGUE, DEALS  # noqa: E402
+from dealgen.specs import CATALOGUE, DEALS, HELDOUT  # noqa: E402
 
-GENERATOR_VERSION = "1.0.0"
+GENERATOR_VERSION = "2.0.0"
 REPO = Path(__file__).resolve().parents[1]
 OM_FIELDS = ["building_name", "asset_type", "area", "plot_number", "title_type", "completion_year", "floors", "unit_count",
              "unit_mix", "bua_sqft", "nsa_sqft", "parking_spaces", "occupancy_stated", "annual_rent_stated", "yield_stated",
@@ -109,34 +109,45 @@ def check_rules(ctx, mandate, market):
     else:
         put(3, False, True, om_yield=y["value"], basis=y["basis"])
     put(4, y["on"] == "asking_price", True, om_yield=y["value"], om_label=y["label"], on=y["on"])
-    am = market["areas"][b["area"]]
+    am = market["areas"][b["ref_area"]]
     f = market["unit_type_factors"]
     occ = [r for r in rr if r["status"] in analysis.OCC_LIKE and r["annual_rent_aed"]]
     tot = sum(r["annual_rent_aed"] for r in occ)
-    over = [r for r in occ if r["annual_rent_aed"] > am["market_rent_aed_psf_1br"] * f[r["unit_type"]] * r["area_sqft"]]
+    thr = soft.get("over_rent_threshold", 0.0)
+    over = [r for r in occ if r["annual_rent_aed"] > (1 + thr) * am["market_rent_aed_psf_1br"] * f[r["unit_type"]] * r["area_sqft"]]
     sh = sum(r["annual_rent_aed"] for r in over) / tot
     put(5, sh > soft["max_over_rent_share_of_income"], sh > 0.27 or sh < 0.15, over_rent_share_of_income=round(sh, 4),
-        units_over_market=len(over), threshold=soft["max_over_rent_share_of_income"])
+        units_over_reference_by_more_than_threshold=len(over), unit_threshold=thr, threshold=soft["max_over_rent_share_of_income"])
     up = om["_upside"]
     if up and up["kind"] == "exceeds_rera":
-        put(6, True, up["claimed_uplift_aed"] > 2 * up["rera_allowed"]["allowed_uplift_aed"], claimed_uplift_aed=up["claimed_uplift_aed"],
-            claimed_uplift_pct=up["claimed_uplift_pct"], rera_allowed_uplift_aed=up["rera_allowed"]["allowed_uplift_aed"],
-            rera_allowed_pct=up["rera_allowed"]["allowed_uplift_pct_of_in_place"], units_by_gap=up["rera_allowed"]["units_by_gap_to_index"])
+        gap = up["claimed_uplift_pct"] - up["supportable_pct"]
+        put(6, gap > 0.05, gap > 0.08, claimed_uplift_aed=up["claimed_uplift_aed"], claimed_uplift_pct=up["claimed_uplift_pct"],
+            supportable_at_screen_reference_aed=up["supportable_at_screen_reference_aed"],
+            supportable_pct=up["supportable_pct"],
+            rera_renewal_allowed_aed=up["rera_allowed"]["allowed_uplift_aed"],
+            rera_renewal_allowed_pct=up["rera_allowed"]["allowed_uplift_pct_of_in_place"],
+            units_by_gap=up["rera_allowed"]["units_by_gap_to_index"],
+            note="Supportable = every occupied unit re-let at the screen reference with no RERA cap (re-lets on turnover are uncapped); "
+                 "RERA renewal allowed = Decree 43 bands at renewal (top band 20%).")
     else:
         put(6, False, True, claim=(up or {}).get("kind"))
     req = ["property_management", "insurance", "sinking_fund"] + (["district_cooling"] if b["chiller_landlord_pays"] else [])
     missing = [c for c in req if c not in stmt["opex_by_category_aed"]]
     put(7, bool(missing), True, missing_categories=missing, chiller_landlord_pays=b["chiller_landlord_pays"])
     pp = om.get("price_psf")
-    put(8, bool(pp and pp["basis"] == "bua" and not pp["basis_labelled"]), True,
+    mislab = ctx["rr_meta"].get("area_unit_label") and ctx["rr_meta"]["area_unit_label"] != ctx["rr_meta"]["area_unit"]
+    put(8, bool(pp and pp["basis"] == "bua" and not pp["basis_labelled"]) or bool(mislab), True,
+        rent_roll_area_header=ctx["rr_meta"].get("area_unit_label", ctx["rr_meta"]["area_unit"]),
+        rent_roll_area_actual_unit=ctx["rr_meta"]["area_unit"],
         om_price_psf=pp["value"] if pp else None, basis=pp["basis"] if pp else None,
         price_psf_nsa=round(om["asking_price_aed"] / b["nsa_sqft"]), price_psf_bua=round(om["asking_price_aed"] / b["bua_sqft"]))
     tots = [s for s in ctx["rr_meta"]["summary_rows"] if s["kind"] == "total"]
-    shown = sum((r["annual_rent_aed"] or 0) + (r["asking_rent_aed"] or 0 if r.get("rent_column_shows") == "asking rent" else 0) for r in rr)
-    gaps = [s["rent_aed"] - shown for s in tots]
+    gaps = [s["rent_aed"] - s["scope_sum_aed"] for s in tots]
     gap = max(gaps, key=abs) if gaps else 0
-    put(9, abs(gap) > 0.005 * shown, abs(gap) > 0.02 * shown or gap == 0, stated_total_aed=tots[0]["rent_aed"] if tots else None,
-        sum_of_rows_aed=shown, difference_aed=gap)
+    scope = max((s["scope_sum_aed"] for s in tots), default=1)
+    put(9, abs(gap) > 0.005 * scope, abs(gap) > 0.02 * scope or gap == 0,
+        stated_totals=[{"label": s["label"], "stated_aed": s["rent_aed"], "sum_of_rows_aed": s["scope_sum_aed"],
+                        **({"sheet": s["sheet"]} if s.get("sheet") else {})} for s in tots], difference_aed=gap)
     rr_mix = {}
     for r in rr:
         rr_mix[r["unit_type"]] = rr_mix.get(r["unit_type"], 0) + 1
@@ -166,7 +177,7 @@ HOW = {
     3: "OM 'net yield' deducts only community/service charges, not the FM, utilities, cooling, insurance and management costs the owner pays.",
     4: "OM yield (ROI) is rent divided by asking price, before DLD 4%, agency 2% + VAT and registration fees.",
     5: "Many tenancies were signed at 2025 peak rents; after the 2026 fall a large share of income sits above the area reference rent.",
-    6: "OM claims full mark-to-market reversion on 2027 renewals; Decree 43 bands allow 0-10% for these gaps and need 90 days' notice.",
+    6: "OM claims a double-digit income uplift within 12 months by comparing passing rents with asking rents for new lettings; passing rents already sit near the screen reference, so renewals allow 0% under Decree 43 and even uncapped re-lets at the reference add only a few percent.",
     7: "Operating statement omits standard costs the owner bears.",
     8: "OM quotes price per sq ft without a basis; the figure is on BUA (incl. parking and common areas), which flatters the price.",
     9: "Rent-roll TOTAL row is a hard-coded figure from an earlier version and does not equal the sum of the unit rows.",
@@ -206,6 +217,10 @@ def generate(spec, out_root, mandate, market, check=True):
     rr_path = pkg / rrf["file"]
     if rrf["fmt"] == "xlsx" and rrf["layout"] == "master_two_sheets":
         rr, meta = write_master_xlsx(rr_path, b, spec)
+    elif rrf["fmt"] == "xlsx" and rrf["layout"] == "export_split":
+        rr, meta = write_split_xlsx(rr_path, b, spec)
+    elif rrf["fmt"] == "pdf" and rrf["layout"] == "pdf_spanning":
+        rr, meta = write_rentroll_pdf_spanning(rr_path, b, spec, area_in_sqm_labelled_sqft=rrf.get("sqm_labelled_sqft", False), stale=stale)
     elif rrf["fmt"] == "xlsx":
         rr, meta = write_rentroll_xlsx(rr_path, b, spec, rrf["layout"], stale=stale)
     elif rrf["fmt"] == "csv":
@@ -232,6 +247,9 @@ def generate(spec, out_root, mandate, market, check=True):
     n_pages = len(pages)
     for k, fv in fields.items():
         q = fv.get("quote")
+        if fv.get("in_image"):
+            assert 1 <= fv["page"] <= len(pages), (k, fv["page"])
+            continue
         if not q:
             fv["page"] = None
             continue
@@ -245,7 +263,7 @@ def generate(spec, out_root, mandate, market, check=True):
         assert norm("Synthetic document for demonstration. Fictional property.") in t, f"footer missing p{i + 1}"
     pdoc.close()
     if spec.get("scanned_om"):
-        scan_pdf(text_pdf, pkg / "om.pdf", spec["seed"])
+        scan_pdf(text_pdf, pkg / "om.pdf", spec["seed"], profile=spec.get("scan_profile", "normal"))
     else:
         shutil.copy(text_pdf, pkg / "om.pdf")
     shutil.rmtree(tmpdir)
@@ -280,6 +298,13 @@ def generate(spec, out_root, mandate, market, check=True):
           "bua_sqft": b["bua_sqft"], "units": ei_units, "opex_aed": cats, "opex_includes_vat": True,
           "other_income_aed": b["other_income_aed"], "chiller_landlord_pays": b["chiller_landlord_pays"], "om_stated": om_stated,
           "rent_roll_date": b["rent_roll_date"].isoformat()}
+    ei["completion_year"] = b["completion_year"]
+    ei["security_deposits_aed"] = sum(u["deposit_aed"] or 0 for u in b["units"] if u["status"] != "vacant")
+    if 12 in spec["plant"]:
+        in_place_paying = sum(u["annual_rent_aed"] for u in b["units"] if u["status"] in ("occupied", "notice_served", "under_renewal"))
+        ya = stmt_truth.get("ytd_actual")
+        collected = (ya["rental_income_aed"] * 12 / ya["months"]) if ya else stmt_truth["rental_income_aed"]
+        ei["collection_loss_override"] = round(max(0.0, 1 - collected / in_place_paying), 4)
     if b["master_lease"]:
         ml = b["master_lease"]
         ei["master_lease"] = {"tenant": ml["tenant"], "related_party": ml["related_party"], "annual_rent_aed": ml["annual_rent_aed"],
@@ -307,8 +332,10 @@ def generate(spec, out_root, mandate, market, check=True):
     hard_res = {"result": "fail" if fails else "pass", "failed_filters": fails,
                 "reason": "; ".join(fails) if fails else "All static hard filters pass on true facts (asset type, title, area, units, price, completion, lease structure).",
                 "note": "min_dscr_year1 is engine-computed and not included here; run tools/check_engine.py for the engine's result on truth."}
-    deal_facts = {"asset_type": "residential_building", "area": b["area"], "title_type": title_type, "unit_count": b["unit_count"],
+    deal_facts = {"asset_type": "mixed_use_residential" if asset_v.startswith("mixed") else "residential_building",
+                  "area": b["area"], "title_type": title_type, "unit_count": b["unit_count"],
                   "price_aed": om["asking_price_aed"], "completion_year": b["completion_year"],
+                  "lease_structure": b["lease_structure"],
                   "master_lease_related_party": bool(b["master_lease"] and b["master_lease"]["related_party"])}
 
     # ---- truth
@@ -327,7 +354,7 @@ def generate(spec, out_root, mandate, market, check=True):
     om_fields["annual_rent_stated"]["basis_as_labelled"] = om["annual_rent"]["basis_as_labelled"]
     om_fields["yield_stated"]["label"] = om["yield"]["label"]
     om_fields["yield_stated"]["basis"] = {"measure": om["yield"]["basis"], "on": om["yield"]["on"]}
-    for extra in ("price_psf", "broker"):
+    for extra in ("price_psf", "broker", "seller", "master_tenant_group"):
         if extra in fields:
             om_fields[extra] = fields[extra]
     if spec.get("scanned_om"):
@@ -339,12 +366,23 @@ def generate(spec, out_root, mandate, market, check=True):
               "totals_stated": [s for s in meta["summary_rows"] if s["kind"] in ("total", "summary", "subtotal")],
               "expiry_by_3m_window_from_roll_date": quarter_shares(rr.rows, b["rent_roll_date"])}
     if b["master_lease"]:
+        from dealgen.building import opex_items
+        op_spec = {k: v for k, v in spec.items() if k not in ("owner_statement_master_lease",)}
+        op_spec["mgmt_fee_pct"] = 0.05
+        op_costs = sum(opex_items(op_spec, dict(b, lease_structure="direct_leases"), random.Random(spec["seed"] + 3)).values())
+        sub_rent = sum(u["annual_rent_aed"] for u in b["units"] if u["status"] in analysis.OCC_LIKE)
+        b["master_lease"]["operator_economics"] = {
+            "sub_let_in_place_rent_aed": sub_rent, "sub_let_occupancy": b["occupancy_units"],
+            "operator_running_costs_aed": int(op_costs), "master_rent_aed": b["master_lease"]["annual_rent_aed"],
+            "operator_annual_shortfall_aed": int(b["master_lease"]["annual_rent_aed"] + op_costs - sub_rent),
+            "note": "The operator collects less than the master rent and also bears running costs, so the rent depends on "
+                    "support from the Silverline Group (covenant risk). On reversion the owner gets the sub-let income less costs."}
         rr_out["master_lease"] = {**b["master_lease"], **meta.get("master_lease_sheet", {})}
         rr_out["note"] = "Sheet 1 is the master lease (the owner's income). Sheet 2 is the operator's sub-tenancy schedule, for look-through."
     true_metrics = {
         "gross_yield_in_place_on_price": round((b["master_lease"]["annual_rent_aed"] if b["master_lease"] else b["in_place_rent_aed"]) / om["asking_price_aed"], 4),
         "price_psf_nsa": round(om["asking_price_aed"] / b["nsa_sqft"]), "price_psf_bua": round(om["asking_price_aed"] / b["bua_sqft"]),
-        "over_rent": analysis.over_rent(b["units"]),
+        "over_rent": analysis.over_rent(b["units"], tolerance=mandate["buy_box"]["soft"].get("over_rent_threshold", 0.0)),
         "rera_allowed_uplift_next_renewal": analysis.rera_allowed_uplift(b["units"], mandate["underwriting"]["rera"]["increase_bands"]),
         "expiry": analysis.expiry_profile(b["units"], b["rent_roll_date"]),
         "expiry_by_3m_window_from_roll_date": quarter_shares([{"status": u["status"], "annual_rent_aed": u["annual_rent_aed"],
@@ -379,7 +417,7 @@ def generate(spec, out_root, mandate, market, check=True):
     if spec["deal_id"].startswith("d04"):
         notes.append("True opex includes Empower district cooling paid by the landlord (chiller-free), absent from the P&L.")
     truth = {
-        "deal_id": spec["deal_id"], "generator": {"version": GENERATOR_VERSION, "seed": spec["seed"], "om_date": om_date.isoformat()},
+        "deal_id": spec["deal_id"], "set": spec.get("set", "dev"), "generator": {"version": GENERATOR_VERSION, "seed": spec["seed"], "om_date": om_date.isoformat()},
         "package": sorted(p.name for p in pkg.iterdir()),
         "true_building": tb, "om_fields": om_fields, "om_pages": n_pages, "rent_roll": rr_out, "opex": stmt_truth,
         "planted_discrepancies": planted,
@@ -390,12 +428,26 @@ def generate(spec, out_root, mandate, market, check=True):
     }
     (deal_dir / "truth.json").write_text(json.dumps(truth, indent=1, default=iso, ensure_ascii=False))
     return {
-        "deal_id": spec["deal_id"], "building_name": b["name"], "area": b["area"], "sub_community": b["sub_community"],
+        "deal_id": spec["deal_id"], "set": spec.get("set", "dev"), "building_name": b["name"], "area": b["area"], "sub_community": b["sub_community"],
         "units": b["unit_count"], "asking_price_aed": om["asking_price_aed"], "broker": fields["broker"]["value"],
         "planted_discrepancies": [CATALOGUE[i] for i in sorted(spec["plant"])],
         "expected_hard_filter_result": hard_res["result"], "tests": spec["describe"],
         "documents": sorted(p.name for p in pkg.iterdir()), "scanned_om": bool(spec.get("scanned_om")),
     }, est, rules
+
+
+def check_unique_names(out):
+    """No tenant name may appear in more than one building (dev and held-out together)."""
+    where = {}
+    for p in sorted(out.glob("*/truth.json")):
+        t = json.loads(p.read_text())
+        for u in t["true_building"]["units"]:
+            if u.get("tenant"):
+                where.setdefault(u["tenant"], set()).add(t["deal_id"])
+    dup = {k: sorted(v) for k, v in where.items() if len(v) > 1}
+    if dup:
+        raise AssertionError(f"tenant names recur across buildings: {dup}")
+    print(f"name check: {len(where)} distinct tenant names, none shared between buildings")
 
 
 def main():
@@ -408,14 +460,17 @@ def main():
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     rows = []
-    for spec in DEALS:
+    for spec in DEALS + HELDOUT:
         if args.only and spec["deal_id"] not in args.only:
             continue
         row, est, rules = generate(dict(spec), out, mandate, market, check=not args.no_check)
         rows.append(row)
         print(f"{row['deal_id']:24s} {row['units']:4d}u AED {row['asking_price_aed'] / 1e6:6.1f}M  planted={row['planted_discrepancies']}")
     if not args.only:
+        check_unique_names(out)
         index = {"generated_by": "tools/generate_deals.py", "generator_version": GENERATOR_VERSION,
+                 "sets": {"dev": "12 deals used to build and tune the pipeline",
+                          "heldout": "8 deals with unseen brokers, layouts and phrasings; for measuring generalisation only"},
                  "note": "Synthetic documents for demonstration. All properties, brokers, people and companies are fictional.",
                  "discrepancy_catalogue": CATALOGUE, "deals": rows}
         (out / "index.json").write_text(json.dumps(index, indent=1, default=iso))

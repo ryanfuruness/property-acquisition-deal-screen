@@ -27,6 +27,8 @@ STATUS_VOCAB = {
               "under_renewal": ["renewing"], "legal_case": ["case filed", "legal"]},
     "export": {"occupied": ["ACTIVE"], "vacant": ["VACANT"], "notice_served": ["NOTICE"], "under_renewal": ["HOLDOVER-RENEWAL"],
                "legal_case": ["LEGAL"]},
+    "bilingual": {"occupied": ["مؤجر Occupied"], "vacant": ["شاغر Vacant"], "notice_served": ["إخطار بالإخلاء Notice"],
+                  "under_renewal": ["قيد التجديد Renewal"], "legal_case": ["قضية إيجارية Case"]},
     "caps": {"occupied": ["OCCUPIED"], "vacant": ["VACANT"], "notice_served": ["NOTICE SERVED"], "under_renewal": ["UNDER RENEWAL"],
              "legal_case": ["LEGAL CASE"]},
 }
@@ -36,6 +38,8 @@ TYPE_VOCAB = {
     "bed": {"studio": "Studio", "1br": "1 Bed", "2br": "2 Bed", "3br": "3 Bed", "retail": "Retail"},
     "code": {"studio": "STU", "1br": "1BR", "2br": "2BR", "3br": "3BR", "retail": "RET"},
     "long": {"studio": "Studio", "1br": "One Bedroom", "2br": "Two Bedroom", "3br": "Three Bedroom", "retail": "Retail Shop"},
+    "bilingual": {"studio": "استوديو Studio", "1br": "غرفة وصالة 1BR", "2br": "غرفتين وصالة 2BR", "3br": "ثلاث غرف 3BR",
+                  "retail": "محل Shop"},
     "caps": {"studio": "STUDIO", "1br": "1 B/R", "2br": "2 B/R", "3br": "3 B/R", "retail": "SHOP"},
 }
 CHILLER_TXT = {"landlord_district": "Chiller free", "landlord_plant": "Chiller free",
@@ -166,8 +170,23 @@ LAYOUTS = {
               ("deposit", "Deposit"), ("status", "Status"), ("sc", "Service Charge (AED/yr)")],
         date="excel:dd/mm/yyyy", status="standard", types="standard", case="as_is", area_dp=2,
         group=None, totals="TOTAL", header_fill="000000", header_font="D4AF37", vacant_rent="blank"),
+    "bilingual": dict(
+        title=lambda b, s: [f"كشف الإيجارات - {b['name']} - Rent Schedule", f"كما في / As at {s['roll_date'].strftime('%d/%m/%Y')}"],
+        cols=[("unit", "رقم الوحدة / Unit No."), ("type", "النوع / Type"), ("area", "المساحة (قدم مربع) / Area (sq ft)"),
+              ("tenant", "اسم المستأجر / Tenant Name"), ("ejari", "رقم إيجاري / Ejari No."), ("start", "تاريخ البداية / Start"),
+              ("end", "تاريخ الانتهاء / End"), ("rent", "الإيجار السنوي (درهم) / Annual Rent (AED)"), ("cheques", "عدد الشيكات / Cheques"),
+              ("deposit", "التأمين / Deposit"), ("status", "الحالة / Status")],
+        date="excel:dd/mm/yyyy", status="bilingual", types="bilingual", case="as_is", area_dp=2,
+        group=None, totals="الإجمالي / TOTAL", header_fill="2E5E4E", header_font="FFFFFF", vacant_rent="blank"),
+    "export_split": dict(
+        title=lambda b, s: [f"{b['name']} | Unit listing export | {s['roll_date'].strftime('%d-%b-%Y')}"],
+        cols=[("unit", "UnitRef"), ("floor", "Lvl"), ("type", "Config"), ("area", "Size_sqft"), ("tenant", "Occupant"),
+              ("ttype", "OccupantType"), ("start", "LeaseStart"), ("end", "LeaseEnd"), ("rent", "ContractRent_AED"),
+              ("cheques", "PDCs"), ("deposit", "SecDep_AED"), ("ejari", "EjariRef"), ("status", "UnitStatus")],
+        date="text:%d-%b-%Y", status="export", types="code", case="as_is", area_dp=2, merge_title=False,
+        group=None, totals="Sheet total", header_fill="DDEBF7", header_font="000000", vacant_rent="blank"),
     "master_sub": dict(
-        title=lambda b, s: [f"{b['name']} - Operator sub-tenancy schedule", f"Prepared by Silverline Homes Management L.L.C - {s['roll_date'].strftime('%d %b %Y')}"],
+        title=lambda b, s: [f"{b['name']} - Operator sub-tenancy schedule", f"Prepared by {b['master_lease']['tenant']} - {s['roll_date'].strftime('%d %b %Y')}"],
         cols=[("unit", "Unit"), ("type", "Type"), ("area", "Size sqft"), ("tenant", "Sub-tenant"), ("ejari", "Ejari"),
               ("start", "Start"), ("end", "End"), ("rent", "Rent AED"), ("cheques", "Cheques"), ("status", "Status")],
         date="excel:dd/mm/yyyy", status="standard", types="standard", case="as_is", area_dp=1,
@@ -195,7 +214,8 @@ def _write_date(ws, cell, d, mode, rr):
     return d
 
 
-def write_rentroll_xlsx(path, b, spec, layout_name, *, wb=None, sheet_title="Rent Roll", stale=None):
+def write_rentroll_xlsx(path, b, spec, layout_name, *, wb=None, sheet_title="Rent Roll", stale=None, units_subset=None, rr=None,
+                        finalize=True):
     L = LAYOUTS[layout_name]
     own_wb = wb is None
     if own_wb:
@@ -204,7 +224,7 @@ def write_rentroll_xlsx(path, b, spec, layout_name, *, wb=None, sheet_title="Ren
         ws.title = sheet_title
     else:
         ws = wb.create_sheet(sheet_title)
-    rr = RR(b, spec, path.name)
+    rr = rr or RR(b, spec, path.name)
     cols = L["cols"]
     ncol = len(cols)
     last_col = get_column_letter(ncol)
@@ -238,7 +258,7 @@ def write_rentroll_xlsx(path, b, spec, layout_name, *, wb=None, sheet_title="Ren
     ws.row_dimensions[r].height = 30
     r += 1
     first_data = r
-    units = _units_sorted(b)
+    units = _units_sorted(b) if units_subset is None else units_subset
     if L["group"] == "type":
         order = ["studio", "1br", "2br", "3br", "retail"]
         groups = [(TYPE_VOCAB["long"][t].upper() + ("S" if t != "retail" else " UNITS"), [u for u in units if u["type"] == t])
@@ -356,7 +376,8 @@ def write_rentroll_xlsx(path, b, spec, layout_name, *, wb=None, sheet_title="Ren
     for j in range(1, ncol + 1):
         ws.cell(row=r, column=j).border = Border(top=Side(style="medium"), bottom=Side(style="double"))
         ws.cell(row=r, column=j).font = Font(bold=True)
-    rr.summary_rows.append({"row": r, "label": L["totals"], "kind": "total", "cell_rent": f"{ws.title}!{get_column_letter(keys.index('rent') + 1)}{r}",
+    rr.summary_rows.append({"row": r, "label": L["totals"], "kind": "total", "sheet": ws.title, "scope_sum_aed": tot_rent,
+                            "cell_rent": f"{ws.title}!{get_column_letter(keys.index('rent') + 1)}{r}",
                             "units": n_units, "rent_aed": stated_rent,
                             "rent_basis": "incl. vacant at asking" if L["vacant_rent"] == "asking_in_rent" else "occupied units",
                             "area": round(tot_area, 2), "area_unit": "sq m" if area_key == "area_sqm" else "sq ft",
@@ -380,11 +401,13 @@ def write_rentroll_xlsx(path, b, spec, layout_name, *, wb=None, sheet_title="Ren
     for j, k in enumerate(keys, 1):
         ws.column_dimensions[get_column_letter(j)].width = width.get(k, 13)
     ws.freeze_panes = f"A{header_row + 1}"
+    if layout_name == "bilingual":
+        ws.row_dimensions[header_row].height = 44
     ws.sheet_view.showGridLines = layout_name in ("owner_simple", "owner_simple2", "pm_export")
     meta = {"document": path.name, "format": "xlsx", "sheet": ws.title, "header_row": header_row,
             "first_data_row": first_data, "last_data_row": last_data, "area_unit": "sq m" if area_key == "area_sqm" else "sq ft",
             "date_format": L["date"], "summary_rows": rr.summary_rows}
-    if own_wb:
+    if own_wb and finalize:
         finalize_workbook(wb, path)
     return rr, meta
 
@@ -436,11 +459,11 @@ def write_master_xlsx(path, b, spec):
 # --------------------------------------------------------------------------- csv
 def write_rentroll_csv(path, b, spec):
     rr = RR(b, spec, path.name)
-    lines = [[f"{b['name']} - {b['sub_community'].split(',')[-1].strip()} - International City"],
+    lines = [[f"{b['name']} - {b['sub_community']}"],
              [f"Rent roll as of {spec['roll_date'].strftime('%d-%m-%Y')}"], [],
              ["Unit", "Type", "Area_sqft", "Tenant", "Ejari", "Start", "End", "Annual_Rent", "Cheques", "Deposit", "Status"]]
     header_line = 4
-    vocab = {"studio": "STUDIO", "1br": "1BR", "2br": "2BR", "retail": "SHOP"}
+    vocab = {"studio": "STUDIO", "1br": "1BR", "2br": "2BR", "3br": "3BR", "retail": "SHOP"}
     stat = {"occupied": "RENTED", "vacant": "VACANT", "under_renewal": "RENEWAL", "notice_served": "NOTICE", "legal_case": "LEGAL"}
     tot = 0
     for u in _units_sorted(b):
@@ -457,7 +480,7 @@ def write_rentroll_csv(path, b, spec):
     lines.append([])
     lines.append(["Total rent incl. vacant at asking", "", "", "", "", "", "", str(tot)])
     rr.summary_rows.append({"line": len(lines), "label": "Total rent incl. vacant at asking", "kind": "total", "rent_aed": tot,
-                            "rent_basis": "incl. vacant at asking", "units": len(b["units"])})
+                            "scope_sum_aed": tot, "rent_basis": "incl. vacant at asking", "units": len(b["units"])})
     lines.append([])
     lines.append([FOOTER])
     with open(path, "w", newline="") as fh:
@@ -501,7 +524,7 @@ def write_rentroll_pdf(path, b, spec):
         rr.canonical(u, area_stated=round(u["area_sqft"], 2), area_unit="sqft", cite=f"page {page}, row S/N {i}", tenant_text=u["tenant"])
     total_row = ["", "", "", f"{sum(u['area_sqft'] for u in units):,.2f}", "TOTAL", "", "", "", f"{tot:,}", "", "", ""]
     last_page = 1 + (len(units) - 1) // per_page
-    rr.summary_rows.append({"page": last_page, "label": "TOTAL", "kind": "total", "rent_aed": tot, "units": len(units),
+    rr.summary_rows.append({"page": last_page, "label": "TOTAL", "kind": "total", "rent_aed": tot, "scope_sum_aed": tot, "units": len(units),
                             "rent_basis": "occupied units"})
 
     def footer(c, d):
@@ -542,4 +565,112 @@ def write_rentroll_pdf(path, b, spec):
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     meta = {"document": path.name, "format": "pdf", "rows_per_page": per_page, "area_unit": "sq ft", "date_format": "%d/%m/%Y",
             "summary_rows": rr.summary_rows}
+    return rr, meta
+
+
+def write_split_xlsx(path, b, spec):
+    """Unit listing export split across two sheets by floor band, plus a summary sheet."""
+    units = _units_sorted(b)
+    floors = sorted({u["floor"] for u in units})
+    cut = floors[len(floors) // 2]
+    a = [u for u in units if u["floor"] < cut]
+    c = [u for u in units if u["floor"] >= cut]
+    name_a = f"Floors {floors[0] if floors[0] else 'G'}-{cut - 1}"
+    name_c = f"Floors {cut}-{floors[-1]}"
+    wb = Workbook()
+    wb.remove(wb.active)
+    rr, meta_a = write_rentroll_xlsx(path, b, spec, "export_split", wb=wb, sheet_title=name_a, units_subset=a, finalize=False)
+    rr, meta_c = write_rentroll_xlsx(path, b, spec, "export_split", wb=wb, sheet_title=name_c, units_subset=c, rr=rr, finalize=False)
+    ws = wb.create_sheet("Summary", 0)
+    occ = [u for u in units if u["status"] != "vacant"]
+    rows = [("Property", b["name"]), ("Export date", spec["roll_date"].strftime("%d-%b-%Y")), (None, None),
+            ("Units (all sheets)", len(units)), ("Let units", len(occ)), ("Vacant units", len(units) - len(occ)),
+            ("Contract rent, let units (AED)", sum(u["annual_rent_aed"] for u in occ)), (None, None),
+            ("Sheets", f"{name_a}; {name_c}")]
+    for i, (k, v) in enumerate(rows, 1):
+        if k:
+            ws.cell(row=i, column=1, value=k).font = Font(bold=True)
+        if v is not None:
+            c_ = ws.cell(row=i, column=2, value=v)
+            if isinstance(v, int) and v > 1000:
+                c_.number_format = "#,##0"
+    ws.cell(row=len(rows) + 2, column=1, value=FOOTER).font = Font(italic=True, size=8, color="808080")
+    ws.oddFooter.center.text = FOOTER
+    ws.column_dimensions["A"].width = 32
+    ws.column_dimensions["B"].width = 36
+    tot = sum(u["annual_rent_aed"] for u in occ)
+    rr.summary_rows.append({"row": 7, "sheet": "Summary", "label": "Contract rent, let units (AED)", "kind": "total",
+                            "rent_aed": tot, "scope_sum_aed": tot, "units": len(units)})
+    finalize_workbook(wb, path)
+    meta = {"document": path.name, "format": "xlsx", "sheets": [meta_a, meta_c], "summary_sheet": "Summary",
+            "area_unit": "sq ft", "date_format": "%d-%b-%Y",
+            "note": "Units are split across two sheets by floor band; each has its own header and sheet total.",
+            "summary_rows": rr.summary_rows}
+    return rr, meta
+
+
+def write_rentroll_pdf_spanning(path, b, spec, *, area_in_sqm_labelled_sqft=False, stale=None):
+    """One long table flowing across pages (header repeated), as exported from a PM system to PDF."""
+    import pymupdf
+    import re as _re
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.lib.units import mm
+    from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+
+    rr = RR(b, spec, path.name)
+    hdr = ["#", "Unit", "Type", "Area (sq ft)", "Tenant", "Ejari", "Start", "Expiry", "Rent AED", "Chq", "Status"]
+    stat = {"occupied": "Let", "vacant": "Vacant", "under_renewal": "Renewal", "notice_served": "Notice", "legal_case": "Legal"}
+    tv = TYPE_VOCAB["code"]
+    units = _units_sorted(b)
+    data = [hdr]
+    tot = 0
+    area_tot = 0.0
+    pst = ParagraphStyle("t", fontName="Helvetica", fontSize=6.6, leading=7.6)
+    for i, u in enumerate(units, 1):
+        area = round(u["area_sqft"] / SQM, 1) if area_in_sqm_labelled_sqft else round(u["area_sqft"], 1)
+        area_tot += area
+        data.append([str(i), u["unit"], tv[u["type"]], f"{area:,.1f}", Paragraph(u["tenant"] or "", pst), u["ejari_no"] or "",
+                     u["lease_start"].strftime("%d.%m.%Y") if u["lease_start"] else "", u["lease_end"].strftime("%d.%m.%Y") if u["lease_end"] else "",
+                     f"{u['annual_rent_aed']:,}" if u["annual_rent_aed"] else "", str(u["cheques"] or ""), stat[u["status"]]])
+        tot += u["annual_rent_aed"] or 0
+        row = rr.canonical(u, area_stated=area, area_unit="sqm" if area_in_sqm_labelled_sqft else "sqft", cite=None, tenant_text=u["tenant"])
+        if area_in_sqm_labelled_sqft:
+            row["area_original"] = {"value": area, "unit": "sq m", "header_says": "sq ft"}
+    stated = tot if stale is None else stale
+    data.append(["", "", "TOTAL", f"{area_tot:,.1f}", "", "", "", "", f"{stated:,}", "", ""])
+
+    def footer(c, d):
+        c.saveState()
+        c.setFont("Helvetica", 6.8)
+        c.setFillColor(colors.grey)
+        c.drawCentredString(A4[0] / 2, 8 * mm, FOOTER)
+        c.drawRightString(A4[0] - 12 * mm, 8 * mm, f"Page {d.page}")
+        c.drawString(12 * mm, A4[1] - 9 * mm, f"{b['name']} - rent roll export {spec['roll_date'].strftime('%d.%m.%Y')}")
+        c.restoreState()
+
+    doc = SimpleDocTemplate(str(path), pagesize=A4, leftMargin=10 * mm, rightMargin=10 * mm, topMargin=14 * mm,
+                            bottomMargin=14 * mm, title=f"{b['name']} rent roll", author="PM system", invariant=1)
+    t = Table(data, colWidths=[w * mm for w in [8, 12, 10, 18, 48, 26, 17, 17, 18, 8, 12]], repeatRows=1)
+    t.setStyle(TableStyle([("FONT", (0, 0), (-1, -1), "Helvetica", 6.6), ("FONT", (0, 0), (-1, 0), "Helvetica-Bold", 6.8),
+                           ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#D9E1F2")), ("LINEBELOW", (0, 0), (-1, -1), 0.25, colors.grey),
+                           ("ALIGN", (3, 1), (3, -1), "RIGHT"), ("ALIGN", (8, 1), (8, -1), "RIGHT"), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                           ("FONT", (0, -1), (-1, -1), "Helvetica-Bold", 6.8), ("TOPPADDING", (0, 0), (-1, -1), 1.2),
+                           ("BOTTOMPADDING", (0, 0), (-1, -1), 1.2)]))
+    ps = ParagraphStyle("h", fontName="Helvetica-Bold", fontSize=11, leading=14)
+    doc.build([Paragraph(f"{b['name']} - Rent Roll", ps), Spacer(1, 3 * mm), t], onFirstPage=footer, onLaterPages=footer)
+    # find each row's page in the rendered text
+    pages = [_re.sub(r"\s+", " ", p.get_text()) for p in pymupdf.open(str(path))]
+    last = 1
+    for i, row in enumerate(rr.rows, 1):
+        pat = f" {i} {row['unit']} "
+        hit = next((k + 1 for k, t_ in enumerate(pages) if pat in " " + t_ + " "), last)
+        row["source"] = f"page {hit}, row {i}"
+        last = hit
+    rr.summary_rows.append({"page": len(pages), "label": "TOTAL", "kind": "total", "rent_aed": stated, "scope_sum_aed": tot,
+                            "units": len(units), "rent_basis": "let units"})
+    meta = {"document": path.name, "format": "pdf", "pages": len(pages), "area_unit": "sq m" if area_in_sqm_labelled_sqft else "sq ft",
+            "area_unit_label": "sq ft", "date_format": "%d.%m.%Y", "summary_rows": rr.summary_rows,
+            "note": "Single table flowing across pages with the header repeated."}
     return rr, meta

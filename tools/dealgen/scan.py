@@ -13,8 +13,11 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 
-def scan_pdf(src, dst, seed, dpi=110, quality=50):
+def scan_pdf(src, dst, seed, dpi=110, quality=50, profile="normal"):
     rng = random.Random(seed)
+    ugly = profile == "ugly"
+    if ugly:
+        dpi, quality = 96, 38
     nrng = np.random.default_rng(seed)
     doc = pymupdf.open(str(src))
     c = canvas.Canvas(str(dst), pagesize=A4, invariant=1)
@@ -26,19 +29,30 @@ def scan_pdf(src, dst, seed, dpi=110, quality=50):
         landscape = img.width > img.height
         # paper tint and toner: compress range
         arr = np.asarray(img).astype(np.float32)
-        arr = 22 + arr * (226 / 255.0)
+        if ugly:
+            # photocopy: crushed greys, low contrast, toner bleed
+            arr = np.where(arr < 150, arr * 0.55, 150 + (arr - 150) * 0.6)
+            arr = 62 + arr * (150 / 255.0)
+        else:
+            arr = 22 + arr * (226 / 255.0)
         img = Image.fromarray(arr.clip(0, 255).astype(np.uint8))
-        img = img.rotate(rng.uniform(-0.9, 0.9), resample=Image.BICUBIC, expand=False, fillcolor=238)
-        img = img.filter(ImageFilter.GaussianBlur(radius=rng.uniform(0.55, 0.8)))
+        rot = rng.uniform(1.4, 2.4) * rng.choice([-1, 1]) if ugly else rng.uniform(-0.9, 0.9)
+        img = img.rotate(rot, resample=Image.BICUBIC, expand=False, fillcolor=60 if ugly else 238)
+        img = img.filter(ImageFilter.GaussianBlur(radius=rng.uniform(0.9, 1.15) if ugly else rng.uniform(0.55, 0.8)))
         arr = np.asarray(img).astype(np.float32)
         h, w = arr.shape
         # uneven exposure: gentle gradient across the page
         gx = np.linspace(rng.uniform(-10, 0), rng.uniform(0, 8), w)[None, :]
         gy = np.linspace(rng.uniform(-6, 0), rng.uniform(0, 6), h)[:, None]
         arr = arr + gx + gy
-        arr = arr + nrng.normal(0, 7.0, arr.shape)
+        arr = arr + nrng.normal(0, 11.0 if ugly else 7.0, arr.shape)
+        if ugly:
+            # copier streak and dark top band
+            sx = int(w * rng.uniform(0.3, 0.7))
+            arr[:, sx:sx + 3] -= 45
+            arr[: int(h * 0.012), :] -= 90
         # speckles
-        n = int(h * w * 0.0006)
+        n = int(h * w * (0.0025 if ugly else 0.0006))
         ys, xs = nrng.integers(0, h, n), nrng.integers(0, w, n)
         arr[ys, xs] = nrng.uniform(30, 120, n)
         # scanner edge shadow on one side

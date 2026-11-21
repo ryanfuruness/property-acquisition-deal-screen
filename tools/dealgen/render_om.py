@@ -186,8 +186,8 @@ def asset_info(b):
 def location_name(b):
     return {"JVC": "Jumeirah Village Circle (JVC), Dubai", "Dubai Silicon Oasis": "Dubai Silicon Oasis (DSO), Dubai",
             "International City": "International City, Dubai", "Business Bay": "Business Bay, Dubai",
-            "Al Barsha": ("Barsha Heights (TECOM), Al Barsha, Dubai" if "Heights" in (b["sub_community"] or "")
-                          else "Al Barsha 1, Dubai")}[b["area"]]
+            "Al Barsha South": "Arjan, Al Barsha South, Dubai", "Al Barsha 1": "Al Barsha 1, Dubai",
+            "Dubai Sports City": "Dubai Sports City, Dubai"}[b["area"]]
 
 
 def chiller_text(b, style):
@@ -227,10 +227,9 @@ def upside_text(om):
         return (f"Reversion: {up['units_more_than_20pct_below_index']} tenancies are let more than 20% below the RERA Smart "
                 f"Rental Index reference and are eligible for increases of 5-10% at renewal, subject to 90 days' notice. "
                 f"No uplift has been assumed in the pricing.")
-    return (f"Reversionary potential: passing rents on under-rented units average c.{round(up['avg_gap_under_rented'] * 100)}% "
-            f"below the RERA Smart Rental Index for Barsha Heights. As leases renew through 2027, re-basing to market is "
-            f"expected to add c.AED {up['claimed_uplift_aed'] / 1e6:.2f}m (+{round(up['claimed_uplift_pct'] * 100)}%) to gross "
-            f"income within 12 months.")
+    return (f"Reversionary potential: passing rents sit c.{round(up['comparables_gap_claimed'] * 100)}% below asking rents for "
+            f"comparable new lettings in the community. As leases renew and re-let through 2027, we expect gross income to "
+            f"rise by c.AED {up['claimed_uplift_aed'] / 1e6:.2f}m (+{round(up['claimed_uplift_pct'] * 100)}%) within 12 months.")
 
 
 def nsa_label(broker):
@@ -243,8 +242,9 @@ def build_om(path, ctx):
     _fonts()
     om = ctx["om"]
     broker = ctx["spec"]["broker"]
+    from .render_om2 import build_qamar, build_tessellate
     builder = {"harbour_crest": _harbour, "marwah_stone": _marwah, "dunecrest": _dunecrest, "meridian_gate": _meridian,
-               "saffron_key": _saffron}[broker]
+               "saffron_key": _saffron, "qamar": build_qamar, "tessellate": build_tessellate}[broker]
     o = OM(ctx)
     builder(path, ctx, o)
     return o.fields
@@ -397,7 +397,7 @@ def _harbour(path, ctx, o):
                         "Building frontage (illustrative)."))
     st.append(PageBreak())
     # ---- 03 location
-    loc = LOCATION[b["area"]]
+    loc = LOCATION[b["loc_key"]]
     st += [Paragraph("03  LOCATION", s_k), Paragraph(esc(location_name(b).replace(", Dubai", "")), s_h),
            Paragraph(esc(loc["intro"]), s_b), Paragraph(esc(f"The building is located in {b['sub_community']}."), s_b), Spacer(1, 3 * mm)]
     t = Table([["Destination", "Drive time"]] + [list(x) for x in loc["access"]], colWidths=[110 * mm, 40 * mm])
@@ -638,7 +638,7 @@ def _marwah(path, ctx, o):
                         "The building (illustrative).", font="Times-Italic"))
     st.append(PageBreak())
     # ---- location
-    loc = LOCATION[b["area"]]
+    loc = LOCATION[b["loc_key"]]
     intro = loc["intro"]
     st += [Paragraph("Location", s_t), Paragraph(esc(location_name(b)), s_sub), Paragraph(esc(intro), s_b)]
     if non_free:
@@ -796,9 +796,12 @@ def _dunecrest(path, ctx, o):
                     "Walking distance to Business Bay Metro and Dubai Canal", "Strong rental demand from Downtown and DIFC professionals",
                     "Individual title deeds allow flexible exit - sell in bulk or unit by unit"]
     else:
-        bullets += [f"Brand new {b['floors']} building, completed {b['completion_year']}, high specification",
-                    "JVC - one of Dubai's most in-demand rental communities", "Strong tenant profile, mostly 1 and 2 bedroom units",
-                    "Two ground-floor retail units serving the building and neighbourhood"]
+        short = location_name(b).replace(", Dubai", "")
+        bullets += [f"{'Brand new' if b['completion_year'] >= 2023 else 'Well maintained'} {b['floors']} building, "
+                    f"completed {b['completion_year']}, high specification",
+                    f"{short} - one of Dubai's most in-demand rental communities", "Strong tenant profile, mostly 1 and 2 bedroom units"]
+        if "retail" in b["unit_mix"]:
+            bullets.append(f"{b['unit_mix']['retail']} ground-floor retail units serving the building and neighbourhood")
     for x in bullets:
         st.append(Paragraph(esc(x), ParagraphStyle("bl", parent=s_b, leftIndent=10, fontSize=11.5, leading=16), bulletText="■"))
     st.append(PageBreak())
@@ -821,6 +824,9 @@ def _dunecrest(path, ctx, o):
         ("Leases", o.rec("lease_structure", om["lease_structure"],
                          f"Master lease - {master['tenant']}" if master else "Direct with tenants (Ejari)")),
     ]
+    if master:
+        left.append(("Seller", o.rec("seller", b["seller"], f"{b['seller']} (Silverline Group)")))
+        right.append(("Master tenant", o.rec("master_tenant_group", master["tenant"], f"{master['tenant']} (Silverline Group)")))
     kv = lambda rows: _kv_table(rows, [36 * mm, 82 * mm], F, FB, 10, colors.HexColor("#555555"), colors.HexColor("#DDDDDD"))
     t = Table([[kv(left), kv(right)]], colWidths=[124 * mm, 124 * mm])
     t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP")]))
@@ -853,11 +859,13 @@ def _dunecrest(path, ctx, o):
     st.append(t)
     if master:
         st.append(Spacer(1, 4 * mm))
-        st.append(Paragraph(esc(f"Master tenant: {master['tenant']}, the building's operator since handover. The operator is a "
-                                "Silverline Group company. Rent payable quarterly in advance; no escalation."), s_sm))
+        st.append(Paragraph(esc(f"Master tenant: {master['tenant']}, the building's operator since handover and, like the Seller, a "
+                                "Silverline Group company. The rent is fixed and payable quarterly in advance with no escalation. "
+                                "The operator sub-lets the apartments and pays all running costs (FM, utilities, cleaning, "
+                                "security and leasing), so the owner's income is unaffected by vacancy."), s_sm))
     st.append(PageBreak())
     # ---- location
-    loc = LOCATION[b["area"]]
+    loc = LOCATION[b["loc_key"]]
     st += [Paragraph("LOCATION", s_h), Paragraph(esc(loc["intro"]), s_b), Spacer(1, 3 * mm)]
     t = Table([[a.upper(), v] for a, v in loc["access"]], colWidths=[82 * mm, 24 * mm])
     t.setStyle(TableStyle([("FONT", (0, 0), (0, -1), F, 9.5), ("FONT", (1, 0), (1, -1), FB, 9.5), ("LINEBELOW", (0, 0), (-1, -1), 0.4, GOLD),
@@ -941,7 +949,7 @@ def _meridian(path, ctx, o):
                    f"AED {om['price_psf']['value']:,} (saleable)")
     boxes = [
         box("Asking price", o.rec("asking_price_aed", om["asking_price_aed"], aed(om["asking_price_aed"]))),
-        box("Annual Rental Income", o.rec("annual_rent_stated", om["annual_rent"]["value"], aed(om["annual_rent"]["value"]),
+        box(spec.get("om_rent_label", "Annual Rental Income"), o.rec("annual_rent_stated", om["annual_rent"]["value"], aed(om["annual_rent"]["value"]),
                                           basis=om["annual_rent"]["basis"])),
         box(yl["label"], o.rec("yield_stated", yl["value"], pct(yl["value"], 2),
                                basis={"measure": yl["basis"], "on": "asking_price"})),
@@ -1002,7 +1010,7 @@ def _meridian(path, ctx, o):
                 ["Net Yield", pct(yl["value"], 2)]]
         o.fields["opex_stated_aed"] = {"value": ded, "quote": f"({aed(ded)})", "label": yl["deduction_label"]}
     else:
-        rows = [["Annual Rental Income", aed(om["annual_rent"]["value"])], ["Asking Price", aed(om["asking_price_aed"])],
+        rows = [[spec.get("om_rent_label", "Annual Rental Income"), aed(om["annual_rent"]["value"])], ["Asking Price", aed(om["asking_price_aed"])],
                 ["Gross Yield", pct(yl["value"], 2)]]
     t = Table(rows, colWidths=[110 * mm, 60 * mm])
     t.setStyle(TableStyle([("FONT", (0, 0), (-1, -1), F, 10.5), ("FONT", (0, -1), (-1, -1), FB, 11.5), ("ALIGN", (1, 0), (1, -1), "RIGHT"),
@@ -1010,9 +1018,14 @@ def _meridian(path, ctx, o):
                            ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 5)]))
     st += [t, Spacer(1, 5 * mm)]
     st.append(Paragraph(esc("Rental income as per the current rent roll. Yield calculated on the asking price."), s_sm))
+    up = upside_text(om)
+    if up:
+        st.append(Spacer(1, 4 * mm))
+        st.append(Paragraph("Rental Upside", s_h))
+        st.append(Paragraph(esc(o.rec("upside_claims", [up], up)), s_b))
     st.append(Spacer(1, 8 * mm))
     st.append(Paragraph("Location", s_h))
-    loc = LOCATION[b["area"]]
+    loc = LOCATION[b["loc_key"]]
     st.append(Paragraph(esc(loc["intro"]), s_b))
     st.append(Paragraph(esc("  •  ".join(f"{a}: {v}" for a, v in loc["access"][:5])), s_sm))
     st.append(PageBreak())
@@ -1135,7 +1148,7 @@ def _saffron(path, ctx, o):
     st += [grid(rows, [55 * mm, 125 * mm]), Spacer(1, 3 * mm),
            Paragraph(esc("ROI = total yearly rent / asking price." + (" Owner wants quick transfer, serious offers considered."
                                                                      if spec.get("motivated") else "")), s_sm), Spacer(1, 6 * mm),
-           Paragraph("Location", s_h), Paragraph(esc(LOCATION[b["area"]]["intro"]), s_b), PageBreak()]
+           Paragraph("Location", s_h), Paragraph(esc(LOCATION[b["loc_key"]]["intro"]), s_b), PageBreak()]
     st.append(Paragraph("Contact", s_h))
     for nm, role, brn, mob, em in br["contacts"]:
         st.append(Paragraph(f"<b>{esc(nm)}</b> ({esc(role)}, {brn})<br/>Mobile / WhatsApp: {mob}<br/>Email: {esc(em)}", s_b))

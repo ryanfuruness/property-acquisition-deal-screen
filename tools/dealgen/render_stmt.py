@@ -31,12 +31,21 @@ def _truth_block(doc, spec, cites):
         "amounts_basis": "as stated in the document's annual/total column" + (" (annualised)" if doc["period"]["annualised"] else ""),
         "opex_includes_vat": True,
     }
-    if doc["period"]["annualised"]:
+    if doc["period"]["annualised"] and any("ytd" in ln for ln in doc["income"]):
         out["ytd_actual"] = {
             "rental_income_aed": sum(ln["ytd"] for ln in doc["income"] if ln["category"] == "rental_income"),
             "other_income_aed": sum(ln["ytd"] for ln in doc["income"] if ln["category"] == "other_income"),
             "total_opex_aed": sum(ln["ytd"] for ln in doc["expenses"]),
         }
+    if any("actual_ytd" in ln for ln in doc["income"]):
+        out["ytd_actual"] = {
+            "months": doc["period"]["actual_months"],
+            "rental_income_aed": sum(ln["actual_ytd"] for ln in doc["income"] if ln["category"] == "rental_income"),
+            "other_income_aed": sum(ln["actual_ytd"] for ln in doc["income"] if ln["category"] == "other_income"),
+            "total_opex_aed": sum(ln["actual_ytd"] for ln in doc["expenses"]),
+        }
+    elif "ytd_actual" in out:
+        out["ytd_actual"]["months"] = doc["period"]["months_covered"]
     out["noi_stated_aed"] = out["rental_income_aed"] + out["other_income_aed"] - out["total_opex_aed"]
     return out
 
@@ -50,7 +59,9 @@ def write_stmt_xlsx(path, b, spec, doc):
     wb = Workbook()
     ws = wb.active
     lay = doc["layout"]
-    ws.title = {"monthly": "T12", "annual_comparative": "P&L", "ytd_annualised": "I&E FY2026", "annual_simple": "Statement"}[lay]
+    ws.title = {"monthly": "T12", "annual_comparative": "P&L", "ytd_annualised": "I&E FY2026", "annual_simple": "Statement",
+                "comparative_budget": "Actual vs Budget"}[lay]
+    fc = spec["stmt"].get("forecast")
     neg = spec["stmt"]["vocab"] == "landlord"
     nf = "#,##0;(#,##0)" if neg else "#,##0"
     months = doc["months"]
@@ -61,6 +72,13 @@ def write_stmt_xlsx(path, b, spec, doc):
     elif lay == "ytd_annualised":
         y = months[-1].year
         heads = [f"Q1 {y}", f"Q2 {y}", f"Q3 {y}", f"FY{y}"]
+    elif lay == "comparative_budget":
+        yr = months[-1].year
+        if fc:
+            heads = [f"FY{yr - 1} Actual", f"FY{yr}F", f"FY{yr + 1} Budget", "FY26F vs FY25"]
+        else:
+            heads = [f"Actual 12m to {months[-1].replace(year=yr - 1).strftime('%b-%y')}", f"Actual 12m to {months[-1].strftime('%b-%y')}",
+                     f"Budget FY{yr + 1}", "Var % (actual)"]
     else:
         heads = ["Amount (AED)"]
     ncol = 1 + len(heads)
@@ -72,6 +90,8 @@ def write_stmt_xlsx(path, b, spec, doc):
         title_lines.append(f"Financial year {months[0].strftime('%d %b %Y').replace(months[0].strftime('%d'), '01')} - {doc['period']['end']}  |  Amounts in AED")
     elif lay == "ytd_annualised":
         title_lines.append("Amounts in AED")
+    elif lay == "comparative_budget":
+        title_lines.append("Amounts in AED. Prepared by the property manager for the owner's annual review.")
     else:
         title_lines.append(f"From {months[0].strftime('%d/%m/%Y')} to {doc['period']['end'][8:]}/{doc['period']['end'][5:7]}/{doc['period']['end'][:4]}")
     r = 1
@@ -87,11 +107,11 @@ def write_stmt_xlsx(path, b, spec, doc):
         c = ws.cell(row=r, column=j)
         c.font = Font(bold=True, color="FFFFFF" if lay != "annual_simple" else "000000")
         c.fill = PatternFill("solid", fgColor={"monthly": "1F3A5F", "annual_comparative": "7B1E2B", "ytd_annualised": "1F3A5F",
-                                               "annual_simple": "D9D9D9"}[lay])
+                                               "annual_simple": "D9D9D9", "comparative_budget": "3B3B3B"}[lay])
         c.alignment = Alignment(horizontal="center", wrap_text=True)
     r += 1
     cites = {}
-    total_col = get_column_letter(ncol if lay in ("monthly", "ytd_annualised", "annual_simple") else 2)
+    total_col = get_column_letter(ncol if lay in ("monthly", "ytd_annualised", "annual_simple") else (3 if lay == "comparative_budget" else 2))
 
     def put_line(label, ln, sign=1):
         nonlocal r
@@ -102,11 +122,14 @@ def write_stmt_xlsx(path, b, spec, doc):
             vals = [ln["stated"], ln["prior"], (ln["stated"] - ln["prior"]) / ln["prior"] if ln["prior"] else None]
         elif lay == "ytd_annualised":
             vals = ln["quarters"] + [ln["annualised"]]
+        elif lay == "comparative_budget":
+            vals = [ln["prior"], ln["stated"], ln["budget_next"], (ln["stated"] - ln["prior"]) / ln["prior"] if ln["prior"] else None]
         else:
             vals = [ln["stated"]]
+        pct_col = 4 if lay == "annual_comparative" else (5 if lay == "comparative_budget" else -1)
         for j, v in enumerate(vals, 2):
-            c = ws.cell(row=r, column=j, value=(v * sign if (v is not None and not (lay == "annual_comparative" and j == 4)) else v))
-            c.number_format = "0.0%" if (lay == "annual_comparative" and j == 4) else nf
+            c = ws.cell(row=r, column=j, value=(v * sign if (v is not None and j != pct_col) else v))
+            c.number_format = "0.0%" if j == pct_col else nf
         cites[label] = f"{ws.title}!{total_col}{r}"
         r += 1
 
@@ -132,6 +155,8 @@ def write_stmt_xlsx(path, b, spec, doc):
             return [sign * sum(ln["stated"] for ln in lines), sign * sum(ln["prior"] for ln in lines)]
         if lay == "ytd_annualised":
             return [sign * sum(ln["quarters"][i] for ln in lines) for i in range(3)] + [sign * sum(ln["annualised"] for ln in lines)]
+        if lay == "comparative_budget":
+            return [sign * sum(ln[k] for ln in lines) for k in ("prior", "stated", "budget_next")]
         return [sign * sum(ln["stated"] for ln in lines)]
 
     section("INCOME" if lay != "annual_simple" else "Income")
@@ -158,6 +183,13 @@ def write_stmt_xlsx(path, b, spec, doc):
         notes.append("Unaudited. Expenses shown in brackets.")
     if lay == "annual_simple":
         notes.append("Prepared by owner's accountant from bank statements. Not audited.")
+    if lay == "comparative_budget":
+        if fc:
+            p_ = doc["period"]
+            notes.append(f"FY{months[-1].year}F = January-{months[-1].strftime('%B')} actuals plus "
+                         f"{p_['budget_months']} months of budget. Budget rent assumes full collection.")
+        else:
+            notes.append("Actuals are unaudited management accounts. FY2027 budget is indicative.")
     notes.append("Expenses are shown inclusive of VAT, which is not recoverable on residential rent.")
     for n in notes:
         ws.cell(row=r, column=1, value=n).font = Font(italic=True, size=8)
