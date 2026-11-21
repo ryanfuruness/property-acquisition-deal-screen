@@ -7,7 +7,7 @@ The site never reads anything outside site/. This script:
 
 * copies ``runs/<deal_id>/run.json`` (minified, otherwise unchanged) and ``runs/<deal_id>/pages/*.png``
   to ``site/data/runs/<deal_id>/``;
-* copies ``evals/summary.json`` and ``evals/FAILURES.md`` to ``site/data/evals/``;
+* copies ``evals/summary.json``, ``evals/FAILURES.md`` and ``evals/tieout/README.md`` to ``site/data/evals/``;
 * copies ``docs/BRIEF.md`` and ``docs/research/*.md`` to ``site/data/docs/``;
 * copies ``assets/walkthrough.gif`` (repo root or ``site/assets/``) if it exists;
 * writes ``site/data/manifest.json``: one summary row per deal for the inbox, plus what exists.
@@ -28,7 +28,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 OUT = SITE / "data"
 REPO_URL = "https://github.com/ryanfuruness/property-acquisition-deal-screen"
-VERDICT_ORDER = {"Pursue": 0, "Needs work": 1, "Pass": 2}
+VERDICT_ORDER = {"Pursue": 0, "Needs work": 1, "Decline": 2}
+
+
+def norm_verdict(v: str | None) -> str | None:
+    """Engine v1 called a hard fail "Pass"; the site says Decline everywhere."""
+    return "Decline" if v == "Pass" else v
 SEVERITY_ORDER = {"high": 0, "medium": 1, "low": 2}
 
 
@@ -75,12 +80,22 @@ def summarise(run: dict) -> dict:
         "going_in_net_yield_on_cost": _metric(out, "going_in_net_yield_on_cost"),
         "levered_irr_pre_tax": _metric(out, "levered_irr_pre_tax"),
         "dscr_year1": _metric(out, "dscr_year1"),
-        "verdict": fit.get("verdict"),
-        "verdict_reason": fit.get("reason"),
+        "verdict": norm_verdict(fit.get("verdict")),
+        "verdict_reason": fit.get("plain_reason") or fit.get("reason"),
+        "verdict_headline": fit.get("headline"),
+        "blocked_on_statements": [b.get("statement") for b in fit.get("blocked_on_statements") or [] if b.get("statement")],
+        "stop_reason": fit.get("stop_reason_plain") or fit.get("stop_reason"),
+        "unlevered_irr_pre_tax": _metric(out, "unlevered_irr_pre_tax"),
+        "unlevered_equity_multiple_pre_tax": _metric(out, "unlevered_equity_multiple_pre_tax"),
+        "walk_away_most_sensitive": (out.get("walk_away") or {}).get("most_sensitive_label"),
+        "walk_away_largest_swing_aed": ((out.get("walk_away") or {}).get("largest_swing_aed") or {}).get("value")
+        if isinstance((out.get("walk_away") or {}).get("largest_swing_aed"), dict) else None,
+        "notices": len(run.get("notices") or []),
         "hard_fails": _count(fit.get("hard_fails")),
         "soft_fails": _count(fit.get("soft_fails")),
         "unknown": _count(fit.get("unknown")),
         "failed_tests": [t.get("name") for t in fit.get("tests") or [] if t.get("status") != "pass"],
+        "engine_version": meta.get("engine_version"),
         "underwriting_status": uw.get("status"),
         "discrepancy_count": len(discs),
         "discrepancy_severity": sev,
@@ -153,6 +168,8 @@ def main(argv: list[str] | None = None) -> int:
     deals = copy_runs(args.runs_dir.resolve())
     # The summary and the hand-kept failure log (the site links to REPORT.md on GitHub). Per-run results files stay in the repo.
     eval_files = copy_tree(args.evals_dir, OUT / "evals", ("summary.json", "FAILURES.md"))
+    eval_files += copy_tree(args.evals_dir / "tieout", OUT / "evals" / "tieout", ("README.md",))
+    eval_files = ["tieout/README.md" if f == "README.md" else f for f in eval_files]
     docs = copy_tree(ROOT / "docs", OUT / "docs", ("BRIEF.md", "research/*.md"))
 
     gif = None
@@ -164,6 +181,22 @@ def main(argv: list[str] | None = None) -> int:
                 shutil.copy2(cand, target)
             gif = "assets/walkthrough.gif"
             break
+    gif_info = None
+    if gif:
+        try:
+            from PIL import Image
+
+            with Image.open(SITE / gif) as im:
+                total, frames = 0, 0
+                for i in range(getattr(im, "n_frames", 1)):
+                    im.seek(i)
+                    total += im.info.get("duration", 100)
+                    frames += 1
+                gif_info = {"path": gif, "duration_s": round(total / 1000, 1), "frames": frames,
+                            "width": im.size[0], "height": im.size[1]}
+        except Exception as exc:
+            print(f"gif not measured: {exc}", file=sys.stderr)
+            gif_info = {"path": gif}
 
     index = ROOT / "data" / "deals" / "index.json"
     expected = []
@@ -171,7 +204,7 @@ def main(argv: list[str] | None = None) -> int:
         # Only the public package facts; the planted answers stay with the evals.
         for d in json.loads(index.read_text()).get("deals", []):
             expected.append({k: d.get(k) for k in ("deal_id", "building_name", "area", "units", "asking_price_aed",
-                                                   "broker", "documents", "scanned_om")})
+                                                   "broker", "documents", "scanned_om")} | {"set": d.get("set") or "dev"})
 
     mandate = {}
     try:
@@ -179,13 +212,22 @@ def main(argv: list[str] | None = None) -> int:
 
         m = yaml.safe_load((ROOT / "data" / "mandate.yaml").read_text())
         hard, soft = m["buy_box"]["hard"], m["buy_box"]["soft"]
+        debt = m["underwriting"]["debt"]
         mandate = {"firm": m.get("firm"), "as_of": str(m.get("as_of")),
                    "min_going_in_net_yield_on_cost": soft.get("min_going_in_net_yield_on_cost"),
-                   "target_levered_irr": soft.get("target_levered_irr"),
-                   "target_equity_multiple": soft.get("target_equity_multiple"),
+                   "target_unlevered_irr": soft.get("target_unlevered_irr"),
+                   "target_unlevered_equity_multiple": soft.get("target_unlevered_equity_multiple"),
+                   "max_ltv": debt.get("max_ltv"), "sizing_dscr": debt.get("sizing_dscr"),
                    "min_dscr_year1": hard.get("min_dscr_year1")}
     except Exception as exc:  # the site shows thresholds only if they are available
         print(f"mandate thresholds not added: {exc}", file=sys.stderr)
+
+    sets = {d["deal_id"]: d["set"] for d in expected}
+    set_notes = {}
+    if index.is_file():
+        set_notes = json.loads(index.read_text()).get("sets") or {}
+    for row in deals:
+        row["set"] = sets.get(row["deal_id"], "dev")
 
     fixture = "dev-fixture" in args.runs_dir.resolve().as_posix()
     manifest = {
@@ -197,10 +239,12 @@ def main(argv: list[str] | None = None) -> int:
         "mandate": mandate,
         "deals": deals,
         "package_index": expected,
+        "sets": set_notes,
         "evals": {"files": eval_files, "summary": "summary.json" in eval_files,
                   "failures": "FAILURES.md" in eval_files},
         "docs": docs,
         "walkthrough_gif": gif,
+        "walkthrough": gif_info,
     }
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False))
     print(f"site/data: {len(deals)} runs, {len(eval_files)} eval files, {len(docs)} docs"

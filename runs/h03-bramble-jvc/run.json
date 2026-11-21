@@ -1,0 +1,5358 @@
+{
+ "deal": {
+  "deal_id": "h03-bramble-jvc",
+  "building_name": "Bramble Heights",
+  "market_area": "JVC",
+  "documents_used": {
+   "om": "om.pdf",
+   "rent_roll": null,
+   "operating_statement": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+  }
+ },
+ "documents": [
+  {
+   "doc_id": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+   "kind": "sheet",
+   "role": "operating_statement",
+   "role_reason": "file name contains 'p&l'",
+   "sheets": [
+    {
+     "name": "T12",
+     "n_rows": 37,
+     "n_cols": 14,
+     "merged": [],
+     "rows": [
+      [
+       "Bramble Heights",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Monthly Profit & Loss Oct 2025 - Sep 2026",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Period: October 2025 to September 2026  |  AED, cash basis",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Description",
+       "Oct-25",
+       "Nov-25",
+       "Dec-25",
+       "Jan-26",
+       "Feb-26",
+       "Mar-26",
+       "Apr-26",
+       "May-26",
+       "Jun-26",
+       "Jul-26",
+       "Aug-26",
+       "Sep-26",
+       "Total"
+      ],
+      [
+       "INCOME",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Rent - residential",
+       "788807",
+       "782372",
+       "783993",
+       "779313",
+       "773401",
+       "769783",
+       "784831",
+       "781092",
+       "782831",
+       "770277",
+       "771339",
+       "781460",
+       "9349499"
+      ],
+      [
+       "Rent - retail",
+       "26070",
+       "25857",
+       "25911",
+       "25756",
+       "25561",
+       "25441",
+       "25939",
+       "25815",
+       "25872",
+       "25458",
+       "25493",
+       "25827",
+       "309000"
+      ],
+      [
+       "Other income",
+       "4892",
+       "5499",
+       "4291",
+       "4985",
+       "5421",
+       "4323",
+       "4339",
+       "5257",
+       "4866",
+       "4540",
+       "5002",
+       "4585",
+       "58000"
+      ],
+      [
+       "Total income",
+       "819769",
+       "813728",
+       "814195",
+       "810054",
+       "804383",
+       "799547",
+       "815109",
+       "812164",
+       "813569",
+       "800275",
+       "801834",
+       "811872",
+       "9716499"
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "OPERATING EXPENSES",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "FM contract",
+       "19742",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "19739",
+       "236871"
+      ],
+      [
+       "Lift AMC",
+       "12436",
+       "0",
+       "0",
+       "12436",
+       "0",
+       "0",
+       "12436",
+       "0",
+       "0",
+       "12436",
+       "0",
+       "0",
+       "49744"
+      ],
+      [
+       "Fire fighting AMC",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "14336",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "14336",
+       "28672"
+      ],
+      [
+       "R&M - general",
+       "8347",
+       "4835",
+       "1765",
+       "11329",
+       "7246",
+       "1212",
+       "9215",
+       "14213",
+       "27560",
+       "10003",
+       "4009",
+       "8281",
+       "108015"
+      ],
+      [
+       "Pest control / tank cleaning",
+       "0",
+       "2740",
+       "0",
+       "0",
+       "2740",
+       "0",
+       "0",
+       "2740",
+       "0",
+       "0",
+       "2740",
+       "0",
+       "10960"
+      ],
+      [
+       "BMU / facade cleaning",
+       "0",
+       "13667",
+       "0",
+       "0",
+       "13668",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "27335"
+      ],
+      [
+       "Security",
+       "9697",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "9701",
+       "116408"
+      ],
+      [
+       "Cleaning",
+       "7456",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "7454",
+       "89450"
+      ],
+      [
+       "Garbage collection",
+       "1321",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "1316",
+       "15797"
+      ],
+      [
+       "DEWA common",
+       "17090",
+       "11652",
+       "9322",
+       "8545",
+       "8545",
+       "10875",
+       "13983",
+       "17867",
+       "20974",
+       "23305",
+       "23304",
+       "20974",
+       "186436"
+      ],
+      [
+       "Building insurance",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "104399",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "104399"
+      ],
+      [
+       "Master community charges",
+       "0",
+       "0",
+       "0",
+       "50231",
+       "0",
+       "0",
+       "0",
+       "0",
+       "0",
+       "50232",
+       "0",
+       "0",
+       "100463"
+      ],
+      [
+       "Mgmt fee",
+       "40744",
+       "40411",
+       "40495",
+       "40253",
+       "39948",
+       "39761",
+       "40538",
+       "40345",
+       "40435",
+       "39787",
+       "39842",
+       "40364",
+       "482923"
+      ],
+      [
+       "Leasing commission",
+       "6514",
+       "11743",
+       "2406",
+       "3747",
+       "1029",
+       "1632",
+       "8749",
+       "1997",
+       "534",
+       "9015",
+       "2981",
+       "1959",
+       "52306"
+      ],
+      [
+       "Advertising",
+       "3120",
+       "2780",
+       "1520",
+       "4890",
+       "2457",
+       "1986",
+       "1510",
+       "733",
+       "941",
+       "41",
+       "429",
+       "630",
+       "21037"
+      ],
+      [
+       "Admin & Ejari",
+       "3891",
+       "3585",
+       "3972",
+       "3444",
+       "3712",
+       "3697",
+       "3575",
+       "3931",
+       "3841",
+       "4055",
+       "3326",
+       "3648",
+       "44677"
+      ],
+      [
+       "Sinking fund",
+       "8693",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "8697",
+       "104360"
+      ],
+      [
+       "Total operating expenses",
+       "139051",
+       "138320",
+       "106387",
+       "181782",
+       "126252",
+       "120406",
+       "241312",
+       "128733",
+       "141192",
+       "195781",
+       "123538",
+       "137099",
+       "1779853"
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "NET OPERATING INCOME",
+       "680718",
+       "675408",
+       "707808",
+       "628272",
+       "678131",
+       "679141",
+       "573797",
+       "683431",
+       "672377",
+       "604494",
+       "678296",
+       "674773",
+       "7936646"
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Unaudited management accounts. Rental income recognised on a cash basis (cheques cleared).",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Expenses are shown inclusive of VAT, which is not recoverable on residential rent.",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Synthetic document for demonstration. Fictional property.",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "doc_id": "Bramble_Heights_unit_listing_export.xlsx",
+   "kind": "sheet",
+   "role": "unknown",
+   "role_reason": "no role keywords found",
+   "sheets": [
+    {
+     "name": "Summary",
+     "n_rows": 11,
+     "n_cols": 2,
+     "merged": [],
+     "rows": [
+      [
+       "Property",
+       "Bramble Heights"
+      ],
+      [
+       "Export date",
+       "31-Oct-2026"
+      ],
+      [
+       null,
+       null
+      ],
+      [
+       "Units (all sheets)",
+       "122"
+      ],
+      [
+       "Let units",
+       "111"
+      ],
+      [
+       "Vacant units",
+       "11"
+      ],
+      [
+       "Contract rent, let units (AED)",
+       "9658500"
+      ],
+      [
+       null,
+       null
+      ],
+      [
+       "Sheets",
+       "Floors G-4; Floors 5-10"
+      ],
+      [
+       null,
+       null
+      ],
+      [
+       "Synthetic document for demonstration. Fictional property.",
+       null
+      ]
+     ]
+    },
+    {
+     "name": "Floors G-4",
+     "n_rows": 56,
+     "n_cols": 13,
+     "merged": [],
+     "rows": [
+      [
+       "Bramble Heights | Unit listing export | 31-Oct-2026",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "UnitRef",
+       "Lvl",
+       "Config",
+       "Size_sqft",
+       "Occupant",
+       "OccupantType",
+       "LeaseStart",
+       "LeaseEnd",
+       "ContractRent_AED",
+       "PDCs",
+       "SecDep_AED",
+       "EjariRef",
+       "UnitStatus"
+      ],
+      [
+       "R1",
+       "G",
+       "RET",
+       "1105.3",
+       "Harbor Gate Stationery Trading",
+       "Company",
+       "01-Jun-2024",
+       "31-May-2027",
+       "142000",
+       "4",
+       "14200",
+       "0120240621606298",
+       "ACTIVE"
+      ],
+      [
+       "R2",
+       "G",
+       "RET",
+       "1388",
+       "Ivory Peak Car Care",
+       "Company",
+       "01-Jul-2025",
+       "30-Jun-2028",
+       "167000",
+       "4",
+       "16700",
+       "0120250710535100",
+       "ACTIVE"
+      ],
+      [
+       "101",
+       "1",
+       "STU",
+       "398.6",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "102",
+       "1",
+       "STU",
+       "412.9",
+       "Ramon Tolentino",
+       "Individual",
+       "01-May-2026",
+       "30-Apr-2027",
+       "54000",
+       "4",
+       "2700",
+       "0120260538093947",
+       "ACTIVE"
+      ],
+      [
+       "103",
+       "1",
+       "1BR",
+       "698",
+       "Christian Salazar",
+       "Individual",
+       "01-May-2026",
+       "30-Apr-2027",
+       "66500",
+       "1",
+       "3325",
+       "0120260594971368",
+       "ACTIVE"
+      ],
+      [
+       "104",
+       "1",
+       "1BR",
+       "712.4",
+       "Omar Abboud",
+       "Individual",
+       "15-Feb-2026",
+       "14-Feb-2027",
+       "74000",
+       "2",
+       "3700",
+       "0120260250545836",
+       "ACTIVE"
+      ],
+      [
+       "105",
+       "1",
+       "1BR",
+       "725.1",
+       "Oliver Costa",
+       "Individual",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "89000",
+       "6",
+       "4450",
+       "0120260753365615",
+       "ACTIVE"
+      ],
+      [
+       "106",
+       "1",
+       "1BR",
+       "738.6",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "107",
+       "1",
+       "2BR",
+       "1072.3",
+       "Hala Khoury",
+       "Individual",
+       "06-Nov-2025",
+       "05-Nov-2026",
+       "121000",
+       "4",
+       "6050",
+       "0120251155443643",
+       "HOLDOVER-RENEWAL"
+      ],
+      [
+       "108",
+       "1",
+       "2BR",
+       "1098.8",
+       "Sapphire Peak Catering Services L.L.C.",
+       "Company",
+       "15-Jul-2026",
+       "14-Jul-2027",
+       "103000",
+       "2",
+       "5150",
+       "0120260737190519",
+       "ACTIVE"
+      ],
+      [
+       "109",
+       "1",
+       "1BR",
+       "745.2",
+       "Willow Grove Engineering Consultants L.L.C",
+       "Company",
+       "05-Apr-2026",
+       "04-Apr-2027",
+       "77000",
+       "1",
+       "3400",
+       "0120260406760643",
+       "ACTIVE"
+      ],
+      [
+       "110",
+       "1",
+       "1BR",
+       "752.9",
+       "Marites Domingo",
+       "Individual",
+       "08-Sep-2026",
+       "07-Sep-2027",
+       "95500",
+       "4",
+       "4775",
+       "0120260965070927",
+       "ACTIVE"
+      ],
+      [
+       "111",
+       "1",
+       "1BR",
+       "760.4",
+       "Kristine Pascual",
+       "Individual",
+       "26-Dec-2025",
+       "25-Dec-2026",
+       "95500",
+       "4",
+       "4775",
+       "0120251260813281",
+       "ACTIVE"
+      ],
+      [
+       "112",
+       "1",
+       "2BR",
+       "1121.6",
+       "Kirill Pavlov",
+       "Individual",
+       "20-Apr-2026",
+       "19-Apr-2027",
+       "110000",
+       "2",
+       "5500",
+       "0120260482326890",
+       "ACTIVE"
+      ],
+      [
+       "201",
+       "2",
+       "STU",
+       "398.6",
+       "Jasmine Anchor Facilities Management L.L.C.",
+       "Company",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "41000",
+       "1",
+       "1850",
+       "0120260780010464",
+       "ACTIVE"
+      ],
+      [
+       "202",
+       "2",
+       "STU",
+       "412.9",
+       "Marites Ramos",
+       "Individual",
+       "01-Mar-2026",
+       "28-Feb-2027",
+       "44500",
+       "1",
+       "2225",
+       "0120260333868328",
+       "ACTIVE"
+      ],
+      [
+       "203",
+       "2",
+       "1BR",
+       "698",
+       "Walid Kanaan",
+       "Individual",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "69500",
+       "2",
+       "3200",
+       "0120260747543200",
+       "ACTIVE"
+      ],
+      [
+       "204",
+       "2",
+       "1BR",
+       "712.4",
+       "Chinedu Eze",
+       "Individual",
+       "15-Nov-2025",
+       "14-Nov-2026",
+       "90000",
+       "1",
+       "4500",
+       "0120251197183916",
+       "ACTIVE"
+      ],
+      [
+       "205",
+       "2",
+       "1BR",
+       "725.1",
+       "Priya Chandran",
+       "Individual",
+       "01-Feb-2026",
+       "31-Jan-2027",
+       "90000",
+       "1",
+       "4500",
+       "0120260251121318",
+       "NOTICE"
+      ],
+      [
+       "206",
+       "2",
+       "1BR",
+       "738.6",
+       "Jasmine Anchor Facilities Management L.L.C.",
+       "Company",
+       "01-Feb-2026",
+       "31-Jan-2027",
+       "72000",
+       "1",
+       "3600",
+       "0120260213984542",
+       "ACTIVE"
+      ],
+      [
+       "207",
+       "2",
+       "2BR",
+       "1072.3",
+       "Kirill Gromov",
+       "Individual",
+       "03-Sep-2026",
+       "02-Sep-2027",
+       "100000",
+       "1",
+       "5000",
+       "0120260943004899",
+       "ACTIVE"
+      ],
+      [
+       "208",
+       "2",
+       "2BR",
+       "1098.8",
+       "Nikolai Volkov",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "108000",
+       "4",
+       "5400",
+       "0120251299718677",
+       "ACTIVE"
+      ],
+      [
+       "209",
+       "2",
+       "1BR",
+       "745.2",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "210",
+       "2",
+       "1BR",
+       "752.9",
+       "Zephyr Peak Cargo Services LLC",
+       "Company",
+       "01-Oct-2026",
+       "30-Sep-2027",
+       "73000",
+       "1",
+       "3650",
+       "0120261029041049",
+       "ACTIVE"
+      ],
+      [
+       "211",
+       "2",
+       "1BR",
+       "760.4",
+       "Ramon Bautista",
+       "Individual",
+       "15-Sep-2026",
+       "14-Sep-2027",
+       "93000",
+       "2",
+       "4650",
+       "0120260938066402",
+       "ACTIVE"
+      ],
+      [
+       "212",
+       "2",
+       "2BR",
+       "1121.6",
+       "Zephyr Peak Cargo Services LLC",
+       "Company",
+       "15-Feb-2026",
+       "14-Feb-2027",
+       "113000",
+       "2",
+       "5650",
+       "0120260267843019",
+       "ACTIVE"
+      ],
+      [
+       "301",
+       "3",
+       "STU",
+       "398.6",
+       "Onyx Crown Hospitality Management L.L.C.",
+       "Company",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "44500",
+       "4",
+       "2225",
+       "0120260771180270",
+       "ACTIVE"
+      ],
+      [
+       "302",
+       "3",
+       "STU",
+       "412.9",
+       "Dmitry Kuznetsov",
+       "Individual",
+       "01-Mar-2026",
+       "28-Feb-2027",
+       "44500",
+       "1",
+       "2100",
+       "0120260388368568",
+       "ACTIVE"
+      ],
+      [
+       "303",
+       "3",
+       "1BR",
+       "698",
+       "Pradeep Thomas",
+       "Individual",
+       "27-Sep-2026",
+       "26-Sep-2027",
+       "66500",
+       "4",
+       "3325",
+       "0120260907812446",
+       "ACTIVE"
+      ],
+      [
+       "304",
+       "3",
+       "1BR",
+       "712.4",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "305",
+       "3",
+       "1BR",
+       "725.1",
+       "Ramon Soriano",
+       "Individual",
+       "15-Aug-2026",
+       "14-Aug-2027",
+       "69500",
+       "4",
+       "3475",
+       "0120260869455342",
+       "ACTIVE"
+      ],
+      [
+       "306",
+       "3",
+       "1BR",
+       "738.6",
+       "Sanduni Dissanayake",
+       "Individual",
+       "04-Dec-2025",
+       "03-Dec-2026",
+       "93500",
+       "6",
+       "4675",
+       "0120251235119177",
+       "ACTIVE"
+      ],
+      [
+       "307",
+       "3",
+       "2BR",
+       "1072.3",
+       "Freya Janssen",
+       "Individual",
+       "01-May-2026",
+       "30-Apr-2027",
+       "105000",
+       "4",
+       "5250",
+       "0120260573864408",
+       "ACTIVE"
+      ],
+      [
+       "308",
+       "3",
+       "2BR",
+       "1098.8",
+       "Pavel Popov",
+       "Individual",
+       "01-Aug-2026",
+       "31-Jul-2027",
+       "127000",
+       "2",
+       "6350",
+       "0120260810002882",
+       "ACTIVE"
+      ],
+      [
+       "309",
+       "3",
+       "1BR",
+       "745.2",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "310",
+       "3",
+       "1BR",
+       "752.9",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "311",
+       "3",
+       "1BR",
+       "760.4",
+       "Angelica Villanueva",
+       "Individual",
+       "01-Feb-2026",
+       "31-Jan-2027",
+       "96000",
+       "2",
+       "4800",
+       "0120260260656441",
+       "ACTIVE"
+      ],
+      [
+       "312",
+       "3",
+       "2BR",
+       "1121.6",
+       "Layla Rizk",
+       "Individual",
+       "12-Apr-2026",
+       "11-Apr-2027",
+       "101000",
+       "1",
+       "4750",
+       "0120260426911065",
+       "ACTIVE"
+      ],
+      [
+       "401",
+       "4",
+       "STU",
+       "398.6",
+       "Daria Vasilieva",
+       "Individual",
+       "01-Sep-2026",
+       "31-Aug-2027",
+       "53000",
+       "4",
+       "2650",
+       "0120260984062478",
+       "ACTIVE"
+      ],
+      [
+       "402",
+       "4",
+       "STU",
+       "412.9",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "403",
+       "4",
+       "1BR",
+       "698",
+       "James Marchetti",
+       "Individual",
+       "14-Apr-2026",
+       "13-Apr-2027",
+       "83000",
+       "4",
+       "4150",
+       "0120260442407809",
+       "ACTIVE"
+      ],
+      [
+       "404",
+       "4",
+       "1BR",
+       "712.4",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "405",
+       "4",
+       "1BR",
+       "725.1",
+       "Hassan Hijazi",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "87500",
+       "2",
+       "4375",
+       "0120251249705047",
+       "ACTIVE"
+      ],
+      [
+       "406",
+       "4",
+       "1BR",
+       "738.6",
+       "Nadia Siddiqui",
+       "Individual",
+       "01-Feb-2026",
+       "31-Jan-2027",
+       "93000",
+       "6",
+       "4650",
+       "0120260257769481",
+       "ACTIVE"
+      ],
+      [
+       "407",
+       "4",
+       "2BR",
+       "1072.3",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "408",
+       "4",
+       "2BR",
+       "1098.8",
+       "Ma Lan",
+       "Individual",
+       "11-Nov-2025",
+       "10-Nov-2026",
+       "124000",
+       "1",
+       "6200",
+       "0120251112722633",
+       "ACTIVE"
+      ],
+      [
+       "409",
+       "4",
+       "1BR",
+       "745.2",
+       "Nisha Hegde",
+       "Individual",
+       "14-Nov-2025",
+       "13-Nov-2026",
+       "90500",
+       "2",
+       "4525",
+       "0120251166259473",
+       "ACTIVE"
+      ],
+      [
+       "410",
+       "4",
+       "1BR",
+       "752.9",
+       "Lukas Lindgren",
+       "Individual",
+       "27-May-2026",
+       "26-May-2027",
+       "94000",
+       "1",
+       "4700",
+       "0120260544342954",
+       "ACTIVE"
+      ],
+      [
+       "411",
+       "4",
+       "1BR",
+       "760.4",
+       "James Fischer",
+       "Individual",
+       "17-Aug-2026",
+       "16-Aug-2027",
+       "90500",
+       "12",
+       "4525",
+       "0120260887691977",
+       "ACTIVE"
+      ],
+      [
+       "412",
+       "4",
+       "2BR",
+       "1121.6",
+       "Willow Grove Engineering Consultants L.L.C",
+       "Company",
+       "01-May-2026",
+       "30-Apr-2027",
+       "105000",
+       "4",
+       "5250",
+       "0120260547807604",
+       "ACTIVE"
+      ],
+      [
+       "Sheet total",
+       null,
+       null,
+       "39440.5",
+       null,
+       null,
+       null,
+       null,
+       "3656500",
+       null,
+       "196925",
+       null,
+       null
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Synthetic document for demonstration. Fictional property.",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    },
+    {
+     "name": "Floors 5-10",
+     "n_rows": 78,
+     "n_cols": 13,
+     "merged": [],
+     "rows": [
+      [
+       "Bramble Heights | Unit listing export | 31-Oct-2026",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "UnitRef",
+       "Lvl",
+       "Config",
+       "Size_sqft",
+       "Occupant",
+       "OccupantType",
+       "LeaseStart",
+       "LeaseEnd",
+       "ContractRent_AED",
+       "PDCs",
+       "SecDep_AED",
+       "EjariRef",
+       "UnitStatus"
+      ],
+      [
+       "501",
+       "5",
+       "STU",
+       "398.6",
+       "Anna Ashworth",
+       "Individual",
+       "15-Jul-2026",
+       "14-Jul-2027",
+       "55000",
+       "2",
+       "2750",
+       "0120260789159888",
+       "ACTIVE"
+      ],
+      [
+       "502",
+       "5",
+       "STU",
+       "412.9",
+       "Nisha Varghese",
+       "Individual",
+       "01-Jan-2026",
+       "31-Dec-2026",
+       "57500",
+       "2",
+       "2875",
+       "0120260196327312",
+       "ACTIVE"
+      ],
+      [
+       "503",
+       "5",
+       "1BR",
+       "698",
+       "Oliver Whitfield",
+       "Individual",
+       "15-Dec-2025",
+       "14-Dec-2026",
+       "66500",
+       "1",
+       "2950",
+       "0120251252111305",
+       "ACTIVE"
+      ],
+      [
+       "504",
+       "5",
+       "1BR",
+       "712.4",
+       "Chamari Dissanayake",
+       "Individual",
+       "20-Apr-2026",
+       "19-Apr-2027",
+       "71500",
+       "4",
+       "3575",
+       "0120260462067739",
+       "ACTIVE"
+      ],
+      [
+       "505",
+       "5",
+       "1BR",
+       "725.1",
+       "Bronze Crown Security Services L.L.C.",
+       "Company",
+       "01-May-2026",
+       "30-Apr-2027",
+       "70500",
+       "4",
+       "3525",
+       "0120260572418241",
+       "ACTIVE"
+      ],
+      [
+       "506",
+       "5",
+       "1BR",
+       "738.6",
+       "Bronze Crown Security Services L.L.C.",
+       "Company",
+       "01-Jun-2026",
+       "31-May-2027",
+       "73000",
+       "1",
+       "3650",
+       "0120260623415559",
+       "ACTIVE"
+      ],
+      [
+       "507",
+       "5",
+       "2BR",
+       "1072.3",
+       "Rami Hijazi",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "99000",
+       "4",
+       "4550",
+       "0120251206303954",
+       "ACTIVE"
+      ],
+      [
+       "508",
+       "5",
+       "2BR",
+       "1098.8",
+       "Kirill Morozov",
+       "Individual",
+       "16-Oct-2026",
+       "15-Oct-2027",
+       "101000",
+       "4",
+       "5050",
+       "0120261056104163",
+       "ACTIVE"
+      ],
+      [
+       "509",
+       "5",
+       "1BR",
+       "745.2",
+       "Oliver Marchetti",
+       "Individual",
+       "01-Oct-2026",
+       "30-Sep-2027",
+       "75000",
+       "12",
+       "3300",
+       "0120261064353981",
+       "ACTIVE"
+      ],
+      [
+       "510",
+       "5",
+       "1BR",
+       "752.9",
+       "Nadeesha Ekanayake",
+       "Individual",
+       "06-Apr-2026",
+       "05-Apr-2027",
+       "90000",
+       "2",
+       "4500",
+       "0120260417621598",
+       "ACTIVE"
+      ],
+      [
+       "511",
+       "5",
+       "1BR",
+       "760.4",
+       "Marwa Mansy",
+       "Individual",
+       "23-May-2026",
+       "22-May-2027",
+       "77500",
+       "6",
+       "3875",
+       "0120260506923645",
+       "ACTIVE"
+      ],
+      [
+       "512",
+       "5",
+       "2BR",
+       "1121.6",
+       "Daniel Keller",
+       "Individual",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "131000",
+       "4",
+       "6550",
+       "0120260758005740",
+       "ACTIVE"
+      ],
+      [
+       "601",
+       "6",
+       "STU",
+       "398.6",
+       "Alexei Volkov",
+       "Individual",
+       "15-Jul-2026",
+       "14-Jul-2027",
+       "52000",
+       "1",
+       "2600",
+       "0120260774098133",
+       "ACTIVE"
+      ],
+      [
+       "602",
+       "6",
+       "STU",
+       "412.9",
+       "Svetlana Titova",
+       "Individual",
+       "01-Jan-2026",
+       "31-Dec-2026",
+       "54500",
+       "4",
+       "2725",
+       "0120260158224412",
+       "ACTIVE"
+      ],
+      [
+       "603",
+       "6",
+       "1BR",
+       "698",
+       "Nuwan Dissanayake",
+       "Individual",
+       "01-Feb-2026",
+       "31-Jan-2027",
+       "72500",
+       "12",
+       "3625",
+       "0120260237167572",
+       "ACTIVE"
+      ],
+      [
+       "604",
+       "6",
+       "1BR",
+       "712.4",
+       "Esther Mwangi",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "72000",
+       "2",
+       "3350",
+       "0120251278597799",
+       "ACTIVE"
+      ],
+      [
+       "605",
+       "6",
+       "1BR",
+       "725.1",
+       "Ritu Iyer",
+       "Individual",
+       "01-Sep-2026",
+       "31-Aug-2027",
+       "86500",
+       "2",
+       "4325",
+       "0120260993629179",
+       "ACTIVE"
+      ],
+      [
+       "606",
+       "6",
+       "1BR",
+       "738.6",
+       "Copper Vale Travel & Tourism L.L.C.",
+       "Company",
+       "26-Sep-2026",
+       "25-Sep-2027",
+       "91500",
+       "2",
+       "4575",
+       "0120260913030970",
+       "ACTIVE"
+      ],
+      [
+       "607",
+       "6",
+       "2BR",
+       "1072.3",
+       "Oliver Ashworth",
+       "Individual",
+       "14-Apr-2026",
+       "13-Apr-2027",
+       "105000",
+       "12",
+       "4800",
+       "0120260487689951",
+       "ACTIVE"
+      ],
+      [
+       "608",
+       "6",
+       "2BR",
+       "1098.8",
+       "Bronze Crown Security Services L.L.C.",
+       "Company",
+       "15-Feb-2026",
+       "14-Feb-2027",
+       "125000",
+       "2",
+       "6250",
+       "0120260214416814",
+       "ACTIVE"
+      ],
+      [
+       "609",
+       "6",
+       "1BR",
+       "745.2",
+       "Sherif Zaki",
+       "Individual",
+       "01-Jun-2026",
+       "31-May-2027",
+       "91500",
+       "1",
+       "4575",
+       "0120260616269727",
+       "ACTIVE"
+      ],
+      [
+       "610",
+       "6",
+       "1BR",
+       "752.9",
+       "Charlotte Varga",
+       "Individual",
+       "15-Aug-2026",
+       "14-Aug-2027",
+       "70000",
+       "6",
+       "3050",
+       "0120260824230425",
+       "ACTIVE"
+      ],
+      [
+       "611",
+       "6",
+       "1BR",
+       "760.4",
+       "Ananya Mehta",
+       "Individual",
+       "01-Jun-2026",
+       "31-May-2027",
+       "94000",
+       "2",
+       "4700",
+       "0120260657483171",
+       "ACTIVE"
+      ],
+      [
+       "612",
+       "6",
+       "2BR",
+       "1121.6",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "701",
+       "7",
+       "STU",
+       "398.6",
+       "Ajith Bhat",
+       "Individual",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "41500",
+       "6",
+       "2075",
+       "0120260706088624",
+       "ACTIVE"
+      ],
+      [
+       "702",
+       "7",
+       "STU",
+       "412.9",
+       "Pierre Becker",
+       "Individual",
+       "01-Aug-2026",
+       "31-Jul-2027",
+       "55500",
+       "2",
+       "2775",
+       "0120260830132155",
+       "ACTIVE"
+      ],
+      [
+       "703",
+       "7",
+       "1BR",
+       "698",
+       "Meera Gupta",
+       "Individual",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "87000",
+       "2",
+       "4350",
+       "0120260761733828",
+       "ACTIVE"
+      ],
+      [
+       "704",
+       "7",
+       "1BR",
+       "712.4",
+       "Samer Tannous",
+       "Individual",
+       "14-Nov-2025",
+       "13-Nov-2026",
+       "72500",
+       "4",
+       "3450",
+       "0120251187142389",
+       "ACTIVE"
+      ],
+      [
+       "705",
+       "7",
+       "1BR",
+       "725.1",
+       "Karim Gamal",
+       "Individual",
+       "29-Dec-2025",
+       "28-Dec-2026",
+       "74500",
+       "4",
+       "3725",
+       "0120251270874253",
+       "ACTIVE"
+      ],
+      [
+       "706",
+       "7",
+       "1BR",
+       "738.6",
+       "Tarek Darwish",
+       "Individual",
+       "01-Jul-2026",
+       "30-Jun-2027",
+       "90500",
+       "4",
+       "4525",
+       "0120260751286153",
+       "ACTIVE"
+      ],
+      [
+       "707",
+       "7",
+       "2BR",
+       "1072.3",
+       "Rodel Ramos",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "122000",
+       "1",
+       "6100",
+       "0120251217511486",
+       "ACTIVE"
+      ],
+      [
+       "708",
+       "7",
+       "2BR",
+       "1098.8",
+       "Claire Russo",
+       "Individual",
+       "03-Oct-2026",
+       "02-Oct-2027",
+       "130000",
+       "4",
+       "6500",
+       "0120261011149399",
+       "ACTIVE"
+      ],
+      [
+       "709",
+       "7",
+       "1BR",
+       "745.2",
+       "Shalini Chopra",
+       "Individual",
+       "15-Apr-2026",
+       "14-Apr-2027",
+       "77500",
+       "12",
+       "3875",
+       "0120260405957935",
+       "ACTIVE"
+      ],
+      [
+       "710",
+       "7",
+       "1BR",
+       "752.9",
+       "Joy Soriano",
+       "Individual",
+       "15-Oct-2026",
+       "14-Oct-2027",
+       "92500",
+       "2",
+       "4625",
+       "0120261058257489",
+       "ACTIVE"
+      ],
+      [
+       "711",
+       "7",
+       "1BR",
+       "760.4",
+       "Sapphire Peak Catering Services L.L.C.",
+       "Company",
+       "01-Mar-2026",
+       "28-Feb-2027",
+       "92000",
+       "1",
+       "4600",
+       "0120260323648985",
+       "ACTIVE"
+      ],
+      [
+       "712",
+       "7",
+       "2BR",
+       "1121.6",
+       "Divya Malhotra",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "110000",
+       "1",
+       "5500",
+       "0120251245658059",
+       "NOTICE"
+      ],
+      [
+       "801",
+       "8",
+       "STU",
+       "398.6",
+       "Marites Manalo",
+       "Individual",
+       "01-Oct-2026",
+       "30-Sep-2027",
+       "54000",
+       "4",
+       "2700",
+       "0120261017799536",
+       "ACTIVE"
+      ],
+      [
+       "802",
+       "8",
+       "STU",
+       "412.9",
+       "Willow Grove Engineering Consultants L.L.C",
+       "Company",
+       "01-May-2026",
+       "30-Apr-2027",
+       "57500",
+       "1",
+       "2875",
+       "0120260582694140",
+       "ACTIVE"
+      ],
+      [
+       "803",
+       "8",
+       "1BR",
+       "698",
+       "Lukas Hartley",
+       "Individual",
+       "06-Feb-2026",
+       "05-Feb-2027",
+       "87000",
+       "4",
+       "4350",
+       "0120260244641548",
+       "ACTIVE"
+      ],
+      [
+       "804",
+       "8",
+       "1BR",
+       "712.4",
+       "Zephyr Peak Cargo Services LLC",
+       "Company",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "70500",
+       "4",
+       "3200",
+       "0120251232904215",
+       "ACTIVE"
+      ],
+      [
+       "805",
+       "8",
+       "1BR",
+       "725.1",
+       "Rola Saleh",
+       "Individual",
+       "01-Jan-2026",
+       "31-Dec-2026",
+       "89000",
+       "1",
+       "4450",
+       "0120260172457220",
+       "ACTIVE"
+      ],
+      [
+       "806",
+       "8",
+       "1BR",
+       "738.6",
+       "Willow Grove Engineering Consultants L.L.C",
+       "Company",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "69000",
+       "4",
+       "3450",
+       "0120251283009172",
+       "ACTIVE"
+      ],
+      [
+       "807",
+       "8",
+       "2BR",
+       "1072.3",
+       "Svetlana Egorova",
+       "Individual",
+       "06-Nov-2025",
+       "05-Nov-2026",
+       "126000",
+       "2",
+       "6300",
+       "0120251191623591",
+       "HOLDOVER-RENEWAL"
+      ],
+      [
+       "808",
+       "8",
+       "2BR",
+       "1098.8",
+       "Angelica Bautista",
+       "Individual",
+       "13-Aug-2026",
+       "12-Aug-2027",
+       "107000",
+       "4",
+       "4700",
+       "0120260820367156",
+       "ACTIVE"
+      ],
+      [
+       "809",
+       "8",
+       "1BR",
+       "745.2",
+       "Amr Hegazy",
+       "Individual",
+       "28-Sep-2026",
+       "27-Sep-2027",
+       "91000",
+       "6",
+       "4550",
+       "0120260958960232",
+       "ACTIVE"
+      ],
+      [
+       "810",
+       "8",
+       "1BR",
+       "752.9",
+       "Ayesha Bhatti",
+       "Individual",
+       "10-Jul-2026",
+       "09-Jul-2027",
+       "94000",
+       "6",
+       "4700",
+       "0120260743882033",
+       "ACTIVE"
+      ],
+      [
+       "811",
+       "8",
+       "1BR",
+       "760.4",
+       "Arnel Soriano",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "90000",
+       "2",
+       "4500",
+       "0120251209963707",
+       "ACTIVE"
+      ],
+      [
+       "812",
+       "8",
+       "2BR",
+       "1121.6",
+       "Willow Grove Engineering Consultants L.L.C",
+       "Company",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "112000",
+       "4",
+       "5600",
+       "0120251279758480",
+       "ACTIVE"
+      ],
+      [
+       "901",
+       "9",
+       "STU",
+       "398.6",
+       "Zawadi Achebe",
+       "Individual",
+       "01-Jan-2026",
+       "31-Dec-2026",
+       "53000",
+       "6",
+       "2650",
+       "0120260128484108",
+       "NOTICE"
+      ],
+      [
+       "902",
+       "9",
+       "STU",
+       "412.9",
+       "Zawadi Sesay",
+       "Individual",
+       "10-Nov-2025",
+       "09-Nov-2026",
+       "54000",
+       "2",
+       "2700",
+       "0120251128602142",
+       "ACTIVE"
+      ],
+      [
+       "903",
+       "9",
+       "1BR",
+       "698",
+       "Wei Zhou",
+       "Individual",
+       "13-May-2026",
+       "12-May-2027",
+       "87000",
+       "4",
+       "4350",
+       "0120260584290580",
+       "ACTIVE"
+      ],
+      [
+       "904",
+       "9",
+       "1BR",
+       "712.4",
+       "Dmitry Sokolov",
+       "Individual",
+       "08-Oct-2026",
+       "07-Oct-2027",
+       "89000",
+       "4",
+       "4450",
+       "0120261019524405",
+       "ACTIVE"
+      ],
+      [
+       "905",
+       "9",
+       "1BR",
+       "725.1",
+       "Suresh Ghosh",
+       "Individual",
+       "20-Nov-2025",
+       "19-Nov-2026",
+       "88500",
+       "2",
+       "4425",
+       "0120251112997216",
+       "ACTIVE"
+      ],
+      [
+       "906",
+       "9",
+       "1BR",
+       "738.6",
+       "Gaurav Naidu",
+       "Individual",
+       "17-Apr-2026",
+       "16-Apr-2027",
+       "77000",
+       "6",
+       "3850",
+       "0120260460137571",
+       "ACTIVE"
+      ],
+      [
+       "907",
+       "9",
+       "2BR",
+       "1072.3",
+       "Ivan Volkov",
+       "Individual",
+       "02-Sep-2026",
+       "01-Sep-2027",
+       "126000",
+       "2",
+       "6300",
+       "0120260950674299",
+       "ACTIVE"
+      ],
+      [
+       "908",
+       "9",
+       "2BR",
+       "1098.8",
+       "Reem Ghanem",
+       "Individual",
+       "01-Apr-2026",
+       "31-Mar-2027",
+       "131000",
+       "4",
+       "6550",
+       "0120260486386303",
+       "ACTIVE"
+      ],
+      [
+       "909",
+       "9",
+       "1BR",
+       "745.2",
+       "Yaw Achebe",
+       "Individual",
+       "01-Oct-2026",
+       "30-Sep-2027",
+       "92500",
+       "2",
+       "4625",
+       "0120261046715604",
+       "ACTIVE"
+      ],
+      [
+       "910",
+       "9",
+       "1BR",
+       "752.9",
+       "Freya Brennan",
+       "Individual",
+       "15-Aug-2026",
+       "14-Aug-2027",
+       "70000",
+       "2",
+       "3250",
+       "0120260864812074",
+       "ACTIVE"
+      ],
+      [
+       "911",
+       "9",
+       "1BR",
+       "760.4",
+       "Anastasia Sokolova",
+       "Individual",
+       "15-Jan-2026",
+       "14-Jan-2027",
+       "95500",
+       "1",
+       "4775",
+       "0120260187866372",
+       "ACTIVE"
+      ],
+      [
+       "912",
+       "9",
+       "2BR",
+       "1121.6",
+       "Matteo Brennan",
+       "Individual",
+       "15-Sep-2026",
+       "14-Sep-2027",
+       "127000",
+       "4",
+       "6350",
+       "0120260947470861",
+       "ACTIVE"
+      ],
+      [
+       "1001",
+       "10",
+       "STU",
+       "398.6",
+       "Bronze Crown Security Services L.L.C.",
+       "Company",
+       "15-Dec-2025",
+       "14-Dec-2026",
+       "46500",
+       "1",
+       "2325",
+       "0120251295157151",
+       "ACTIVE"
+      ],
+      [
+       "1002",
+       "10",
+       "STU",
+       "412.9",
+       "Rui Xu",
+       "Individual",
+       "06-Sep-2026",
+       "05-Sep-2027",
+       "43000",
+       "2",
+       "2150",
+       "0120260961245646",
+       "ACTIVE"
+      ],
+      [
+       "1003",
+       "10",
+       "1BR",
+       "698",
+       "Bronze Crown Security Services L.L.C.",
+       "Company",
+       "19-Nov-2025",
+       "18-Nov-2026",
+       "75500",
+       "4",
+       "3775",
+       "0120251122475059",
+       "ACTIVE"
+      ],
+      [
+       "1004",
+       "10",
+       "1BR",
+       "712.4",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       "VACANT"
+      ],
+      [
+       "1005",
+       "10",
+       "1BR",
+       "725.1",
+       "Maya Awad",
+       "Individual",
+       "01-Apr-2026",
+       "31-Mar-2027",
+       "71000",
+       "2",
+       "3550",
+       "0120260408409713",
+       "ACTIVE"
+      ],
+      [
+       "1006",
+       "10",
+       "1BR",
+       "738.6",
+       "Wei Tang",
+       "Individual",
+       "01-Dec-2025",
+       "30-Nov-2026",
+       "89000",
+       "4",
+       "4450",
+       "0120251212292048",
+       "ACTIVE"
+      ],
+      [
+       "1007",
+       "10",
+       "2BR",
+       "1072.3",
+       "Rodel Soriano",
+       "Individual",
+       "01-Apr-2026",
+       "31-Mar-2027",
+       "123000",
+       "6",
+       "6150",
+       "0120260425337915",
+       "ACTIVE"
+      ],
+      [
+       "1008",
+       "10",
+       "2BR",
+       "1098.8",
+       "Vivek Pandey",
+       "Individual",
+       "15-Feb-2026",
+       "14-Feb-2027",
+       "129000",
+       "4",
+       "6450",
+       "0120260278422120",
+       "ACTIVE"
+      ],
+      [
+       "1009",
+       "10",
+       "1BR",
+       "745.2",
+       "Willow Grove Engineering Consultants L.L.C",
+       "Company",
+       "31-May-2026",
+       "30-May-2027",
+       "77500",
+       "2",
+       "3350",
+       "0120260593328554",
+       "ACTIVE"
+      ],
+      [
+       "1010",
+       "10",
+       "1BR",
+       "752.9",
+       "Ajith Ghosh",
+       "Individual",
+       "12-Sep-2026",
+       "11-Sep-2027",
+       "78000",
+       "2",
+       "3350",
+       "0120260976172766",
+       "ACTIVE"
+      ],
+      [
+       "1011",
+       "10",
+       "1BR",
+       "760.4",
+       "Bronze Crown Security Services L.L.C.",
+       "Company",
+       "09-Aug-2026",
+       "08-Aug-2027",
+       "92500",
+       "4",
+       "4625",
+       "0120260812728129",
+       "ACTIVE"
+      ],
+      [
+       "1012",
+       "10",
+       "2BR",
+       "1121.6",
+       "Fjord Spire Technical Services LLC",
+       "Company",
+       "06-Feb-2026",
+       "05-Feb-2027",
+       "112000",
+       "4",
+       "5600",
+       "0120260272289282",
+       "ACTIVE"
+      ],
+      [
+       "Sheet total",
+       null,
+       null,
+       "55420.8",
+       null,
+       null,
+       null,
+       null,
+       "6002000",
+       null,
+       "295250",
+       null,
+       null
+      ],
+      [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ],
+      [
+       "Synthetic document for demonstration. Fictional property.",
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "doc_id": "om.pdf",
+   "kind": "pdf",
+   "role": "om",
+   "role_reason": "file name contains 'om'",
+   "scanned": false,
+   "pages": [
+    {
+     "number": 1,
+     "image": "pages/om-p1.png",
+     "width_pt": 595.2756,
+     "height_pt": 841.8898,
+     "ocr": false,
+     "ocr_mean_conf": null
+    },
+    {
+     "number": 2,
+     "image": "pages/om-p2.png",
+     "width_pt": 595.2756,
+     "height_pt": 841.8898,
+     "ocr": false,
+     "ocr_mean_conf": null
+    },
+    {
+     "number": 3,
+     "image": "pages/om-p3.png",
+     "width_pt": 595.2756,
+     "height_pt": 841.8898,
+     "ocr": false,
+     "ocr_mean_conf": null
+    },
+    {
+     "number": 4,
+     "image": "pages/om-p4.png",
+     "width_pt": 595.2756,
+     "height_pt": 841.8898,
+     "ocr": false,
+     "ocr_mean_conf": null
+    },
+    {
+     "number": 5,
+     "image": "pages/om-p5.png",
+     "width_pt": 595.2756,
+     "height_pt": 841.8898,
+     "ocr": false,
+     "ocr_mean_conf": null
+    }
+   ]
+  }
+ ],
+ "extracted": {
+  "om": {
+   "building_name": {
+    "value": "Bramble Heights",
+    "unit": null,
+    "as_of": null,
+    "quote": "Building name Bramble Heights",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.103,
+       0.4602,
+       0.1137
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "text appears in quote"
+    }
+   },
+   "asset_type": {
+    "value": "mixed_use_residential_retail",
+    "unit": null,
+    "as_of": null,
+    "quote": "Property type Residential building with ground-floor retail",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.124,
+       0.6623,
+       0.1347
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "classification backed by 'retail' in quote"
+    }
+   },
+   "area": {
+    "value": "Jumeirah Village Circle, District 16",
+    "unit": null,
+    "as_of": null,
+    "quote": "Community Jumeirah Village Circle, District 16",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.1449,
+       0.5927,
+       0.1556
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "text appears in quote"
+    }
+   },
+   "market_area": {
+    "value": "JVC",
+    "unit": null,
+    "as_of": null,
+    "quote": "Community Jumeirah Village Circle, District 16",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.1449,
+       0.5927,
+       0.1556
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "quote names 'jumeirah village circle'"
+    }
+   },
+   "plot_number": {
+    "value": "681-9024",
+    "unit": null,
+    "as_of": null,
+    "quote": "Plot number 681-9024",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.1659,
+       0.4067,
+       0.1766
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "text appears in quote"
+    }
+   },
+   "title_type": {
+    "value": {
+     "tenure": "freehold",
+     "ownership": "single_title"
+    },
+    "unit": null,
+    "as_of": null,
+    "quote": "Ownership Freehold (single title)",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.1869,
+       0.4958,
+       0.1976
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "backed by tenure=freehold ('freehold'), ownership=single_title ('single title')"
+    }
+   },
+   "completion_year": {
+    "value": 2023,
+    "unit": null,
+    "as_of": null,
+    "quote": "Completion year 2023",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.2288,
+       0.3724,
+       0.2395
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches '2023'"
+    }
+   },
+   "floors": {
+    "value": "G+P+10",
+    "unit": null,
+    "as_of": null,
+    "quote": "Floors G+P+10",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.2078,
+       0.3993,
+       0.2185
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "text appears in quote"
+    }
+   },
+   "unit_count": {
+    "value": 122,
+    "unit": null,
+    "as_of": null,
+    "quote": "Total units\n122",
+    "source": {
+     "doc": "om.pdf",
+     "page": 2,
+     "bbox": [
+      [
+       0.3684,
+       0.1813,
+       0.4376,
+       0.1905
+      ],
+      [
+       0.3684,
+       0.204,
+       0.4123,
+       0.2188
+      ]
+     ],
+     "match": "normalised",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (normalised)",
+     "value": "matches '122'"
+    }
+   },
+   "unit_mix": {
+    "value": {
+     "studio": 20,
+     "1br": 70,
+     "2br": 30,
+     "retail": 2
+    },
+    "unit": null,
+    "as_of": null,
+    "quote": "122 units: 20 x studio, 70 x 1 bedroom, 30 x 2 bedroom, 2 x retail",
+    "source": {
+     "doc": "om.pdf",
+     "page": 2,
+     "bbox": [
+      [
+       0.099,
+       0.5639,
+       0.6116,
+       0.5748
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "every count appears in the quote"
+    }
+   },
+   "bua_sqft": {
+    "value": 133610.0,
+    "unit": "sqft",
+    "as_of": null,
+    "quote": "BUA 133,610 sq ft",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.2498,
+       0.4348,
+       0.2605
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "stated": {
+     "value": 133610,
+     "unit": "sqft"
+    },
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches '133,610 sq ft'"
+    }
+   },
+   "nsa_sqft": {
+    "value": 94861.0,
+    "unit": "sqft",
+    "as_of": null,
+    "quote": "Saleable area 94,861 sq ft",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.2707,
+       0.4251,
+       0.2814
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "stated": {
+     "value": 94861,
+     "unit": "sqft"
+    },
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches '94,861 sq ft'"
+    }
+   },
+   "parking_spaces": {
+    "value": 134,
+    "unit": null,
+    "as_of": null,
+    "quote": "Parking 134",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.2917,
+       0.3628,
+       0.3024
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches '134'"
+    }
+   },
+   "occupancy_stated": {
+    "value": 0.91,
+    "unit": "ratio",
+    "as_of": null,
+    "quote": "Occupancy\n91%",
+    "source": {
+     "doc": "om.pdf",
+     "page": 2,
+     "bbox": [
+      [
+       0.3684,
+       0.1191,
+       0.4439,
+       0.1283
+      ],
+      [
+       0.0851,
+       0.204,
+       0.1353,
+       0.2188
+      ]
+     ],
+     "match": "normalised",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (normalised)",
+     "value": "matches '91%'"
+    }
+   },
+   "annual_rent_stated": {
+    "value": 10530000.0,
+    "unit": "AED",
+    "as_of": null,
+    "quote": "Gross Rental Income (100% occupancy) AED 10,530,000",
+    "source": {
+     "doc": "om.pdf",
+     "page": 4,
+     "bbox": [
+      [
+       0.1053,
+       0.1056,
+       0.8947,
+       0.1181
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "basis": "potential",
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches 'AED 10,530,000'"
+    }
+   },
+   "net_income_stated_aed": {
+    "value": null,
+    "unit": null,
+    "as_of": null,
+    "quote": null,
+    "source": null,
+    "status": "not_stated",
+    "reason": "not stated in the OM"
+   },
+   "opex_stated_aed": {
+    "value": null,
+    "unit": null,
+    "as_of": null,
+    "quote": null,
+    "source": null,
+    "status": "not_stated",
+    "reason": "not stated in the OM"
+   },
+   "yield_stated": {
+    "value": 0.0721,
+    "unit": "ratio",
+    "as_of": null,
+    "quote": "Gross Yield 7.21%",
+    "source": {
+     "doc": "om.pdf",
+     "page": 4,
+     "bbox": [
+      [
+       0.1053,
+       0.1595,
+       0.8947,
+       0.1732
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "basis": {
+     "measure": "gross",
+     "on": "asking_price"
+    },
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches '7.21%'"
+    }
+   },
+   "asking_price_aed": {
+    "value": 146000000.0,
+    "unit": "AED",
+    "as_of": null,
+    "quote": "Asking Price AED 146,000,000",
+    "source": {
+     "doc": "om.pdf",
+     "page": 4,
+     "bbox": [
+      [
+       0.1053,
+       0.1324,
+       0.8947,
+       0.1449
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "matches 'AED 146,000,000'"
+    }
+   },
+   "price_psf_stated": {
+    "value": 1539.0,
+    "unit": "AED/sqft",
+    "as_of": null,
+    "quote": "Price per sq ft\nAED 1,539 (saleable)",
+    "source": {
+     "doc": "om.pdf",
+     "page": 2,
+     "bbox": [
+      [
+       0.6518,
+       0.1813,
+       0.7431,
+       0.1905
+      ],
+      [
+       0.6518,
+       0.204,
+       0.8988,
+       0.2188
+      ]
+     ],
+     "match": "normalised",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "basis": "nsa",
+    "checks": {
+     "quote": "found (normalised)",
+     "value": "matches 'AED 1,539'"
+    }
+   },
+   "chiller_arrangement": {
+    "value": "tenant_pays",
+    "unit": null,
+    "as_of": null,
+    "quote": "Chiller District cooling - paid by tenants",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.3127,
+       0.5807,
+       0.3234
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "classification backed by 'chiller' in quote"
+    }
+   },
+   "lease_structure": {
+    "value": {
+     "type": "direct_leases",
+     "master_tenant": null
+    },
+    "unit": null,
+    "as_of": null,
+    "quote": "Tenancy Direct leases",
+    "source": {
+     "doc": "om.pdf",
+     "page": 3,
+     "bbox": [
+      [
+       0.0863,
+       0.3336,
+       0.4321,
+       0.3443
+      ]
+     ],
+     "match": "exact",
+     "similarity": 1.0,
+     "ocr": false
+    },
+    "status": "verified",
+    "reason": null,
+    "checks": {
+     "quote": "found (exact)",
+     "value": "backed by 'lease'"
+    }
+   },
+   "upside_claims": [
+    {
+     "quote": "Reversionary potential: passing rents sit c.10% below asking rents for comparable new lettings in the",
+     "applies_to": "passing rents vs asking rents for comparable new lettings",
+     "claimed_uplift": 0.1,
+     "source": {
+      "doc": "om.pdf",
+      "page": 4,
+      "bbox": [
+       [
+        0.0762,
+        0.2585,
+        0.8641,
+        0.2694
+       ]
+      ],
+      "match": "exact",
+      "similarity": 1.0
+     },
+     "status": "unverified",
+     "reason": "claimed uplift: no number in quote"
+    },
+    {
+     "quote": "As leases renew and re-let through 2027, we expect gross income to rise by c.AED 1.15m",
+     "applies_to": "leases renewing and re-letting through 2027",
+     "claimed_uplift": null,
+     "source": {
+      "doc": "om.pdf",
+      "page": 4,
+      "bbox": [
+       [
+        0.1732,
+        0.2742,
+        0.8687,
+        0.2851
+       ]
+      ],
+      "match": "exact",
+      "similarity": 1.0
+     },
+     "status": "verified",
+     "reason": null
+    }
+   ]
+  }
+ },
+ "rent_roll_summary": null,
+ "opex": {
+  "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+  "period": {
+   "start": "2025-10-01",
+   "end": "2026-09-30",
+   "months_covered": 12,
+   "presented_as_annual": false,
+   "annualised": false,
+   "evidence": [
+    {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "A3",
+     "quote": "Period: October 2025 to September 2026  |  AED, cash basis",
+     "status": "verified",
+     "reason": null
+    },
+    {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "A2",
+     "quote": "Monthly Profit & Loss Oct 2025 - Sep 2026",
+     "status": "verified",
+     "reason": null
+    },
+    {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "B5:N5",
+     "quote": "Oct-25 | Nov-25 | ... | Sep-26 | Total",
+     "status": "unverified",
+     "reason": "quote not found in the cited cells"
+    }
+   ],
+   "months_used": 12,
+   "annualisation": {
+    "factor": 1.0,
+    "note": "amounts are for a 12-month period"
+   }
+  },
+  "amount_basis": "period_total",
+  "vat_basis": "includes_vat",
+  "lines": [
+   {
+    "label": "Rent - residential",
+    "category": "rental_income",
+    "sign": "income",
+    "note": null,
+    "amount_aed": 9349499.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N7",
+     "label_cell": "T12!A7"
+    }
+   },
+   {
+    "label": "Rent - retail",
+    "category": "rental_income",
+    "sign": "income",
+    "note": "Shop rent counts as rental income.",
+    "amount_aed": 309000.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N8",
+     "label_cell": "T12!A8"
+    }
+   },
+   {
+    "label": "Other income",
+    "category": "other_income",
+    "sign": "income",
+    "note": null,
+    "amount_aed": 58000.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N9",
+     "label_cell": "T12!A9"
+    }
+   },
+   {
+    "label": "Total income",
+    "category": "total_or_subtotal",
+    "sign": "income",
+    "note": null,
+    "amount_aed": 9716499.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N10",
+     "label_cell": "T12!A10"
+    }
+   },
+   {
+    "label": "FM contract",
+    "category": "maintenance_repairs",
+    "sign": "expense",
+    "note": "Facilities management contract; mapped to maintenance as it is not specified as security or cleaning.",
+    "amount_aed": 236871.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N13",
+     "label_cell": "T12!A13"
+    }
+   },
+   {
+    "label": "Lift AMC",
+    "category": "maintenance_repairs",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 49744.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N14",
+     "label_cell": "T12!A14"
+    }
+   },
+   {
+    "label": "Fire fighting AMC",
+    "category": "maintenance_repairs",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 28672.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N15",
+     "label_cell": "T12!A15"
+    }
+   },
+   {
+    "label": "R&M - general",
+    "category": "maintenance_repairs",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 108015.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N16",
+     "label_cell": "T12!A16"
+    }
+   },
+   {
+    "label": "Pest control / tank cleaning",
+    "category": "maintenance_repairs",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 10960.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N17",
+     "label_cell": "T12!A17"
+    }
+   },
+   {
+    "label": "BMU / facade cleaning",
+    "category": "maintenance_repairs",
+    "sign": "expense",
+    "note": "Facade maintenance.",
+    "amount_aed": 27335.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N18",
+     "label_cell": "T12!A18"
+    }
+   },
+   {
+    "label": "Security",
+    "category": "security_cleaning",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 116408.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N19",
+     "label_cell": "T12!A19"
+    }
+   },
+   {
+    "label": "Cleaning",
+    "category": "security_cleaning",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 89450.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N20",
+     "label_cell": "T12!A20"
+    }
+   },
+   {
+    "label": "Garbage collection",
+    "category": "security_cleaning",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 15797.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N21",
+     "label_cell": "T12!A21"
+    }
+   },
+   {
+    "label": "DEWA common",
+    "category": "utilities_common",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 186436.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N22",
+     "label_cell": "T12!A22"
+    }
+   },
+   {
+    "label": "Building insurance",
+    "category": "insurance",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 104399.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N23",
+     "label_cell": "T12!A23"
+    }
+   },
+   {
+    "label": "Master community charges",
+    "category": "service_charge",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 100463.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N24",
+     "label_cell": "T12!A24"
+    }
+   },
+   {
+    "label": "Mgmt fee",
+    "category": "property_management",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 482923.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N25",
+     "label_cell": "T12!A25"
+    }
+   },
+   {
+    "label": "Leasing commission",
+    "category": "marketing_leasing",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 52306.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N26",
+     "label_cell": "T12!A26"
+    }
+   },
+   {
+    "label": "Advertising",
+    "category": "marketing_leasing",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 21037.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N27",
+     "label_cell": "T12!A27"
+    }
+   },
+   {
+    "label": "Admin & Ejari",
+    "category": "admin_other",
+    "sign": "expense",
+    "note": "Combined admin and Ejari fees in one line; mapped to admin_other.",
+    "amount_aed": 44677.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N28",
+     "label_cell": "T12!A28"
+    }
+   },
+   {
+    "label": "Sinking fund",
+    "category": "sinking_fund",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 104360.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N29",
+     "label_cell": "T12!A29"
+    }
+   },
+   {
+    "label": "Total operating expenses",
+    "category": "total_or_subtotal",
+    "sign": "expense",
+    "note": null,
+    "amount_aed": 1779853.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N30",
+     "label_cell": "T12!A30"
+    }
+   },
+   {
+    "label": "NET OPERATING INCOME",
+    "category": "total_or_subtotal",
+    "sign": "income",
+    "note": null,
+    "amount_aed": 7936646.0,
+    "status": "verified",
+    "reason": null,
+    "source": {
+     "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx",
+     "cell": "T12!N32",
+     "label_cell": "T12!A32"
+    }
+   }
+  ],
+  "totals_by_category": {
+   "rental_income": 9658499.0,
+   "other_income": 58000.0,
+   "maintenance_repairs": 461597.0,
+   "security_cleaning": 221655.0,
+   "utilities_common": 186436.0,
+   "insurance": 104399.0,
+   "service_charge": 100463.0,
+   "property_management": 482923.0,
+   "marketing_leasing": 73343.0,
+   "admin_other": 44677.0,
+   "sinking_fund": 104360.0
+  },
+  "total_income_aed": 9716499.0,
+  "total_deductions_aed": 0.0,
+  "total_expenses_aed": 1779853.0,
+  "noi_aed": 7936646.0,
+  "opex_ratio": 0.1832,
+  "stated_total_checks": [
+   {
+    "measure": "total_income",
+    "label": "Total income",
+    "stated_aed": 9716499.0,
+    "stated_annualised_aed": 9716499.0,
+    "computed_aed": 9716499.0,
+    "foots": true,
+    "cell": "T12!N10"
+   },
+   {
+    "measure": "total_expenses",
+    "label": "Total operating expenses",
+    "stated_aed": 1779853.0,
+    "stated_annualised_aed": 1779853.0,
+    "computed_aed": 1779853.0,
+    "foots": true,
+    "cell": "T12!N30"
+   },
+   {
+    "measure": "noi",
+    "label": "NET OPERATING INCOME",
+    "stated_aed": 7936646.0,
+    "stated_annualised_aed": 7936646.0,
+    "computed_aed": 7936646.0,
+    "foots": true,
+    "cell": "T12!N32"
+   }
+  ],
+  "absent_standard_categories": [],
+  "unverified_lines": [],
+  "prior_period": null,
+  "notes": "The Total column (N) gives the 12-month total for every line. The statement is described as \"Unaudited management accounts\" on a cash basis. The footnote in A34 is truncated. The footnote in A35 says expenses include VAT that is not recoverable, so I set vat_basis to includes_vat, though the income VAT treatment isn't visible. The period ends Sep-26, so check whether the later months are actuals. There is no district cooling line, vacancy or collection loss line, or non-operating line. No cooling cost is shown, so check whether the building has district cooling."
+ },
+ "discrepancies": [
+  {
+   "id": "potential_rent_as_income",
+   "severity": "medium",
+   "title": "Headline income and 7.21% yield use 100% occupancy rent, but the OM states 91% occupancy",
+   "sources": [
+    {
+     "doc": "om.pdf",
+     "page": 4,
+     "cell": null,
+     "bbox": [
+      [
+       0.1053,
+       0.1056,
+       0.8947,
+       0.1181
+      ]
+     ],
+     "quote": "Gross Rental Income (100% occupancy) AED 10,530,000",
+     "value": null,
+     "unit": "text",
+     "label": "verified quote"
+    },
+    {
+     "doc": "om.pdf",
+     "page": 4,
+     "cell": null,
+     "bbox": [
+      [
+       0.0762,
+       0.1974,
+       0.5416,
+       0.2057
+      ]
+     ],
+     "quote": "Rental income as per the current rent roll. Yield calculated on the asking price.",
+     "value": null,
+     "unit": "text",
+     "label": "verified quote"
+    },
+    {
+     "doc": "om.pdf",
+     "page": 2,
+     "cell": null,
+     "bbox": [
+      [
+       0.3684,
+       0.1191,
+       0.4439,
+       0.1283
+      ],
+      [
+       0.0851,
+       0.204,
+       0.1353,
+       0.2188
+      ]
+     ],
+     "quote": "Occupancy\n91%",
+     "value": null,
+     "unit": "text",
+     "label": "verified quote"
+    }
+   ],
+   "relied_on": "documents",
+   "why": "The OM labels the income as the current rent roll, but the figure is stated at 100% occupancy while the same OM gives occupancy of 91%. The 7.21% gross yield therefore counts rent on vacant units that is not being earned. It is a gross figure on asking price, with no operating costs deducted, so it overstates what a buyer would receive today.",
+   "impact": null,
+   "analyst_action": "Request the dated rent roll with contracted rent for let units only. Recompute the in-place gross and net yield on let units, and reconcile the result to the trailing 12-month P&L.",
+   "detected_by": "model",
+   "related_party": null,
+   "unverified_evidence": []
+  },
+  {
+   "id": "upside_exceeds_rera_cap",
+   "severity": "medium",
+   "title": "Reversion claim of c.+12% income within 12 months ignores RERA caps and softer 2026 rents",
+   "sources": [
+    {
+     "doc": "om.pdf",
+     "page": 4,
+     "cell": null,
+     "bbox": [
+      [
+       0.0762,
+       0.2585,
+       0.8641,
+       0.2694
+      ]
+     ],
+     "quote": "Reversionary potential: passing rents sit c.10% below asking rents for comparable new lettings in the",
+     "value": null,
+     "unit": "text",
+     "label": "verified quote"
+    },
+    {
+     "doc": "om.pdf",
+     "page": 4,
+     "cell": null,
+     "bbox": [
+      [
+       0.0762,
+       0.2898,
+       0.28,
+       0.3008
+      ]
+     ],
+     "quote": "(+12%) within 12 months.",
+     "value": null,
+     "unit": "text",
+     "label": "verified quote"
+    }
+   ],
+   "relied_on": "documents",
+   "why": "The OM bases the uplift on asking rents for new lettings. Increases on existing tenancies can only happen at renewal, are capped in bands by the gap to the RERA rental index, and need 90 days' notice. The OM does not mention these limits or the 2026 fall in market rents. The claimed rise of c.AED 1.15m (+12%) in 12 months is therefore unlikely to be achievable and should not be used in pricing.",
+   "impact": null,
+   "analyst_action": "Do not underwrite the uplift. Obtain the lease expiry schedule and test each renewal against the RERA rental index calculator. Compare passing rents with achieved 2026 transactions, not asking rents.",
+   "detected_by": "model",
+   "related_party": null,
+   "unverified_evidence": []
+  }
+ ],
+ "notices": [],
+ "diligence_checklist": [
+  {
+   "id": "title_eligibility",
+   "text": "Title deed and DLD ownership search: freehold status, single title, and that the buyer is eligible to own the plot."
+  },
+  {
+   "id": "completion_certificate",
+   "text": "Building completion certificate (Dubai Municipality) for the as-built building."
+  },
+  {
+   "id": "affection_plan",
+   "text": "Affection plan and permitted use: confirm residential use and the plot's permitted floors match the building."
+  },
+  {
+   "id": "ejari_export",
+   "text": "Ejari export for every lease, reconciled to the rent roll unit by unit."
+  },
+  {
+   "id": "civil_defence_cladding",
+   "text": "Civil Defence completion and annual fire-safety certificates, and ACP cladding compliance."
+  }
+ ],
+ "rejected_model_findings": [],
+ "underwriting": {
+  "status": "not_underwritten",
+  "error": "CannotUnderwrite: no parsed rent roll",
+  "deal_inputs": null,
+  "inputs_provenance": {},
+  "outputs": null,
+  "sensitivities": null,
+  "noi_bridge": null
+ },
+ "mandate_fit": {
+  "verdict": "Needs work",
+  "reason": "Blocked on unknown hard filter(s): min_units, max_units; 6 soft miss(es) or unknown(s).",
+  "hard_fails": 0,
+  "soft_fails": 6,
+  "unknown": 8,
+  "blocked_on": [
+   "min_units",
+   "max_units"
+  ],
+  "stop_reason": null,
+  "tests": [
+   {
+    "name": "asset_type",
+    "kind": "hard",
+    "threshold": [
+     "residential_building",
+     "mixed_use_residential"
+    ],
+    "actual": "residential_building",
+    "passed": true,
+    "status": "pass",
+    "reason": "Asset type 'residential_building' is in the mandate.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "title",
+    "kind": "hard",
+    "threshold": [
+     "freehold_single_title"
+    ],
+    "actual": "freehold_single_title",
+    "passed": true,
+    "status": "pass",
+    "reason": "Title 'freehold_single_title' is in the mandate.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "areas",
+    "kind": "hard",
+    "threshold": [
+     "JVC",
+     "Dubai Silicon Oasis",
+     "International City",
+     "Al Barsha South",
+     "Business Bay"
+    ],
+    "actual": "JVC",
+    "passed": true,
+    "status": "pass",
+    "reason": "Area 'JVC' is in the mandate.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "min_units",
+    "kind": "hard",
+    "threshold": 30,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Unit count unknown; blocks the verdict until known.",
+    "source": "deal_facts",
+    "decisive": true,
+    "screen_note": "Minimum unit count is not known; confirm before any further work."
+   },
+   {
+    "name": "max_units",
+    "kind": "hard",
+    "threshold": 250,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Unit count unknown; blocks the verdict until known.",
+    "source": "deal_facts",
+    "decisive": true,
+    "screen_note": "Maximum unit count is not known; confirm before any further work."
+   },
+   {
+    "name": "min_price_aed",
+    "kind": "hard",
+    "threshold": 30000000,
+    "actual": 146000000.0,
+    "passed": true,
+    "status": "pass",
+    "reason": "Price AED 146,000,000 meets the at least AED 30,000,000 requirement.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "max_price_aed",
+    "kind": "hard",
+    "threshold": 200000000,
+    "actual": 146000000.0,
+    "passed": true,
+    "status": "pass",
+    "reason": "Price AED 146,000,000 meets the at most AED 200,000,000 requirement.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "min_completion_year",
+    "kind": "hard",
+    "threshold": 2008,
+    "actual": 2023,
+    "passed": true,
+    "status": "pass",
+    "reason": "Completion year 2023 meets the at least 2008 requirement.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "no_master_lease_to_related_party",
+    "kind": "hard",
+    "threshold": false,
+    "actual": false,
+    "passed": true,
+    "status": "pass",
+    "reason": "No master lease to a related party.",
+    "source": "deal_facts",
+    "decisive": true
+   },
+   {
+    "name": "min_going_in_net_yield_on_cost",
+    "kind": "soft",
+    "threshold": 0.06,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Going-in net yield on cost unknown; counts as a soft miss.",
+    "source": "engine",
+    "decisive": true
+   },
+   {
+    "name": "target_unlevered_irr",
+    "kind": "soft",
+    "threshold": 0.075,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Unlevered IRR (pre-tax) unknown; counts as a soft miss.",
+    "source": "engine",
+    "decisive": true
+   },
+   {
+    "name": "target_unlevered_equity_multiple",
+    "kind": "soft",
+    "threshold": 1.3,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Unlevered equity multiple (pre-tax) unknown; counts as a soft miss.",
+    "source": "engine",
+    "decisive": true
+   },
+   {
+    "name": "min_occupancy",
+    "kind": "soft",
+    "threshold": 0.9,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Occupancy by units unknown; counts as a soft miss.",
+    "source": "engine",
+    "decisive": true
+   },
+   {
+    "name": "max_lease_expiry_share_in_any_quarter",
+    "kind": "soft",
+    "threshold": 0.4,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Largest 3-month lease expiry share (12 months from the rent roll date) unknown; counts as a soft miss.",
+    "source": "engine",
+    "decisive": true
+   },
+   {
+    "name": "max_over_rent_share_of_income",
+    "kind": "soft",
+    "threshold": 0.2,
+    "actual": null,
+    "passed": null,
+    "status": "unknown",
+    "reason": "Share of income let above the reference by more than the threshold unknown; counts as a soft miss.",
+    "source": "engine",
+    "decisive": true
+   }
+  ],
+  "headline": "Needs work, blocked on minimum unit count, maximum unit count: Minimum unit count is not known; confirm before any further work. Maximum unit count is not known; confirm before any further work.",
+  "plain_reason": "Cannot yet test going-in net yield on total cost, unlevered IRR target, unlevered equity multiple target, minimum occupancy, lease expiry concentration, share of income let above the screen reference.",
+  "stop_reason_plain": null,
+  "blocked_on_statements": [
+   {
+    "test": "min_units",
+    "statement": "Minimum unit count is not known; confirm before any further work."
+   },
+   {
+    "test": "max_units",
+    "statement": "Maximum unit count is not known; confirm before any further work."
+   }
+  ],
+  "tests_in_words": {
+   "asset_type": "asset type",
+   "title": "freehold single title",
+   "areas": "location in a mandate area",
+   "min_units": "minimum unit count",
+   "max_units": "maximum unit count",
+   "min_price_aed": "minimum price",
+   "max_price_aed": "maximum price",
+   "min_completion_year": "building age",
+   "no_master_lease_to_related_party": "no master lease to a related party",
+   "min_going_in_net_yield_on_cost": "going-in net yield on total cost",
+   "target_unlevered_irr": "unlevered IRR target",
+   "target_unlevered_equity_multiple": "unlevered equity multiple target",
+   "min_occupancy": "minimum occupancy",
+   "max_lease_expiry_share_in_any_quarter": "lease expiry concentration",
+   "max_over_rent_share_of_income": "share of income let above the screen reference"
+  },
+  "deal_facts": {
+   "asset_type": "residential_building",
+   "area": "JVC",
+   "title_type": "freehold_single_title",
+   "price_aed": 146000000.0,
+   "completion_year": 2023,
+   "lease_structure": "direct_leases",
+   "master_lease_related_party": false
+  },
+  "deal_facts_provenance": {
+   "asset_type": {
+    "from": "om.asset_type",
+    "status": "verified",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.124,
+      0.6623,
+      0.1347
+     ]
+    ],
+    "quote": "Property type Residential building with ground-floor retail"
+   },
+   "area": {
+    "from": "om.market_area",
+    "status": "verified",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.1449,
+      0.5927,
+      0.1556
+     ]
+    ],
+    "quote": "Community Jumeirah Village Circle, District 16"
+   },
+   "title_type": {
+    "from": "om.title_type",
+    "status": "verified",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.1869,
+      0.4958,
+      0.1976
+     ]
+    ],
+    "quote": "Ownership Freehold (single title)"
+   },
+   "price_aed": {
+    "from": "om.asking_price_aed",
+    "status": "verified",
+    "doc": "om.pdf",
+    "page": 4,
+    "bbox": [
+     [
+      0.1053,
+      0.1324,
+      0.8947,
+      0.1449
+     ]
+    ],
+    "quote": "Asking Price AED 146,000,000"
+   },
+   "completion_year": {
+    "from": "om.completion_year",
+    "status": "verified",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.2288,
+      0.3724,
+      0.2395
+     ]
+    ],
+    "quote": "Completion year 2023"
+   },
+   "lease_structure": {
+    "from": "OM lease_structure (verified) and model review",
+    "value": "direct_leases",
+    "related_party": false
+   }
+  },
+  "lease_structure_conclusion": "direct_leases"
+ },
+ "fact_sheet": {
+  "deal.building_name": {
+   "value": "Bramble Heights",
+   "unit": "text",
+   "label": "building name",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.103,
+      0.4602,
+      0.1137
+     ]
+    ],
+    "quote": "Building name Bramble Heights",
+    "status": "verified"
+   }
+  },
+  "deal.location": {
+   "value": "Jumeirah Village Circle, District 16",
+   "unit": "text",
+   "label": "location as stated in the OM",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.1449,
+      0.5927,
+      0.1556
+     ]
+    ],
+    "quote": "Community Jumeirah Village Circle, District 16",
+    "status": "verified"
+   }
+  },
+  "deal.market_area": {
+   "value": "JVC",
+   "unit": "text",
+   "label": "market area",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.1449,
+      0.5927,
+      0.1556
+     ]
+    ],
+    "quote": "Community Jumeirah Village Circle, District 16",
+    "status": "verified"
+   }
+  },
+  "deal.completion_year": {
+   "value": 2023,
+   "unit": "year",
+   "label": "completion year",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.2288,
+      0.3724,
+      0.2395
+     ]
+    ],
+    "quote": "Completion year 2023",
+    "status": "verified"
+   }
+  },
+  "deal.floors": {
+   "value": "G+P+10",
+   "unit": "text",
+   "label": "floors",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.2078,
+      0.3993,
+      0.2185
+     ]
+    ],
+    "quote": "Floors G+P+10",
+    "status": "verified"
+   }
+  },
+  "deal.asking_price_aed": {
+   "value": 146000000.0,
+   "unit": "AED",
+   "label": "asking price",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 4,
+    "bbox": [
+     [
+      0.1053,
+      0.1324,
+      0.8947,
+      0.1449
+     ]
+    ],
+    "quote": "Asking Price AED 146,000,000",
+    "status": "verified"
+   }
+  },
+  "om.unit_count": {
+   "value": 122,
+   "unit": "units",
+   "label": "unit count stated in the OM",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 2,
+    "bbox": [
+     [
+      0.3684,
+      0.1813,
+      0.4376,
+      0.1905
+     ],
+     [
+      0.3684,
+      0.204,
+      0.4123,
+      0.2188
+     ]
+    ],
+    "quote": "Total units\n122",
+    "status": "verified"
+   }
+  },
+  "om.nsa_sqft": {
+   "value": 94861.0,
+   "unit": "sqft",
+   "label": "NSA stated in the OM (sq ft)",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.2707,
+      0.4251,
+      0.2814
+     ]
+    ],
+    "quote": "Saleable area 94,861 sq ft",
+    "status": "verified"
+   }
+  },
+  "deal.bua_sqft": {
+   "value": 133610.0,
+   "unit": "sqft",
+   "label": "BUA stated in the OM (sq ft)",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.2498,
+      0.4348,
+      0.2605
+     ]
+    ],
+    "quote": "BUA 133,610 sq ft",
+    "status": "verified"
+   }
+  },
+  "om.occupancy_stated": {
+   "value": 0.91,
+   "unit": "ratio",
+   "label": "occupancy stated in the OM",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 2,
+    "bbox": [
+     [
+      0.3684,
+      0.1191,
+      0.4439,
+      0.1283
+     ],
+     [
+      0.0851,
+      0.204,
+      0.1353,
+      0.2188
+     ]
+    ],
+    "quote": "Occupancy\n91%",
+    "status": "verified"
+   }
+  },
+  "om.annual_rent_stated": {
+   "value": 10530000.0,
+   "unit": "AED/yr",
+   "label": "annual rent stated in the OM",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 4,
+    "bbox": [
+     [
+      0.1053,
+      0.1056,
+      0.8947,
+      0.1181
+     ]
+    ],
+    "quote": "Gross Rental Income (100% occupancy) AED 10,530,000",
+    "status": "verified"
+   }
+  },
+  "om.yield_stated": {
+   "value": 0.0721,
+   "unit": "ratio",
+   "label": "headline yield stated in the OM",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 4,
+    "bbox": [
+     [
+      0.1053,
+      0.1595,
+      0.8947,
+      0.1732
+     ]
+    ],
+    "quote": "Gross Yield 7.21%",
+    "status": "verified"
+   }
+  },
+  "om.price_psf_stated": {
+   "value": 1539.0,
+   "unit": "AED/sqft",
+   "label": "price per sq ft stated in the OM",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 2,
+    "bbox": [
+     [
+      0.6518,
+      0.1813,
+      0.7431,
+      0.1905
+     ],
+     [
+      0.6518,
+      0.204,
+      0.8988,
+      0.2188
+     ]
+    ],
+    "quote": "Price per sq ft\nAED 1,539 (saleable)",
+    "status": "verified"
+   }
+  },
+  "deal.title": {
+   "value": "{\"tenure\": \"freehold\", \"ownership\": \"single_title\"}",
+   "unit": "text",
+   "label": "title as stated",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.1869,
+      0.4958,
+      0.1976
+     ]
+    ],
+    "quote": "Ownership Freehold (single title)",
+    "status": "verified"
+   }
+  },
+  "deal.chiller": {
+   "value": "tenant_pays",
+   "unit": "text",
+   "label": "chiller arrangement as stated",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.3127,
+      0.5807,
+      0.3234
+     ]
+    ],
+    "quote": "Chiller District cooling - paid by tenants",
+    "status": "verified"
+   }
+  },
+  "deal.lease_structure": {
+   "value": "{\"type\": \"direct_leases\", \"master_tenant\": null}",
+   "unit": "text",
+   "label": "lease structure as stated",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 3,
+    "bbox": [
+     [
+      0.0863,
+      0.3336,
+      0.4321,
+      0.3443
+     ]
+    ],
+    "quote": "Tenancy Direct leases",
+    "status": "verified"
+   }
+  },
+  "om.annual_rent_basis": {
+   "value": "\"potential\"",
+   "unit": "text",
+   "label": "the OM's own basis for annual_rent_stated",
+   "source": null
+  },
+  "om.yield_basis": {
+   "value": "{\"measure\": \"gross\", \"on\": \"asking_price\"}",
+   "unit": "text",
+   "label": "the OM's own basis for yield_stated",
+   "source": null
+  },
+  "om.price_psf_basis": {
+   "value": "\"nsa\"",
+   "unit": "text",
+   "label": "the OM's own basis for price_psf_stated",
+   "source": null
+  },
+  "om.upside_claim_1": {
+   "value": "As leases renew and re-let through 2027, we expect gross income to rise by c.AED 1.15m",
+   "unit": "text",
+   "label": "OM upside claim (verbatim)",
+   "source": {
+    "kind": "document",
+    "doc": "om.pdf",
+    "page": 4,
+    "bbox": [
+     [
+      0.1732,
+      0.2742,
+      0.8687,
+      0.2851
+     ]
+    ],
+    "match": "exact",
+    "similarity": 1.0,
+    "quote": "As leases renew and re-let through 2027, we expect gross income to rise by c.AED 1.15m"
+   }
+  },
+  "screen.unverified_om_fields": {
+   "value": "none",
+   "unit": "text",
+   "label": "material OM figures whose quote or value failed verification (not used)",
+   "source": null
+  },
+  "screen.not_stated_om_fields": {
+   "value": "net_income_stated_aed, opex_stated_aed",
+   "unit": "text",
+   "label": "OM fields the OM does not state",
+   "source": null
+  },
+  "screen.house_view": {
+   "value": "The walk-away price and the returns rest on the firm's house view (screen reference rent path, exit yield, vacancy and downtime), not on market evidence for this building.",
+   "unit": "text",
+   "label": "what the walk-away price and returns rest on",
+   "source": null
+  },
+  "opex.months": {
+   "value": 12,
+   "unit": "months",
+   "label": "months covered by the operating statement",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.period": {
+   "value": "2025-10-01 to 2026-09-30",
+   "unit": "text",
+   "label": "statement period",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.annualisation": {
+   "value": "amounts are for a 12-month period",
+   "unit": "text",
+   "label": "how statement figures were annualised",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.total_income_aed": {
+   "value": 9716499.0,
+   "unit": "AED/yr",
+   "label": "statement income net of losses (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.total_expenses_aed": {
+   "value": 1779853.0,
+   "unit": "AED/yr",
+   "label": "statement operating expenses (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.noi_aed": {
+   "value": 7936646.0,
+   "unit": "AED/yr",
+   "label": "statement NOI before the screen's adjustments (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.opex_ratio": {
+   "value": 0.1832,
+   "unit": "ratio",
+   "label": "statement expenses / income",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.rental_income": {
+   "value": 9658499.0,
+   "unit": "AED/yr",
+   "label": "statement rental income (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.other_income": {
+   "value": 58000.0,
+   "unit": "AED/yr",
+   "label": "statement other income (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.maintenance_repairs": {
+   "value": 461597.0,
+   "unit": "AED/yr",
+   "label": "statement maintenance repairs (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.security_cleaning": {
+   "value": 221655.0,
+   "unit": "AED/yr",
+   "label": "statement security cleaning (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.utilities_common": {
+   "value": 186436.0,
+   "unit": "AED/yr",
+   "label": "statement utilities common (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.insurance": {
+   "value": 104399.0,
+   "unit": "AED/yr",
+   "label": "statement insurance (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.service_charge": {
+   "value": 100463.0,
+   "unit": "AED/yr",
+   "label": "statement service charge (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.property_management": {
+   "value": 482923.0,
+   "unit": "AED/yr",
+   "label": "statement property management (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.marketing_leasing": {
+   "value": 73343.0,
+   "unit": "AED/yr",
+   "label": "statement marketing leasing (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.admin_other": {
+   "value": 44677.0,
+   "unit": "AED/yr",
+   "label": "statement admin other (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.sinking_fund": {
+   "value": 104360.0,
+   "unit": "AED/yr",
+   "label": "statement sinking fund (annual)",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "opex.absent_standard_categories": {
+   "value": "none",
+   "unit": "text",
+   "label": "standard costs absent from the statement",
+   "source": {
+    "kind": "operating_statement",
+    "doc": "Bramble Heights - Monthly P&L Oct25-Sep26.xlsx"
+   }
+  },
+  "mandate.verdict": {
+   "value": "Needs work",
+   "unit": "text",
+   "label": "mandate verdict",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.headline": {
+   "value": "Needs work, blocked on minimum unit count, maximum unit count: Minimum unit count is not known; confirm before any further work. Maximum unit count is not known; confirm before any further work.",
+   "unit": "text",
+   "label": "verdict in plain words",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.reason": {
+   "value": "Cannot yet test going-in net yield on total cost, unlevered IRR target, unlevered equity multiple target, minimum occupancy, lease expiry concentration, share of income let above the screen reference.",
+   "unit": "text",
+   "label": "why, in plain words",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.asset_type": {
+   "value": "asset type: passes. Asset type 'residential_building' is in the mandate.",
+   "unit": "text",
+   "label": "hard mandate test: asset type",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.title": {
+   "value": "freehold single title: passes. Title 'freehold_single_title' is in the mandate.",
+   "unit": "text",
+   "label": "hard mandate test: freehold single title",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.areas": {
+   "value": "location in a mandate area: passes. Area 'JVC' is in the mandate.",
+   "unit": "text",
+   "label": "hard mandate test: location in a mandate area",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_units": {
+   "value": "minimum unit count: not known. Unit count unknown; blocks the verdict until known.",
+   "unit": "text",
+   "label": "hard mandate test: minimum unit count",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_units.threshold": {
+   "value": 30,
+   "unit": "number",
+   "label": "mandate threshold: minimum unit count",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.max_units": {
+   "value": "maximum unit count: not known. Unit count unknown; blocks the verdict until known.",
+   "unit": "text",
+   "label": "hard mandate test: maximum unit count",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.max_units.threshold": {
+   "value": 250,
+   "unit": "number",
+   "label": "mandate threshold: maximum unit count",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.min_price_aed": {
+   "value": "minimum price: passes. Price AED 146,000,000 meets the at least AED 30,000,000 requirement.",
+   "unit": "text",
+   "label": "hard mandate test: minimum price",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_price_aed.threshold": {
+   "value": 30000000,
+   "unit": "number",
+   "label": "mandate threshold: minimum price",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.max_price_aed": {
+   "value": "maximum price: passes. Price AED 146,000,000 meets the at most AED 200,000,000 requirement.",
+   "unit": "text",
+   "label": "hard mandate test: maximum price",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.max_price_aed.threshold": {
+   "value": 200000000,
+   "unit": "number",
+   "label": "mandate threshold: maximum price",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.min_completion_year": {
+   "value": "building age: passes. Completion year 2023 meets the at least 2008 requirement.",
+   "unit": "text",
+   "label": "hard mandate test: building age",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_completion_year.threshold": {
+   "value": 2008,
+   "unit": "year",
+   "label": "mandate threshold: building age",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.no_master_lease_to_related_party": {
+   "value": "no master lease to a related party: passes. No master lease to a related party.",
+   "unit": "text",
+   "label": "hard mandate test: no master lease to a related party",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_going_in_net_yield_on_cost": {
+   "value": "going-in net yield on total cost: not known. Going-in net yield on cost unknown; counts as a soft miss.",
+   "unit": "text",
+   "label": "soft mandate test: going-in net yield on total cost",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_going_in_net_yield_on_cost.threshold": {
+   "value": 0.06,
+   "unit": "ratio",
+   "label": "mandate threshold: going-in net yield on total cost",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.target_unlevered_irr": {
+   "value": "unlevered IRR target: not known. Unlevered IRR (pre-tax) unknown; counts as a soft miss.",
+   "unit": "text",
+   "label": "soft mandate test: unlevered IRR target",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.target_unlevered_irr.threshold": {
+   "value": 0.075,
+   "unit": "ratio",
+   "label": "mandate threshold: unlevered IRR target",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.target_unlevered_equity_multiple": {
+   "value": "unlevered equity multiple target: not known. Unlevered equity multiple (pre-tax) unknown; counts as a soft miss.",
+   "unit": "text",
+   "label": "soft mandate test: unlevered equity multiple target",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.target_unlevered_equity_multiple.threshold": {
+   "value": 1.3,
+   "unit": "x",
+   "label": "mandate threshold: unlevered equity multiple target",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.min_occupancy": {
+   "value": "minimum occupancy: not known. Occupancy by units unknown; counts as a soft miss.",
+   "unit": "text",
+   "label": "soft mandate test: minimum occupancy",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.min_occupancy.threshold": {
+   "value": 0.9,
+   "unit": "ratio",
+   "label": "mandate threshold: minimum occupancy",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.max_lease_expiry_share_in_any_quarter": {
+   "value": "lease expiry concentration: not known. Largest 3-month lease expiry share (12 months from the rent roll date) unknown; counts as a soft miss.",
+   "unit": "text",
+   "label": "soft mandate test: lease expiry concentration",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.max_lease_expiry_share_in_any_quarter.threshold": {
+   "value": 0.4,
+   "unit": "ratio",
+   "label": "mandate threshold: lease expiry concentration",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "mandate.max_over_rent_share_of_income": {
+   "value": "share of income let above the screen reference: not known. Share of income let above the reference by more than the threshold unknown; counts as a soft miss.",
+   "unit": "text",
+   "label": "soft mandate test: share of income let above the screen reference",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.max_over_rent_share_of_income.threshold": {
+   "value": 0.2,
+   "unit": "ratio",
+   "label": "mandate threshold: share of income let above the screen reference",
+   "source": {
+    "kind": "mandate"
+   }
+  },
+  "disc.potential_rent_as_income.severity": {
+   "value": "medium",
+   "unit": "text",
+   "label": "severity of: OM income includes potential rent",
+   "source": {
+    "kind": "discrepancy",
+    "id": "potential_rent_as_income"
+   }
+  },
+  "disc.potential_rent_as_income.title": {
+   "value": "Headline income and 7.21% yield use 100% occupancy rent, but the OM states 91% occupancy",
+   "unit": "text",
+   "label": "discrepancy: OM income includes potential rent",
+   "source": {
+    "kind": "discrepancy",
+    "id": "potential_rent_as_income"
+   }
+  },
+  "disc.potential_rent_as_income.why": {
+   "value": "The OM labels the income as the current rent roll, but the figure is stated at 100% occupancy while the same OM gives occupancy of 91%. The 7.21% gross yield therefore counts rent on vacant units that is not being earned. It is a gross figure on asking price, with no operating costs deducted, so it overstates what a buyer would receive today.",
+   "unit": "text",
+   "label": "why it matters and what the screen relied on: OM income includes potential rent",
+   "source": {
+    "kind": "discrepancy",
+    "id": "potential_rent_as_income"
+   }
+  },
+  "disc.potential_rent_as_income.relied_on": {
+   "value": "the documents",
+   "unit": "text",
+   "label": "source the screen relied on: OM income includes potential rent",
+   "source": {
+    "kind": "discrepancy",
+    "id": "potential_rent_as_income"
+   }
+  },
+  "disc.potential_rent_as_income.analyst_action": {
+   "value": "Request the dated rent roll with contracted rent for let units only. Recompute the in-place gross and net yield on let units, and reconcile the result to the trailing 12-month P&L.",
+   "unit": "text",
+   "label": "analyst action: OM income includes potential rent",
+   "source": {
+    "kind": "discrepancy",
+    "id": "potential_rent_as_income"
+   }
+  },
+  "disc.upside_exceeds_rera_cap.severity": {
+   "value": "medium",
+   "unit": "text",
+   "label": "severity of: uplift claim beyond RERA bands",
+   "source": {
+    "kind": "discrepancy",
+    "id": "upside_exceeds_rera_cap"
+   }
+  },
+  "disc.upside_exceeds_rera_cap.title": {
+   "value": "Reversion claim of c.+12% income within 12 months ignores RERA caps and softer 2026 rents",
+   "unit": "text",
+   "label": "discrepancy: uplift claim beyond RERA bands",
+   "source": {
+    "kind": "discrepancy",
+    "id": "upside_exceeds_rera_cap"
+   }
+  },
+  "disc.upside_exceeds_rera_cap.why": {
+   "value": "The OM bases the uplift on asking rents for new lettings. Increases on existing tenancies can only happen at renewal, are capped in bands by the gap to the RERA rental index, and need 90 days' notice. The OM does not mention these limits or the 2026 fall in market rents. The claimed rise of c.AED 1.15m (+12%) in 12 months is therefore unlikely to be achievable and should not be used in pricing.",
+   "unit": "text",
+   "label": "why it matters and what the screen relied on: uplift claim beyond RERA bands",
+   "source": {
+    "kind": "discrepancy",
+    "id": "upside_exceeds_rera_cap"
+   }
+  },
+  "disc.upside_exceeds_rera_cap.relied_on": {
+   "value": "the documents",
+   "unit": "text",
+   "label": "source the screen relied on: uplift claim beyond RERA bands",
+   "source": {
+    "kind": "discrepancy",
+    "id": "upside_exceeds_rera_cap"
+   }
+  },
+  "disc.upside_exceeds_rera_cap.analyst_action": {
+   "value": "Do not underwrite the uplift. Obtain the lease expiry schedule and test each renewal against the RERA rental index calculator. Compare passing rents with achieved 2026 transactions, not asking rents.",
+   "unit": "text",
+   "label": "analyst action: uplift claim beyond RERA bands",
+   "source": {
+    "kind": "discrepancy",
+    "id": "upside_exceeds_rera_cap"
+   }
+  },
+  "mandate.blocked_on.min_units": {
+   "value": "Minimum unit count is not known; confirm before any further work.",
+   "unit": "text",
+   "label": "BLOCKING: lead the verdict and the open items with this",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "mandate.blocked_on.max_units": {
+   "value": "Maximum unit count is not known; confirm before any further work.",
+   "unit": "text",
+   "label": "BLOCKING: lead the verdict and the open items with this",
+   "source": {
+    "kind": "mandate_fit"
+   }
+  },
+  "diligence.title_eligibility": {
+   "value": "Title deed and DLD ownership search: freehold status, single title, and that the buyer is eligible to own the plot.",
+   "unit": "text",
+   "label": "standard first-pass diligence item",
+   "source": {
+    "kind": "checklist"
+   }
+  },
+  "diligence.completion_certificate": {
+   "value": "Building completion certificate (Dubai Municipality) for the as-built building.",
+   "unit": "text",
+   "label": "standard first-pass diligence item",
+   "source": {
+    "kind": "checklist"
+   }
+  },
+  "diligence.affection_plan": {
+   "value": "Affection plan and permitted use: confirm residential use and the plot's permitted floors match the building.",
+   "unit": "text",
+   "label": "standard first-pass diligence item",
+   "source": {
+    "kind": "checklist"
+   }
+  },
+  "diligence.ejari_export": {
+   "value": "Ejari export for every lease, reconciled to the rent roll unit by unit.",
+   "unit": "text",
+   "label": "standard first-pass diligence item",
+   "source": {
+    "kind": "checklist"
+   }
+  },
+  "diligence.civil_defence_cladding": {
+   "value": "Civil Defence completion and annual fire-safety certificates, and ACP cladding compliance.",
+   "unit": "text",
+   "label": "standard first-pass diligence item",
+   "source": {
+    "kind": "checklist"
+   }
+  }
+ },
+ "memo": {
+  "status": "passed",
+  "markdown": "## Verdict\n**Needs work**: the deal is blocked because the unit count is not established, so the minimum and maximum unit tests cannot run.\n\nMinimum unit count is not known; confirm before any further work. Maximum unit count is not known; confirm before any further work. The mandate range is 30 [[mandate.min_units.threshold]] to 250 [[mandate.max_units.threshold]] units. Nothing else matters until this is resolved. There is no walk-away price and no buy recommendation.\n\n## The deal\n- **What and where:** Bramble Heights, Jumeirah Village Circle (District 16), market area JVC, completed 2023 [[deal.completion_year]], G+P+10. The OM states 122 units [[om.unit_count]], but the screen does not treat the count as known. Freehold, single title.\n- **Price:** asking AED 146.0m [[deal.asking_price_aed]]. The OM quotes AED 1,539 per sq ft [[om.price_psf_stated]] on NSA of 94,861 sq ft [[om.nsa_sqft]]. BUA is 133,610 sq ft [[deal.bua_sqft]].\n- **Income:** direct leases, no master tenant, tenants pay chiller. The OM states 91% occupancy [[om.occupancy_stated]] and annual rent of AED 10.5m [[om.annual_rent_stated]], which is potential rent, not rent being earned. The operating statement shows rental income of AED 9.7m [[opex.rental_income]], expenses of AED 1.8m [[opex.total_expenses_aed]] (18% [[opex.opex_ratio]] of income) and NOI of AED 7.9m [[opex.noi_aed]] before the screen's adjustments. The OM gives no net income or operating cost figure.\n\n## Returns\nThe deal was not underwritten, so there are no returns. These mandate tests could not be run:\n- going-in net yield on total cost, 6.0% [[mandate.min_going_in_net_yield_on_cost.threshold]] minimum\n- unlevered IRR, 7.5% [[mandate.target_unlevered_irr.threshold]] target\n- unlevered equity multiple, 1.30x [[mandate.target_unlevered_equity_multiple.threshold]] target\n- occupancy, 90% [[mandate.min_occupancy.threshold]] minimum\n- largest quarterly lease expiry share, 40% [[mandate.max_lease_expiry_share_in_any_quarter.threshold]] maximum\n- share of income let above the screen reference, 20% [[mandate.max_over_rent_share_of_income.threshold]] maximum\n\nThe OM's headline yield is 7.2% [[om.yield_stated]]. It is gross, on asking price, and built on potential rent at full occupancy. It is not a buyer's net yield on let units.\n\n## What would make it fail\n- The unit count falls outside the mandate range, which ends the deal.\n- In-place rent is well below the OM's potential rent, so the real yield is lower than the headline.\n- The OM's income uplift of c.AED 1.15m [[om.upside_claim_1]], about 12% [[disc.upside_exceeds_rera_cap.title]], does not happen. Renewal increases are limited by RERA rent-increase bands, and market rents have fallen.\n- The lease expiry profile and over-renting are unknown. If expiries cluster or many leases sit above market, income is at risk.\n\n## Discrepancies\nMost severe first. Both items are medium severity. Lower-severity items are not discussed.\n\n1. **Potential rent presented as income.** The OM labels the income as the current rent roll, but the figure assumes full occupancy while the same OM states 91% [[om.occupancy_stated]] occupancy. The 7.21% [[disc.potential_rent_as_income.title]] gross yield therefore counts rent on vacant units. It is on asking price with no operating costs deducted, so it overstates what a buyer receives today. The screen relied on the documents. Action: get a dated rent roll with contracted rent for let units only, recompute gross and net yield on let units, and reconcile to the trailing P&L.\n2. **Uplift claim beyond RERA bands.** The OM bases the uplift on asking rents for new lettings. Increases on existing tenancies happen only at renewal, are capped by the gap to the RERA rental index, and need 90 [[disc.upside_exceeds_rera_cap.why]] days' notice. The OM mentions none of this, nor the fall in market rents. The claim is unlikely to be achievable and should not be used in pricing. Action: do not underwrite it, get the lease expiry schedule, test each renewal against the RERA rental index calculator, and compare passing rents with recent achieved transactions.\n\n## Checks before diligence\n- Confirm the unit count with a unit-by-unit schedule. This blocks everything else.\n- Obtain the dated rent roll for let units only and reconcile it to the trailing P&L.\n- Obtain the lease expiry schedule and test renewals against the RERA rental index.\n- Compare passing rents with recent achieved transactions, not asking rents.\n- Title deed and DLD ownership search: freehold, single title, buyer eligibility.\n- Building completion certificate from Dubai Municipality.\n- Affection plan and permitted use: residential use and permitted floors match the building.\n- Ejari export for every lease, reconciled to the rent roll unit by unit.\n- Civil Defence completion and annual fire-safety certificates, and ACP cladding compliance.\n\n## Assumptions\nNo underwriting was run, so no exit yield, rent path, vacancy or leverage assumptions were applied. If the unit count clears the mandate, the walk-away price and returns will rest on the firm's house view (screen reference rent path, exit yield, vacancy and downtime), not on market evidence for this building. No mandate defaults were reported as filling gaps in the package. The operating statement covers 12 months [[opex.months]] and needed no annualising.",
+  "attempts": [
+   {
+    "attempt": 1,
+    "errors": [
+     "number '2026' has no anchor right after it (…ns none of this, nor the 2026 fall in m…)",
+     "number '2026' has no anchor right after it (…sing rents with achieved 2026 transacti…)",
+     "number '2026' has no anchor right after it (…sing rents with achieved 2026 transacti…)",
+     "number '12' has no anchor right after it (… statement covers a full 12 months an…)"
+    ]
+   },
+   {
+    "attempt": 2,
+    "errors": []
+   }
+  ],
+  "anchor_syntax": "[[fact_id]]"
+ },
+ "notes": [],
+ "errors": [
+  {
+   "stage": "rent_roll",
+   "error": "no rent roll found in the package"
+  }
+ ],
+ "meta": {
+  "pipeline_version": "0.3.0",
+  "engine_version": "2.0.0",
+  "model": "claude-sonnet-5-5",
+  "mapping_model": "claude-sonnet-5-5",
+  "started_at": "2026-11-21T20:04:02+00:00",
+  "duration_s": 91.3,
+  "stage_durations_s": {
+   "ingest": 0.92,
+   "extract_om": 21.86,
+   "opex": 18.75,
+   "underwrite_base": 0.0,
+   "reconcile_rules": 0.0,
+   "review": 12.72,
+   "memo": 36.99
+  },
+  "calls": [
+   {
+    "stage": "extract_om",
+    "model": "claude-sonnet-5-5",
+    "input_tokens": 1134,
+    "output_tokens": 3961,
+    "cache_creation_input_tokens": 20672,
+    "cache_read_input_tokens": 0,
+    "cost_usd": 0.140337,
+    "duration_s": 21.85,
+    "stop_reason": "tool_use",
+    "tool": "record_om_fields"
+   },
+   {
+    "stage": "opex_map",
+    "model": "claude-sonnet-5-5",
+    "input_tokens": 5678,
+    "output_tokens": 3486,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cost_usd": 0.069324,
+    "duration_s": 18.75,
+    "stop_reason": "tool_use",
+    "tool": "record_statement_mapping"
+   },
+   {
+    "stage": "review",
+    "model": "claude-sonnet-5-5",
+    "input_tokens": 1574,
+    "output_tokens": 1731,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 20672,
+    "cost_usd": 0.036889,
+    "duration_s": 12.71,
+    "stop_reason": "tool_use",
+    "tool": "record_review_findings"
+   },
+   {
+    "stage": "memo_1",
+    "model": "claude-sonnet-5-5",
+    "input_tokens": 6784,
+    "output_tokens": 3511,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cost_usd": 0.073017,
+    "duration_s": 22.01,
+    "stop_reason": "tool_use",
+    "tool": "submit_memo"
+   },
+   {
+    "stage": "memo_2",
+    "model": "claude-sonnet-5-5",
+    "input_tokens": 9018,
+    "output_tokens": 2730,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cost_usd": 0.068004,
+    "duration_s": 14.98,
+    "stop_reason": "tool_use",
+    "tool": "submit_memo"
+   }
+  ],
+  "tokens": {
+   "input_tokens": 24188,
+   "output_tokens": 15419,
+   "cache_creation_input_tokens": 20672,
+   "cache_read_input_tokens": 20672
+  },
+  "cost_usd": 0.3876,
+  "prices_usd_per_mtok": {
+   "claude-sonnet-5-5": {
+    "input": 3.0,
+    "output": 15.0,
+    "cache_write": 3.75,
+    "cache_read": 0.3
+   }
+  },
+  "prices_note": "assumed list prices; see pipeline/config.py"
+ }
+}

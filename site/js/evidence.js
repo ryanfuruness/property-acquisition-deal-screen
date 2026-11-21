@@ -11,6 +11,8 @@ const MARKET_URL = "https://github.com/ryanfuruness/property-acquisition-deal-sc
 
 const ASSUME_INPUT = {
   ltv: "mandate.underwriting.debt.ltv",
+  max_ltv: "mandate.underwriting.debt.max_ltv",
+  sizing_dscr: "mandate.underwriting.debt.sizing_dscr",
   eibor: "mandate.underwriting.debt.base_rate_3m_eibor",
   margin: "mandate.underwriting.debt.margin",
   amortisation_years: "mandate.underwriting.debt.amortisation_years",
@@ -131,6 +133,7 @@ export class EvidencePanel {
     if (kind === "mandate") return this.factMandate(id, f);
     if (kind === "mandate_fit") return this.factMandateFit(id, f);
     if (kind === "discrepancy") return this.factDiscrepancy(id, f);
+    if (kind === "notice" || kind === "checklist") return this.factCheck(id, f);
     return this.factPlain(id, f);
   }
 
@@ -342,12 +345,18 @@ export class EvidencePanel {
   engineMetric(id, f) {
     const out = this.run.underwriting?.outputs || {};
     const name = id.replace(/^uw\./, "");
+    if (name === "walk_away_price_aed" && out.walk_away?.price_aed) return { m: out.metrics?.[name] || out.walk_away.price_aed, name: "Walk-away price", walkAway: true };
     if (out.metrics?.[name]) return { m: out.metrics[name], name: metricLabel(name) };
-    if (name.startsWith("walk_away_")) { const k = name.replace("walk_away_", ""); if (out.walk_away?.[k] && typeof out.walk_away[k] === "object") return { m: out.walk_away[k], name: `walk-away ${words(k)}` }; }
+    if (id.startsWith("bridge.")) return { bridge: true };
+    if (name.startsWith("walk_away_")) {
+      const k = name.replace("walk_away_", "");
+      if (out.walk_away?.[k] && typeof out.walk_away[k] === "object" && "value" in out.walk_away[k]) return { m: out.walk_away[k], name: `Walk-away ${words(k)}`, walkAway: true };
+      if (out.walk_away?.price_aed) return { m: out.walk_away.price_aed, name: "Walk-away price", walkAway: true };
+    }
     if (name.startsWith("om_yield.")) { const k = name.split(".")[1]; if (out.om_yield_check?.[k]) return { m: out.om_yield_check[k], name: `OM yield check: ${words(k)}` }; }
     if (name.startsWith("opex_default.")) { const k = name.split(".")[1]; const inp = out.inputs?.[`deal.opex_aed.${k}`]; if (inp) return { input: inp, inputName: `deal.opex_aed.${k}` }; }
     if (name.startsWith("sens.")) return { sens: true };
-    if (name === "max_expiry_quarter" || name === "max_expiry_quarter_rent_aed") return { expiry: true };
+    if (/^max_expiry_(quarter|window)/.test(name)) return { expiry: true };
     return {};
   }
 
@@ -355,7 +364,20 @@ export class EvidencePanel {
     const found = this.engineMetric(id, f);
     const value = this.valueBlock(f);
     const title = found.name ? found.name : sentence(f.label);
-    if (found.m) return this.renderMetric(title, found.m, value + (f.source?.note || found.m.note ? `<p class="small">${esc(sentence(f.source?.note || found.m.note))}.</p>` : ""));
+    if (found.m) {
+      let extra = f.source?.note || found.m.note ? `<p class="small">${esc(sentence(f.source?.note || found.m.note))}.</p>` : "";
+      if (found.walkAway) extra += this.walkAwayNote();
+      return this.renderMetric(title, found.m, value + extra);
+    }
+    if (found.bridge) {
+      const br = this.run.underwriting?.noi_bridge;
+      return this.frame(esc(sentence(f.label)), "From the seller's NOI to the screen's, computed by code from engine lines",
+        `${value}${br ? `<table class="tbl dense"><tbody><tr><td>Statement NOI</td><td class="n">${esc(aedFull(br.statement_noi_aed))}</td></tr>${(br.steps || []).map((st) => `<tr><td>${esc(sentence(st.label))}</td><td class="n">${esc(st.aed < 0 ? `(${int(-st.aed)})` : int(st.aed))}</td></tr>`).join("")}<tr class="total"><td>Screen Year-1 NOI</td><td class="n">${esc(aedFull(br.screen_noi_year1_aed))}</td></tr></tbody></table>` : ""}
+        <p><button type="button" class="btn ghost sm" data-ev="tab" data-tab="underwriting" data-focus="bridge">Open the NOI bridge</button></p>`);
+    }
+    if (found.expiry) {
+      return this.frame(esc(sentence(f.label)), "Computed by the engine from rent-roll lease end dates", `${value}<p><button type="button" class="btn ghost sm" data-ev="tab" data-tab="underwriting" data-focus="cash-flow">Open Underwriting</button></p>`);
+    }
     if (found.input) {
       return this.frame(esc(sentence(f.label)), "Mandate default used because the package lacked this cost",
         `${value}<p class="small">${prov(found.input.provenance)} ${esc(found.input.note || "")}</p><p class="small">Defaults are priced per sq ft of NSA from <a href="${MANDATE_URL}" target="_blank" rel="noopener">data/mandate.yaml</a> (underwriting.operations.opex_defaults_aed_per_sqft_nsa). Unknown facts count against a deal, never for it.</p>`);
@@ -371,6 +393,13 @@ export class EvidencePanel {
       <button type="button" class="btn ghost sm" data-ev="tab" data-tab="underwriting">Open Underwriting</button>`);
   }
 
+  walkAwayNote() {
+    const wa = this.run.underwriting?.outputs?.walk_away || {};
+    const cases = wa.sensitivity?.cases || [];
+    return `<p class="small"><span class="hv">house view</span> Rests on the firm's house view of rents and exit yields, not on market evidence for this building.${wa.most_sensitive_label ? ` The assumption that moves it most is the <b>${esc(wa.most_sensitive_label)}</b>, by up to ${esc(aed(wa.largest_swing_aed?.value))}.` : ""}</p>
+      ${cases.length ? `<table class="tbl dense"><tbody>${cases.map((c) => `<tr><td>${esc(c.assumption === "exit_yield" ? "Exit yield" : "Reference rent path")} ${esc(c.case)}</td><td class="n">${esc(aed(c.price_aed))}</td></tr>`).join("")}</tbody></table>` : ""}`;
+  }
+
   showMetric(name) {
     const out = this.run.underwriting?.outputs || {};
     let m = out.metrics?.[name];
@@ -379,7 +408,7 @@ export class EvidencePanel {
     if (!m && name.startsWith("wa.")) { m = out.walk_away?.[name.slice(3)]; title = `Walk-away: ${words(name.slice(3))}`; }
     if (!m && name.startsWith("oy.")) { m = out.om_yield_check?.[name.slice(3)]; title = `OM yield check: ${words(name.slice(3))}`; }
     if (!m) { this.frame(esc(title), "Engine", `<p class="muted">No such metric in this run.</p>`); return; }
-    this.renderMetric(title, m, `<div class="ev-value">${esc(byUnit(m.value, m.unit))}</div>${m.note ? `<p class="small">${esc(sentence(m.note))}.</p>` : ""}`);
+    this.renderMetric(title, m, `<div class="ev-value">${esc(byUnit(m.value, m.unit))}</div>${m.note ? `<p class="small">${esc(sentence(m.note))}.</p>` : ""}${name === "walk_away_price_aed" ? this.walkAwayNote() : ""}${m.indicative ? `<p class="small"><span class="ind-tag">indicative</span> Simplified tax model.</p>` : ""}`);
   }
 
   renderMetric(title, m, head) {
@@ -452,7 +481,7 @@ export class EvidencePanel {
     const fails = [...(fit.tests || []).filter((t) => t.status !== "pass")];
     this.frame(esc(sentence(f.label)), "Mandate fit, applied by code", `${this.valueBlock(f)}<p>${esc(humanReason(fit.reason))}</p>
       ${fails.length ? `<table class="tbl dense"><thead><tr><th>Test</th><th>Kind</th><th>Result</th></tr></thead><tbody>${fails.map((t) => `<tr><td>${esc(testName(t.name))}</td><td>${esc(t.kind)}</td><td>${statusMark(t.status)}</td></tr>`).join("")}</tbody></table>` : ""}
-      <p class="small">Any hard fail gives Pass; no soft fails or unknowns gives Pursue; anything else is Needs work. An unknown counts against the deal.</p>
+      <p class="small">Any hard fail gives Decline; no soft misses or unknowns gives Pursue; anything else is Needs work. An unknown counts against the deal.</p>
       <button type="button" class="btn ghost sm" data-ev="tab" data-tab="mandate">Open Mandate fit</button>`);
   }
 
@@ -468,7 +497,16 @@ export class EvidencePanel {
       <p><button type="button" class="btn ghost sm" data-ev="tab" data-tab="discrepancies" data-focus="${esc(d.id)}">Open the discrepancy card</button></p>`);
   }
 
+  factCheck(id, f) {
+    const notice = f.source.kind === "notice";
+    this.frame(esc(notice ? "Notice" : "Standard diligence item"), notice ? "Raised by code from the package; not a discrepancy, not scored" : "From the firm's first-pass diligence list (data/diligence.yaml)",
+      `<p>${esc(f.value)}</p><p><button type="button" class="btn ghost sm" data-ev="tab" data-tab="discrepancies" data-focus="checks">Open the checks list</button></p>`);
+  }
+
   factPlain(id, f) {
+    if (id === "screen.house_view") {
+      return this.frame("House view", "What the walk-away price and returns rest on", `<p>${esc(f.value)}</p><p><button type="button" class="btn ghost sm" data-ev="tab" data-tab="underwriting" data-focus="assumptions">Open the assumptions</button></p>`);
+    }
     const field = OM_BASIS_FIELD[id];
     const om = this.run.extracted?.om?.[field];
     if (om?.source?.page) {
@@ -521,6 +559,8 @@ export function testValue(name, v) {
 export function sourceButton(s, label) {
   if (!s) return "";
   const text = label || (s.page ? `${s.doc}, p.${s.page}` : s.cell ? `${s.doc}, ${s.cell}` : s.doc === "engine" ? "Engine calculation" : s.doc);
+  const hasBox = Array.isArray(s.bbox) && s.bbox.length;
+  if (s.page && s.cell && s.doc && !hasBox) return `<button type="button" class="btn ghost sm" data-ev="sheet" data-doc="${esc(s.doc)}" data-ref="${esc(s.cell)}" data-title="${esc(s.label ? sentence(s.label) : s.doc)}">${esc(text)}</button>`;
   if (s.page && s.doc) return `<button type="button" class="btn ghost sm" data-ev="page" data-doc="${esc(s.doc)}" data-page="${s.page}" data-bbox="${esc(JSON.stringify(s.bbox || []))}" data-title="${esc(s.label ? sentence(s.label) : s.doc)}">${esc(text)}</button>`;
   if (s.cell && s.doc) return `<button type="button" class="btn ghost sm" data-ev="sheet" data-doc="${esc(s.doc)}" data-ref="${esc(s.cell)}" data-title="${esc(s.label ? sentence(s.label) : s.doc)}">${esc(text)}</button>`;
   return "";

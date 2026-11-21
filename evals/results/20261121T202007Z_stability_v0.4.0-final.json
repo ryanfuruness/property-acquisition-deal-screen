@@ -1,0 +1,362 @@
+{
+ "kind": "stability",
+ "label": "v0.4.0-final",
+ "scored_at": "2026-11-21T20:20:07+00:00",
+ "run_dirs": [
+  "runs",
+  "runs_repeat1"
+ ],
+ "aggregate": {
+  "deals": 3,
+  "runs": 6,
+  "verdict_unanimous": {
+   "value": 1.0,
+   "k": 3,
+   "n": 3
+  },
+  "verdict_correct_runs": {
+   "value": 1.0,
+   "k": 6,
+   "n": 6
+  },
+  "discrepancy_sets_identical": {
+   "value": 1.0,
+   "k": 3,
+   "n": 3
+  },
+  "discrepancy_jaccard_mean": {
+   "value": 1.0,
+   "n": 3
+  },
+  "walk_away_spread_rel_mean": {
+   "value": 0.0,
+   "n": 3
+  },
+  "walk_away_spread_rel_max": {
+   "value": 0.0,
+   "n": 3
+  },
+  "memo_pass_rate": {
+   "value": 1.0,
+   "k": 6,
+   "n": 6
+  }
+ },
+ "aggregate_by_set": {
+  "dev": {
+   "deals": 3,
+   "runs": 6,
+   "verdict_unanimous": {
+    "value": 1.0,
+    "k": 3,
+    "n": 3
+   },
+   "verdict_correct_runs": {
+    "value": 1.0,
+    "k": 6,
+    "n": 6
+   },
+   "discrepancy_sets_identical": {
+    "value": 1.0,
+    "k": 3,
+    "n": 3
+   },
+   "discrepancy_jaccard_mean": {
+    "value": 1.0,
+    "n": 3
+   },
+   "walk_away_spread_rel_mean": {
+    "value": 0.0,
+    "n": 3
+   },
+   "walk_away_spread_rel_max": {
+    "value": 0.0,
+    "n": 3
+   },
+   "memo_pass_rate": {
+    "value": 1.0,
+    "k": 6,
+    "n": 6
+   }
+  },
+  "heldout": {
+   "deals": 0,
+   "runs": 0,
+   "verdict_unanimous": {
+    "value": null,
+    "k": 0,
+    "n": 0
+   },
+   "verdict_correct_runs": {
+    "value": null,
+    "k": 0,
+    "n": 0
+   },
+   "discrepancy_sets_identical": {
+    "value": null,
+    "k": 0,
+    "n": 0
+   },
+   "discrepancy_jaccard_mean": {
+    "value": null,
+    "n": 0
+   },
+   "walk_away_spread_rel_mean": {
+    "value": null,
+    "n": 0
+   },
+   "walk_away_spread_rel_max": {
+    "value": null,
+    "n": 0
+   },
+   "memo_pass_rate": {
+    "value": null,
+    "k": 0,
+    "n": 0
+   }
+  }
+ },
+ "deals": [
+  {
+   "deal_id": "d03-sorrel-jvc",
+   "set": "dev",
+   "n_runs": 2,
+   "runs": [
+    {
+     "runs_dir": "runs",
+     "verdict": "Needs work",
+     "verdict_correct": true,
+     "discrepancies": [
+      "occupancy_mismatch",
+      "over_rented_vs_market",
+      "potential_rent_as_income",
+      "yield_excludes_acquisition_costs"
+     ],
+     "walk_away_price_aed": 105780000,
+     "memo_status": "passed",
+     "memo_passed": true,
+     "cost_usd": 0.4674,
+     "started_at": "2026-11-21T19:44:32+00:00"
+    },
+    {
+     "runs_dir": "runs_repeat1",
+     "verdict": "Needs work",
+     "verdict_correct": true,
+     "discrepancies": [
+      "occupancy_mismatch",
+      "over_rented_vs_market",
+      "potential_rent_as_income",
+      "yield_excludes_acquisition_costs"
+     ],
+     "walk_away_price_aed": 105780000,
+     "memo_status": "passed",
+     "memo_passed": true,
+     "cost_usd": 0.5665,
+     "started_at": "2026-11-21T20:14:52+00:00"
+    }
+   ],
+   "expected_verdict": "Needs work",
+   "verdicts": [
+    "Needs work",
+    "Needs work"
+   ],
+   "verdict_unanimous": true,
+   "verdict_modal": "Needs work",
+   "verdict_modal_share": 1.0,
+   "verdict_correct_runs": 2,
+   "discrepancy_sets": [
+    [
+     "occupancy_mismatch",
+     "over_rented_vs_market",
+     "potential_rent_as_income",
+     "yield_excludes_acquisition_costs"
+    ],
+    [
+     "occupancy_mismatch",
+     "over_rented_vs_market",
+     "potential_rent_as_income",
+     "yield_excludes_acquisition_costs"
+    ]
+   ],
+   "discrepancy_jaccard_mean": 1.0,
+   "discrepancy_jaccard_min": 1.0,
+   "discrepancies_in_every_run": [
+    "occupancy_mismatch",
+    "over_rented_vs_market",
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs"
+   ],
+   "discrepancies_in_some_runs": [],
+   "walk_away_min": 105780000,
+   "walk_away_max": 105780000,
+   "walk_away_spread_aed": 0,
+   "walk_away_spread_rel": 0.0,
+   "memo_passed": [
+    true,
+    true
+   ]
+  },
+  {
+   "deal_id": "d08-jade-ic",
+   "set": "dev",
+   "n_runs": 2,
+   "runs": [
+    {
+     "runs_dir": "runs",
+     "verdict": "Needs work",
+     "verdict_correct": true,
+     "discrepancies": [
+      "missing_opex_items",
+      "potential_rent_as_income",
+      "yield_excludes_acquisition_costs"
+     ],
+     "walk_away_price_aed": 30770000,
+     "memo_status": "passed",
+     "memo_passed": true,
+     "cost_usd": 0.4752,
+     "started_at": "2026-11-21T19:52:55+00:00"
+    },
+    {
+     "runs_dir": "runs_repeat1",
+     "verdict": "Needs work",
+     "verdict_correct": true,
+     "discrepancies": [
+      "missing_opex_items",
+      "potential_rent_as_income",
+      "yield_excludes_acquisition_costs"
+     ],
+     "walk_away_price_aed": 30770000,
+     "memo_status": "passed",
+     "memo_passed": true,
+     "cost_usd": 0.3865,
+     "started_at": "2026-11-21T20:16:44+00:00"
+    }
+   ],
+   "expected_verdict": "Needs work",
+   "verdicts": [
+    "Needs work",
+    "Needs work"
+   ],
+   "verdict_unanimous": true,
+   "verdict_modal": "Needs work",
+   "verdict_modal_share": 1.0,
+   "verdict_correct_runs": 2,
+   "discrepancy_sets": [
+    [
+     "missing_opex_items",
+     "potential_rent_as_income",
+     "yield_excludes_acquisition_costs"
+    ],
+    [
+     "missing_opex_items",
+     "potential_rent_as_income",
+     "yield_excludes_acquisition_costs"
+    ]
+   ],
+   "discrepancy_jaccard_mean": 1.0,
+   "discrepancy_jaccard_min": 1.0,
+   "discrepancies_in_every_run": [
+    "missing_opex_items",
+    "potential_rent_as_income",
+    "yield_excludes_acquisition_costs"
+   ],
+   "discrepancies_in_some_runs": [],
+   "walk_away_min": 30770000,
+   "walk_away_max": 30770000,
+   "walk_away_spread_aed": 0,
+   "walk_away_spread_rel": 0.0,
+   "memo_passed": [
+    true,
+    true
+   ]
+  },
+  {
+   "deal_id": "d11-silverline-dso",
+   "set": "dev",
+   "n_runs": 2,
+   "runs": [
+    {
+     "runs_dir": "runs",
+     "verdict": "Decline",
+     "verdict_correct": true,
+     "discrepancies": [
+      "master_lease_related_party",
+      "yield_excludes_acquisition_costs"
+     ],
+     "walk_away_price_aed": 41170000,
+     "memo_status": "passed",
+     "memo_passed": true,
+     "cost_usd": 0.4836,
+     "started_at": "2026-11-21T19:57:57+00:00"
+    },
+    {
+     "runs_dir": "runs_repeat1",
+     "verdict": "Decline",
+     "verdict_correct": true,
+     "discrepancies": [
+      "master_lease_related_party",
+      "yield_excludes_acquisition_costs"
+     ],
+     "walk_away_price_aed": 41170000,
+     "memo_status": "passed",
+     "memo_passed": true,
+     "cost_usd": 0.4835,
+     "started_at": "2026-11-21T20:18:28+00:00"
+    }
+   ],
+   "expected_verdict": "Decline",
+   "verdicts": [
+    "Decline",
+    "Decline"
+   ],
+   "verdict_unanimous": true,
+   "verdict_modal": "Decline",
+   "verdict_modal_share": 1.0,
+   "verdict_correct_runs": 2,
+   "discrepancy_sets": [
+    [
+     "master_lease_related_party",
+     "yield_excludes_acquisition_costs"
+    ],
+    [
+     "master_lease_related_party",
+     "yield_excludes_acquisition_costs"
+    ]
+   ],
+   "discrepancy_jaccard_mean": 1.0,
+   "discrepancy_jaccard_min": 1.0,
+   "discrepancies_in_every_run": [
+    "master_lease_related_party",
+    "yield_excludes_acquisition_costs"
+   ],
+   "discrepancies_in_some_runs": [],
+   "walk_away_min": 41170000,
+   "walk_away_max": 41170000,
+   "walk_away_spread_aed": 0,
+   "walk_away_spread_rel": 0.0,
+   "memo_passed": [
+    true,
+    true
+   ]
+  }
+ ],
+ "deals_not_compared": {
+  "d01-cedarline-dso": "1 readable run(s)",
+  "d02-lantana-ic": "1 readable run(s)",
+  "d04-kestrel-bb": "1 readable run(s)",
+  "d05-larkspur-barsha": "1 readable run(s)",
+  "d06-opaline-jvc": "1 readable run(s)",
+  "d07-vireo-dso": "1 readable run(s)",
+  "d09-aurelia-bb": "1 readable run(s)",
+  "d10-almehrab-barsha": "1 readable run(s)",
+  "d12-tulip-ic": "1 readable run(s)",
+  "h01-almond-ic": "1 readable run(s)",
+  "h02-halden-dso": "1 readable run(s)",
+  "h03-bramble-jvc": "1 readable run(s)",
+  "h04-corvina-bb": "1 readable run(s)",
+  "h05-tamarind-barsha": "1 readable run(s)",
+  "h06-oryxlane-dso": "1 readable run(s)",
+  "h07-cypress-ic": "1 readable run(s)",
+  "h08-fennel-dsc": "1 readable run(s)"
+ }
+}

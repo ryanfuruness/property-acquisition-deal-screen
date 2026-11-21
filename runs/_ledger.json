@@ -1,19 +1,27 @@
 {
- "total_usd": 29.120372,
- "calls": 328,
+ "total_usd": 42.24228,
+ "calls": 487,
  "by_deal": {
-  "d01-cedarline-dso": 2.618451,
-  "d08-jade-ic": 1.874857,
-  "d06-opaline-jvc": 2.104834,
-  "d10-almehrab-barsha": 2.372003,
-  "d07-vireo-dso": 2.81368,
-  "d03-sorrel-jvc": 2.888025,
-  "d11-silverline-dso": 3.083667,
-  "d04-kestrel-bb": 2.55744,
-  "d05-larkspur-barsha": 2.430289,
-  "d12-tulip-ic": 1.985476,
-  "d09-aurelia-bb": 2.563153,
-  "d02-lantana-ic": 1.828497
+  "d01-cedarline-dso": 3.137073,
+  "d08-jade-ic": 3.332267,
+  "d06-opaline-jvc": 2.589212,
+  "d10-almehrab-barsha": 2.806531,
+  "d07-vireo-dso": 3.325098,
+  "d03-sorrel-jvc": 3.921934,
+  "d11-silverline-dso": 4.953892,
+  "d04-kestrel-bb": 3.090192,
+  "d05-larkspur-barsha": 3.934603,
+  "d12-tulip-ic": 2.404718,
+  "d09-aurelia-bb": 3.04523,
+  "d02-lantana-ic": 2.311233,
+  "h01-almond-ic": 0.510705,
+  "h02-halden-dso": 0.353883,
+  "h03-bramble-jvc": 0.387571,
+  "h04-corvina-bb": 0.528718,
+  "h05-tamarind-barsha": 0.395041,
+  "h06-oryxlane-dso": 0.44793,
+  "h07-cypress-ic": 0.409801,
+  "h08-fennel-dsc": 0.356648
  },
  "entries": [
   {
@@ -4285,6 +4293,2073 @@
    "tokens": {
     "input": 14176,
     "output": 3230,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:30:34+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.14129,
+   "tokens": {
+    "input": 1129,
+    "output": 3549,
+    "cache_write": 22578,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:30:37+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.157821,
+   "tokens": {
+    "input": 1127,
+    "output": 4029,
+    "cache_write": 25068,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:30:41+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.051603,
+   "tokens": {
+    "input": 11081,
+    "output": 1224,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:30:42+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.068283,
+   "tokens": {
+    "input": 17271,
+    "output": 1098,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:30:53+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049119,
+   "tokens": {
+    "input": 5528,
+    "output": 2169,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:30:58+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.056829,
+   "tokens": {
+    "input": 4263,
+    "output": 2936,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:31:06+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.029135,
+   "tokens": {
+    "input": 2420,
+    "output": 957,
+    "cache_write": 0,
+    "cache_read": 25068
+   }
+  },
+  {
+   "at": "2026-11-21T23:31:10+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049517,
+   "tokens": {
+    "input": 2638,
+    "output": 2322,
+    "cache_write": 0,
+    "cache_read": 22578
+   }
+  },
+  {
+   "at": "2026-11-21T23:31:37+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.118467,
+   "tokens": {
+    "input": 12524,
+    "output": 5393,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:31:42+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.122379,
+   "tokens": {
+    "input": 13163,
+    "output": 5526,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:31:56+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.101964,
+   "tokens": {
+    "input": 15533,
+    "output": 3691,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:32:00+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.100182,
+   "tokens": {
+    "input": 15979,
+    "output": 3483,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:33:28+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.065244,
+   "tokens": {
+    "input": 4273,
+    "output": 3495,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:33:38+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.033929,
+   "tokens": {
+    "input": 2483,
+    "output": 1264,
+    "cache_write": 0,
+    "cache_read": 25068
+   }
+  },
+  {
+   "at": "2026-11-21T23:33:46+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.11879,
+   "tokens": {
+    "input": 1169,
+    "output": 3274,
+    "cache_write": 17646,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:33:55+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.058668,
+   "tokens": {
+    "input": 12311,
+    "output": 1449,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:34:09+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049065,
+   "tokens": {
+    "input": 3580,
+    "output": 2555,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:34:11+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.12441,
+   "tokens": {
+    "input": 12540,
+    "output": 5786,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:34:19+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.033662,
+   "tokens": {
+    "input": 2586,
+    "output": 1374,
+    "cache_write": 0,
+    "cache_read": 17646
+   }
+  },
+  {
+   "at": "2026-11-21T23:34:27+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.095385,
+   "tokens": {
+    "input": 15360,
+    "output": 3287,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:34:49+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.120399,
+   "tokens": {
+    "input": 13298,
+    "output": 5367,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:35:05+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.101439,
+   "tokens": {
+    "input": 16333,
+    "output": 3496,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:36:19+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.112695,
+   "tokens": {
+    "input": 12520,
+    "output": 5009,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:36:36+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.113673,
+   "tokens": {
+    "input": 13276,
+    "output": 4923,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:37:01+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.044769,
+   "tokens": {
+    "input": 5538,
+    "output": 1877,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:37:26+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.145402,
+   "tokens": {
+    "input": 2635,
+    "output": 3522,
+    "cache_write": 22578,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:37:53+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.106557,
+   "tokens": {
+    "input": 13059,
+    "output": 4492,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:38:08+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.092283,
+   "tokens": {
+    "input": 15636,
+    "output": 3025,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:41:45+0400",
+   "deal_id": "d01-cedarline-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.160223,
+   "tokens": {
+    "input": 1129,
+    "output": 4177,
+    "cache_write": 25115,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:41:52+0400",
+   "deal_id": "d01-cedarline-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.069387,
+   "tokens": {
+    "input": 16564,
+    "output": 1313,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:42:06+0400",
+   "deal_id": "d01-cedarline-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.058587,
+   "tokens": {
+    "input": 5669,
+    "output": 2772,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:42:16+0400",
+   "deal_id": "d01-cedarline-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.032233,
+   "tokens": {
+    "input": 2353,
+    "output": 1176,
+    "cache_write": 0,
+    "cache_read": 25115
+   }
+  },
+  {
+   "at": "2026-11-21T23:42:43+0400",
+   "deal_id": "d01-cedarline-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.108579,
+   "tokens": {
+    "input": 11753,
+    "output": 4888,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:42:58+0400",
+   "deal_id": "d01-cedarline-dso",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.089613,
+   "tokens": {
+    "input": 14426,
+    "output": 3089,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:43:19+0400",
+   "deal_id": "d02-lantana-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.142486,
+   "tokens": {
+    "input": 1123,
+    "output": 3640,
+    "cache_write": 22538,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:43:26+0400",
+   "deal_id": "d02-lantana-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.054507,
+   "tokens": {
+    "input": 12399,
+    "output": 1154,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:43:36+0400",
+   "deal_id": "d02-lantana-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049791,
+   "tokens": {
+    "input": 6072,
+    "output": 2105,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:43:46+0400",
+   "deal_id": "d02-lantana-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.030218,
+   "tokens": {
+    "input": 2264,
+    "output": 1111,
+    "cache_write": 0,
+    "cache_read": 22538
+   }
+  },
+  {
+   "at": "2026-11-21T23:44:15+0400",
+   "deal_id": "d02-lantana-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.110859,
+   "tokens": {
+    "input": 11648,
+    "output": 5061,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:44:32+0400",
+   "deal_id": "d02-lantana-ic",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.094875,
+   "tokens": {
+    "input": 14535,
+    "output": 3418,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:44:53+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.1414,
+   "tokens": {
+    "input": 1127,
+    "output": 3598,
+    "cache_write": 22413,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:45:05+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.096684,
+   "tokens": {
+    "input": 21023,
+    "output": 2241,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:45:19+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.058626,
+   "tokens": {
+    "input": 5832,
+    "output": 2742,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:45:28+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.031459,
+   "tokens": {
+    "input": 2595,
+    "output": 1130,
+    "cache_write": 0,
+    "cache_read": 22413
+   }
+  },
+  {
+   "at": "2026-11-21T23:46:06+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.139281,
+   "tokens": {
+    "input": 13667,
+    "output": 6552,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:46:24+0400",
+   "deal_id": "d04-kestrel-bb",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.129512,
+   "tokens": {
+    "input": 1118,
+    "output": 3267,
+    "cache_write": 20574,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:46:36+0400",
+   "deal_id": "d04-kestrel-bb",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.081231,
+   "tokens": {
+    "input": 17337,
+    "output": 1948,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:46:50+0400",
+   "deal_id": "d04-kestrel-bb",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.053613,
+   "tokens": {
+    "input": 4116,
+    "output": 2751,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:46:56+0400",
+   "deal_id": "d04-kestrel-bb",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.023869,
+   "tokens": {
+    "input": 2629,
+    "output": 654,
+    "cache_write": 0,
+    "cache_read": 20574
+   }
+  },
+  {
+   "at": "2026-11-21T23:47:32+0400",
+   "deal_id": "d04-kestrel-bb",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.132468,
+   "tokens": {
+    "input": 13521,
+    "output": 6127,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:47:53+0400",
+   "deal_id": "d04-kestrel-bb",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.112059,
+   "tokens": {
+    "input": 16843,
+    "output": 4102,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:48:15+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.155601,
+   "tokens": {
+    "input": 1127,
+    "output": 3881,
+    "cache_write": 25068,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:48:21+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.068478,
+   "tokens": {
+    "input": 17271,
+    "output": 1111,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:48:38+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.061269,
+   "tokens": {
+    "input": 4273,
+    "output": 3230,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:48:46+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.030971,
+   "tokens": {
+    "input": 2467,
+    "output": 1070,
+    "cache_write": 0,
+    "cache_read": 25068
+   }
+  },
+  {
+   "at": "2026-11-21T23:49:19+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.124074,
+   "tokens": {
+    "input": 12563,
+    "output": 5759,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:49:36+0400",
+   "deal_id": "d05-larkspur-barsha",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.099759,
+   "tokens": {
+    "input": 15633,
+    "output": 3524,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:49:54+0400",
+   "deal_id": "d06-opaline-jvc",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.120021,
+   "tokens": {
+    "input": 1107,
+    "output": 3124,
+    "cache_write": 18624,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:50:03+0400",
+   "deal_id": "d06-opaline-jvc",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.047166,
+   "tokens": {
+    "input": 7557,
+    "output": 1633,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:50:14+0400",
+   "deal_id": "d06-opaline-jvc",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.061926,
+   "tokens": {
+    "input": 8812,
+    "output": 2366,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:50:26+0400",
+   "deal_id": "d06-opaline-jvc",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.035206,
+   "tokens": {
+    "input": 2198,
+    "output": 1535,
+    "cache_write": 0,
+    "cache_read": 18624
+   }
+  },
+  {
+   "at": "2026-11-21T23:50:58+0400",
+   "deal_id": "d06-opaline-jvc",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.119166,
+   "tokens": {
+    "input": 13037,
+    "output": 5337,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:51:15+0400",
+   "deal_id": "d06-opaline-jvc",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.100893,
+   "tokens": {
+    "input": 16106,
+    "output": 3505,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:51:31+0400",
+   "deal_id": "d07-vireo-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.124978,
+   "tokens": {
+    "input": 1118,
+    "output": 2977,
+    "cache_write": 20525,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:51:37+0400",
+   "deal_id": "d07-vireo-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.06207,
+   "tokens": {
+    "input": 15705,
+    "output": 997,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:51:51+0400",
+   "deal_id": "d07-vireo-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.056739,
+   "tokens": {
+    "input": 5473,
+    "output": 2688,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:52:01+0400",
+   "deal_id": "d07-vireo-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.031948,
+   "tokens": {
+    "input": 2462,
+    "output": 1227,
+    "cache_write": 0,
+    "cache_read": 20525
+   }
+  },
+  {
+   "at": "2026-11-21T23:52:34+0400",
+   "deal_id": "d07-vireo-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.125904,
+   "tokens": {
+    "input": 12798,
+    "output": 5834,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:52:55+0400",
+   "deal_id": "d07-vireo-dso",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.109779,
+   "tokens": {
+    "input": 16168,
+    "output": 4085,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:53:31+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.118669,
+   "tokens": {
+    "input": 1169,
+    "output": 3266,
+    "cache_write": 17646,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:53:40+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.057903,
+   "tokens": {
+    "input": 12311,
+    "output": 1398,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:53:54+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.050265,
+   "tokens": {
+    "input": 3580,
+    "output": 2635,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:54:02+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.024524,
+   "tokens": {
+    "input": 2580,
+    "output": 766,
+    "cache_write": 0,
+    "cache_read": 17646
+   }
+  },
+  {
+   "at": "2026-11-21T23:54:32+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.118533,
+   "tokens": {
+    "input": 12976,
+    "output": 5307,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:54:51+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.105312,
+   "tokens": {
+    "input": 16059,
+    "output": 3809,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:55:11+0400",
+   "deal_id": "d09-aurelia-bb",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.13753,
+   "tokens": {
+    "input": 1126,
+    "output": 3356,
+    "cache_write": 22350,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:55:18+0400",
+   "deal_id": "d09-aurelia-bb",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.058356,
+   "tokens": {
+    "input": 13807,
+    "output": 1129,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:55:28+0400",
+   "deal_id": "d09-aurelia-bb",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.047829,
+   "tokens": {
+    "input": 5733,
+    "output": 2042,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:55:47+0400",
+   "deal_id": "d09-aurelia-bb",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.052779,
+   "tokens": {
+    "input": 2213,
+    "output": 2629,
+    "cache_write": 0,
+    "cache_read": 22350
+   }
+  },
+  {
+   "at": "2026-11-21T23:56:11+0400",
+   "deal_id": "d09-aurelia-bb",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.098454,
+   "tokens": {
+    "input": 12583,
+    "output": 4047,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:56:26+0400",
+   "deal_id": "d09-aurelia-bb",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.087129,
+   "tokens": {
+    "input": 14973,
+    "output": 2814,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:56:51+0400",
+   "deal_id": "d10-almehrab-barsha",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.147712,
+   "tokens": {
+    "input": 1116,
+    "output": 3961,
+    "cache_write": 22653,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:57:00+0400",
+   "deal_id": "d10-almehrab-barsha",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.060402,
+   "tokens": {
+    "input": 10909,
+    "output": 1845,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:57:10+0400",
+   "deal_id": "d10-almehrab-barsha",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.048435,
+   "tokens": {
+    "input": 5835,
+    "output": 2062,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:57:29+0400",
+   "deal_id": "d10-almehrab-barsha",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.054451,
+   "tokens": {
+    "input": 2325,
+    "output": 2712,
+    "cache_write": 0,
+    "cache_read": 22653
+   }
+  },
+  {
+   "at": "2026-11-21T23:57:47+0400",
+   "deal_id": "d10-almehrab-barsha",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.064008,
+   "tokens": {
+    "input": 8161,
+    "output": 2635,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:57:57+0400",
+   "deal_id": "d10-almehrab-barsha",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.05952,
+   "tokens": {
+    "input": 9810,
+    "output": 2006,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:58:19+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.1439,
+   "tokens": {
+    "input": 1129,
+    "output": 3723,
+    "cache_write": 22578,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:58:26+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.051183,
+   "tokens": {
+    "input": 11081,
+    "output": 1196,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:58:36+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.042909,
+   "tokens": {
+    "input": 5538,
+    "output": 1753,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:58:53+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.048158,
+   "tokens": {
+    "input": 2650,
+    "output": 2229,
+    "cache_write": 0,
+    "cache_read": 22578
+   }
+  },
+  {
+   "at": "2026-11-21T23:59:19+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.104751,
+   "tokens": {
+    "input": 13292,
+    "output": 4325,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:59:35+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.092745,
+   "tokens": {
+    "input": 15805,
+    "output": 3022,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:59:52+0400",
+   "deal_id": "d12-tulip-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.121931,
+   "tokens": {
+    "input": 1115,
+    "output": 3257,
+    "cache_write": 18595,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-21T23:59:58+0400",
+   "deal_id": "d12-tulip-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.03138,
+   "tokens": {
+    "input": 5810,
+    "output": 930,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:00:12+0400",
+   "deal_id": "d12-tulip-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.051942,
+   "tokens": {
+    "input": 3619,
+    "output": 2739,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:00:18+0400",
+   "deal_id": "d12-tulip-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.023786,
+   "tokens": {
+    "input": 1984,
+    "output": 817,
+    "cache_write": 0,
+    "cache_read": 18595
+   }
+  },
+  {
+   "at": "2026-11-22T00:00:41+0400",
+   "deal_id": "d12-tulip-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.097374,
+   "tokens": {
+    "input": 12468,
+    "output": 3998,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:00:57+0400",
+   "deal_id": "d12-tulip-ic",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.092829,
+   "tokens": {
+    "input": 15033,
+    "output": 3182,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:01:27+0400",
+   "deal_id": "h01-almond-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.145247,
+   "tokens": {
+    "input": 1128,
+    "output": 5152,
+    "cache_write": 17222,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:01:33+0400",
+   "deal_id": "h01-almond-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.057012,
+   "tokens": {
+    "input": 13079,
+    "output": 1185,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:01:47+0400",
+   "deal_id": "h01-almond-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049077,
+   "tokens": {
+    "input": 3644,
+    "output": 2543,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:02:02+0400",
+   "deal_id": "h01-almond-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.041758,
+   "tokens": {
+    "input": 2437,
+    "output": 1952,
+    "cache_write": 0,
+    "cache_read": 17222
+   }
+  },
+  {
+   "at": "2026-11-22T00:02:32+0400",
+   "deal_id": "h01-almond-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.11532,
+   "tokens": {
+    "input": 12570,
+    "output": 5174,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:02:51+0400",
+   "deal_id": "h01-almond-ic",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.102291,
+   "tokens": {
+    "input": 15582,
+    "output": 3703,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:03:13+0400",
+   "deal_id": "h02-halden-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.139212,
+   "tokens": {
+    "input": 1114,
+    "output": 3623,
+    "cache_write": 21740,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:03:19+0400",
+   "deal_id": "h02-halden-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.064323,
+   "tokens": {
+    "input": 15751,
+    "output": 1138,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:03:35+0400",
+   "deal_id": "h02-halden-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.059289,
+   "tokens": {
+    "input": 4323,
+    "output": 3088,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:03:45+0400",
+   "deal_id": "h02-halden-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.032445,
+   "tokens": {
+    "input": 2421,
+    "output": 1244,
+    "cache_write": 0,
+    "cache_read": 21740
+   }
+  },
+  {
+   "at": "2026-11-22T00:04:02+0400",
+   "deal_id": "h02-halden-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.058614,
+   "tokens": {
+    "input": 6843,
+    "output": 2539,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:04:25+0400",
+   "deal_id": "h03-bramble-jvc",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.140337,
+   "tokens": {
+    "input": 1134,
+    "output": 3961,
+    "cache_write": 20672,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:04:43+0400",
+   "deal_id": "h03-bramble-jvc",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.069324,
+   "tokens": {
+    "input": 5678,
+    "output": 3486,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:04:56+0400",
+   "deal_id": "h03-bramble-jvc",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.036889,
+   "tokens": {
+    "input": 1574,
+    "output": 1731,
+    "cache_write": 0,
+    "cache_read": 20672
+   }
+  },
+  {
+   "at": "2026-11-22T00:05:18+0400",
+   "deal_id": "h03-bramble-jvc",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.073017,
+   "tokens": {
+    "input": 6784,
+    "output": 3511,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:05:33+0400",
+   "deal_id": "h03-bramble-jvc",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.068004,
+   "tokens": {
+    "input": 9018,
+    "output": 2730,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:05:56+0400",
+   "deal_id": "h04-corvina-bb",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.153819,
+   "tokens": {
+    "input": 1118,
+    "output": 3803,
+    "cache_write": 24912,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:06:12+0400",
+   "deal_id": "h04-corvina-bb",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.079323,
+   "tokens": {
+    "input": 13226,
+    "output": 2643,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:06:27+0400",
+   "deal_id": "h04-corvina-bb",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.061305,
+   "tokens": {
+    "input": 6275,
+    "output": 2832,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:06:38+0400",
+   "deal_id": "h04-corvina-bb",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.034234,
+   "tokens": {
+    "input": 2395,
+    "output": 1305,
+    "cache_write": 0,
+    "cache_read": 24912
+   }
+  },
+  {
+   "at": "2026-11-22T00:07:06+0400",
+   "deal_id": "h04-corvina-bb",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.109983,
+   "tokens": {
+    "input": 12451,
+    "output": 4842,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:07:20+0400",
+   "deal_id": "h04-corvina-bb",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.090054,
+   "tokens": {
+    "input": 15148,
+    "output": 2974,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:07:42+0400",
+   "deal_id": "h05-tamarind-barsha",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.1414,
+   "tokens": {
+    "input": 1127,
+    "output": 3761,
+    "cache_write": 21761,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:07:49+0400",
+   "deal_id": "h05-tamarind-barsha",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.076797,
+   "tokens": {
+    "input": 19369,
+    "output": 1246,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:08:06+0400",
+   "deal_id": "h05-tamarind-barsha",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.046062,
+   "tokens": {
+    "input": 1948,
+    "output": 2246,
+    "cache_write": 0,
+    "cache_read": 21761
+   }
+  },
+  {
+   "at": "2026-11-22T00:08:30+0400",
+   "deal_id": "h05-tamarind-barsha",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.071706,
+   "tokens": {
+    "input": 6597,
+    "output": 3461,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:08:41+0400",
+   "deal_id": "h05-tamarind-barsha",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.059076,
+   "tokens": {
+    "input": 8477,
+    "output": 2243,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:09:12+0400",
+   "deal_id": "h06-oryxlane-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.147551,
+   "tokens": {
+    "input": 1136,
+    "output": 5286,
+    "cache_write": 17294,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:09:19+0400",
+   "deal_id": "h06-oryxlane-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.053148,
+   "tokens": {
+    "input": 11746,
+    "output": 1194,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:09:27+0400",
+   "deal_id": "h06-oryxlane-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.040941,
+   "tokens": {
+    "input": 5557,
+    "output": 1618,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:09:57+0400",
+   "deal_id": "h06-oryxlane-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.080128,
+   "tokens": {
+    "input": 2650,
+    "output": 4466,
+    "cache_write": 0,
+    "cache_read": 17294
+   }
+  },
+  {
+   "at": "2026-11-22T00:10:32+0400",
+   "deal_id": "h06-oryxlane-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.126162,
+   "tokens": {
+    "input": 13034,
+    "output": 5804,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:11:24+0400",
+   "deal_id": "h07-cypress-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.120995,
+   "tokens": {
+    "input": 1149,
+    "output": 3425,
+    "cache_write": 17646,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:11:36+0400",
+   "deal_id": "h07-cypress-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.065037,
+   "tokens": {
+    "input": 12309,
+    "output": 1874,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:11:50+0400",
+   "deal_id": "h07-cypress-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.050982,
+   "tokens": {
+    "input": 3569,
+    "output": 2685,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:12:03+0400",
+   "deal_id": "h07-cypress-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.037643,
+   "tokens": {
+    "input": 2373,
+    "output": 1682,
+    "cache_write": 0,
+    "cache_read": 17646
+   }
+  },
+  {
+   "at": "2026-11-22T00:12:24+0400",
+   "deal_id": "h07-cypress-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.069873,
+   "tokens": {
+    "input": 7211,
+    "output": 3216,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:12:38+0400",
+   "deal_id": "h07-cypress-ic",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.065271,
+   "tokens": {
+    "input": 9222,
+    "output": 2507,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:12:57+0400",
+   "deal_id": "h08-fennel-dsc",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.134828,
+   "tokens": {
+    "input": 1114,
+    "output": 3208,
+    "cache_write": 22231,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:13:02+0400",
+   "deal_id": "h08-fennel-dsc",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.047841,
+   "tokens": {
+    "input": 11082,
+    "output": 973,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:13:13+0400",
+   "deal_id": "h08-fennel-dsc",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.060984,
+   "tokens": {
+    "input": 8893,
+    "output": 2287,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:13:30+0400",
+   "deal_id": "h08-fennel-dsc",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.047337,
+   "tokens": {
+    "input": 2256,
+    "output": 2260,
+    "cache_write": 0,
+    "cache_read": 22231
+   }
+  },
+  {
+   "at": "2026-11-22T00:13:49+0400",
+   "deal_id": "h08-fennel-dsc",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.065658,
+   "tokens": {
+    "input": 7586,
+    "output": 2860,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:15:12+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.137755,
+   "tokens": {
+    "input": 1127,
+    "output": 3355,
+    "cache_write": 22413,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:15:26+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.099564,
+   "tokens": {
+    "input": 21023,
+    "output": 2433,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:15:40+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.056571,
+   "tokens": {
+    "input": 5832,
+    "output": 2605,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:15:50+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.03421,
+   "tokens": {
+    "input": 2557,
+    "output": 1321,
+    "cache_write": 0,
+    "cache_read": 22413
+   }
+  },
+  {
+   "at": "2026-11-22T00:16:24+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.132132,
+   "tokens": {
+    "input": 13699,
+    "output": 6069,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:16:42+0400",
+   "deal_id": "d03-sorrel-jvc",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.106227,
+   "tokens": {
+    "input": 16954,
+    "output": 3691,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:17:22+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.121114,
+   "tokens": {
+    "input": 1169,
+    "output": 3429,
+    "cache_write": 17646,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:17:32+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.059343,
+   "tokens": {
+    "input": 12311,
+    "output": 1494,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:17:46+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049095,
+   "tokens": {
+    "input": 3580,
+    "output": 2557,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:17:56+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.034283,
+   "tokens": {
+    "input": 2583,
+    "output": 1416,
+    "cache_write": 0,
+    "cache_read": 17646
+   }
+  },
+  {
+   "at": "2026-11-22T00:18:27+0400",
+   "deal_id": "d08-jade-ic",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.122673,
+   "tokens": {
+    "input": 13301,
+    "output": 5518,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:18:48+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "extract_om",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.139175,
+   "tokens": {
+    "input": 1129,
+    "output": 3408,
+    "cache_write": 22578,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:18:55+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "rent_roll_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.051828,
+   "tokens": {
+    "input": 11081,
+    "output": 1239,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:19:06+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "opex_map",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.043059,
+   "tokens": {
+    "input": 5538,
+    "output": 1763,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:19:22+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "review",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.049901,
+   "tokens": {
+    "input": 2626,
+    "output": 2350,
+    "cache_write": 0,
+    "cache_read": 22578
+   }
+  },
+  {
+   "at": "2026-11-22T00:19:49+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_1",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.109065,
+   "tokens": {
+    "input": 13330,
+    "output": 4605,
+    "cache_write": 0,
+    "cache_read": 0
+   }
+  },
+  {
+   "at": "2026-11-22T00:20:03+0400",
+   "deal_id": "d11-silverline-dso",
+   "stage": "memo_2",
+   "model": "claude-sonnet-5-5",
+   "cost_usd": 0.09045,
+   "tokens": {
+    "input": 15785,
+    "output": 2873,
     "cache_write": 0,
     "cache_read": 0
    }

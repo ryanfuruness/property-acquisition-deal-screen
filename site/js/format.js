@@ -123,12 +123,26 @@ export function byUnit(v, unit, opts = {}) {
   return num(v, Number.isInteger(v) ? 0 : 2);
 }
 
+// Engine v1 called a hard fail "Pass"; everything on the site says Decline.
+export function verdictName(v) {
+  return v === "Pass" ? "Decline" : v;
+}
+
 export function verdictClass(v) {
-  return { Pursue: "pursue", "Needs work": "work", Pass: "pass" }[v] || "unknown";
+  return { Pursue: "pursue", "Needs work": "work", Decline: "decline", Pass: "decline" }[v] || "unknown";
 }
 
 export function chip(verdict, lg = false) {
-  return `<span class="chip ${verdictClass(verdict)}${lg ? " lg" : ""}">${esc(verdict || "Not screened")}</span>`;
+  return `<span class="chip ${verdictClass(verdict)}${lg ? " lg" : ""}">${esc(verdictName(verdict) || "Not screened")}</span>`;
+}
+
+const MANDATE_YAML = "https://github.com/ryanfuruness/property-acquisition-deal-screen/blob/main/data/mandate.yaml";
+const HV_TEXT = "Rests on the firm's house view (reference rent path, exit yield, vacancy and downtime), not on market evidence for this building.";
+
+// A small "house view" tag next to walk-away prices and IRRs. href: the deal's assumptions section, else mandate.yaml.
+export function hv(href) {
+  const ext = !href;
+  return `<a class="hv" href="${esc(href || MANDATE_YAML)}" title="${esc(HV_TEXT)} Open the assumptions."${ext ? ' target="_blank" rel="noopener"' : ""}>house view</a>`;
 }
 
 export function sev(s) {
@@ -141,7 +155,7 @@ export function prov(p) {
 }
 
 export function statusMark(s) {
-  const map = { pass: ["✓", "Pass"], fail: ["✗", "Fail"], unknown: ["?", "Unknown"] };
+  const map = { pass: ["✓", "Met"], fail: ["✗", "Not met"], unknown: ["?", "Unknown"] };
   const [ico, label] = map[s] || ["?", s];
   return `<span class="status ${esc(s)}"><span class="ico" aria-hidden="true">${ico}</span>${label}</span>`;
 }
@@ -165,7 +179,10 @@ export const METRIC_LABELS = {
   levered_irr_pre_tax: "Levered IRR, pre-tax", levered_irr_post_tax: "Levered IRR, post-tax",
   unlevered_equity_multiple_pre_tax: "Unlevered equity multiple, pre-tax", unlevered_equity_multiple_post_tax: "Unlevered equity multiple, post-tax",
   levered_equity_multiple_pre_tax: "Equity multiple, pre-tax", levered_equity_multiple_post_tax: "Equity multiple, post-tax",
-  walk_away_price_aed: "Walk-away price",
+  walk_away_price_aed: "Walk-away price", entry_yield_on_price: "Entry yield on price", ltv: "Loan to value",
+  screen_reference_rent_aed: "Screen reference rent", over_rent_excess_at_expiry_aed: "Over-rent excess at expiry",
+  commercial_income_share_year1: "Year-1 commercial income share", input_vat_recovered_year1: "Year-1 input VAT recovered",
+  security_deposits_aed: "Security deposits assumed",
 };
 
 export function metricLabel(name) {
@@ -187,6 +204,7 @@ export const TEST_LABELS = {
   min_dscr_year1: "Year-1 DSCR", no_master_lease_to_related_party: "No related-party master lease",
   min_going_in_net_yield_on_cost: "Net yield on cost", target_levered_irr: "Levered IRR, pre-tax",
   target_equity_multiple: "Equity multiple, pre-tax", min_occupancy: "Occupancy",
+  target_unlevered_irr: "Unlevered IRR, pre-tax", target_unlevered_equity_multiple: "Unlevered equity multiple",
   max_lease_expiry_share_in_any_quarter: "Lease expiry in any quarter", max_over_rent_share_of_income: "Over-rented share of income",
 };
 

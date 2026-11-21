@@ -4,12 +4,32 @@ Each failure the evals found, what caused it, what was done about it and what th
 
 The v0.1.0 labels were scored on an earlier build of the deal packages (before prices were recalibrated and rent-roll dates added to ground truth). Extraction, rent-roll and discrepancy metrics are comparable across labels; verdicts and returns are not. Labels v0.2.2 to v0.2.4 reused cached model responses for unchanged requests while fixes were tested, so their cost and time lines understate a real run; the final label is a full run with no cache.
 
+### Held-out set, first and only blind run
+- Run label: v0.4.0-final (held-out deals h01 to h08, run once, never used for tuning)
+- Deals / items: across the held-out set: planted discrepancies found 12 of 22 (55%) against 28 of 28 on development deals; verdicts 6 of 8; OM fields verified against the page 65% against 99%; four deals not underwritten.
+- What failed, by root cause:
+  1. **Figures inside images.** One new brokerage design puts its key tables in images on pages that otherwise have a text layer, and h07's OM is a poor photocopy. The model read the values, but code could not verify the quotes, so the asking price stayed unverified and h02, h05 and h07 were not underwritten. Everything downstream followed: no returns, title "not stated" flagged where the image said freehold, and h07's completion-year hard fail left unknown instead of a Decline.
+  2. **A rent roll split across two sheets plus a summary sheet** (h03) was not parsed, so h03 was not underwritten and its over-rent and yield checks could not run.
+  3. **A statement mixing eight months of actuals with four months of budget** (h05) was not parsed, so its annualisation, collections and unit-mix checks did not run.
+  4. **New related-party wording** (h06: a seller-affiliate "income assurance agreement") did not establish the tie to the seller, so the related-party hard filter read "unknown" and h06 came out Needs work instead of Decline.
+  5. **Square metres under a "sq ft" header** in a PDF rent roll (h04) was not caught.
+- Root cause: ingest and verify (OCR runs only on pages without a text layer), rent-roll mapping (one sheet assumed), operating-statement mapping (actual and budget columns not distinguished), review (related-party evidence rule tied to the phrasings seen in development).
+- Fix: none yet, deliberately. These numbers are the honest measure of generalisation and stay published as they are. The failures are safe in kind: where the screen could not verify a figure it refused to underwrite and said why, rather than guessing. The fixes are general (OCR image regions on text pages; multi-sheet rent rolls; actual and budget columns; broader related-party evidence), and a fresh held-out set is needed to measure them, because these eight deals are no longer blind.
+- Effect on metrics: baseline for the next round.
+
+### Changes from the domain review
+- Run label: v0.3.0-final-uncached -> v0.4.0-final
+- Deals / items: all development deals
+- What changed: an independent reviewer and a red team playing a Dubai acquisitions director found underwriting and wording problems rather than extraction errors: exits below the entry yield, debt sized at a fixed loan-to-value instead of to cover, a proxy rent presented like the RERA index, a RERA flag that ignored uncapped re-letting, Al Barsha 1 treated as freehold, double-counted impacts and leasing costs, and "Pass" read as approval.
+- Fix: engine v2 (debt sized to 1.40x cover, unlevered returns lead, exit never below entry, per-tenant RERA bands, novation at master-lease expiry), mandate v2 (Al Barsha South only, Decline label), pipeline v0.3 (area mapping, linked duplicate gaps, notices, diligence list, fixed memo structure) and recalibrated deals.
+- Effect on metrics: verdicts and returns are not comparable across this change. On development deals: planted discrepancies 28 of 28, verdicts 12 of 12, memos 12 of 12 passed.
+
 ### Related-party flag lost when the model left its yes/no blank (d11)
 - Run label: v0.3.0-final-uncached (first scoring of the uncached run)
 - Deals / items: d11-silverline-dso, verdict
 - What failed: Needs work against Pass. The review quoted "The operator is a Silverline Group company." and the quote verified, but the model left the finding's related-party field empty, so the hard filter saw "unknown".
 - Root cause: reconcile stage. The mandate fact depended on one model-filled boolean; run-to-run variance in that field changed the verdict.
-- Fix: the flag is now also set from the model's lease-structure conclusion, or from affiliation wording in verified quotes ("group company", "affiliate", "subsidiary" and similar); a regression test covers the blank-field case. d11 re-run.
+- Fix: the flag is now also set from the model's lease-structure conclusion, or from affiliation wording in verified quotes; a regression test covers the blank-field case. d11 re-run. Superseded in v0.3: after the domain review, a related party must be shown by a verified quote that ties the master tenant to the seller, not by a shared group name alone.
 - Effect on metrics: verdict agreement 83.3% -> 91.7% on the final label; nothing else changed.
 
 ### Accepted: an ambiguous cost line (d04)

@@ -1,57 +1,52 @@
 # Deal Screen: product brief
 
-**A first-pass screen for acquiring income-producing residential buildings in Dubai.** It reads the broker's package (offering memorandum, rent roll, operating statement), reconciles the three documents, underwrites the deal on the firm's own assumptions, tests it against the firm's mandate, and drafts a screening memo where every number traces to a page, a cell or a calculation.
+**A first-pass screen for acquiring income-producing residential buildings in Dubai.** It reads a broker's package (offering memorandum, rent roll, operating statement), reconciles the three documents, underwrites the deal on the firm's own assumptions, tests it against the mandate, and drafts a screening memo in which every number traces to a page, a cell or a calculation.
 
 ## User and job
 
-**User:** an acquisitions analyst or associate at an institutional investor buying whole residential buildings in Dubai. **Reader of the output:** the MD or investment committee deciding whether a deal deserves full diligence.
+An acquisitions analyst at an institutional buyer of whole residential buildings, and the MD or investment committee who reads the result. The job: decide quickly and defensibly whether a deal deserves full underwriting, and at what price it would.
 
-**Job:** decide quickly, and defensibly, whether a deal is worth underwriting properly, and hand the decision-maker a screen they can trust without re-checking every figure.
+## Problem
 
-## The problem
-
-- **Most deals die fast, so screening is about volume.** A senior often decides after about a ten-minute read of the OM, and perhaps one deal in five goes on to full underwriting. Juniors process the rest.
-- **The time goes on data handling, not judgement.** An OM review takes 20 to 45 minutes, most of it re-keying figures from PDFs and spreadsheets into the firm's template.
-- **The errors are silent.** A mistyped rent, a skipped operating-statement line, a summary row counted as a unit, square metres read as square feet. Reviewers challenge assumptions; they rarely re-check transcription.
-- **Broker math flatters the deal.** Yields quoted gross on asking price and called net, vacant units counted at asking rent, costs the buyer will bear left out.
-- **Dubai in late 2026 makes this sharper.** Rents are falling in the main mid-market areas after record supply, so in-place rents can sit above market and "upside" claims can hide downside. RERA's index bands cap how far an under-rented unit can rise at renewal, so mark-to-market upside is often legally out of reach. And a single-title building's owner carries real costs, from district cooling in "chiller-free" buildings to the 4% DLD transfer fee, that broker yields routinely ignore.
-
-Sources for each point are in [docs/research](research/).
+- **Screening is a volume game.** Most deals die after a short read of the OM; the time goes on re-keying figures from PDFs and spreadsheets, not on judgement.
+- **The errors are silent.** A mistyped rent, a summary row counted as a unit, square metres read as square feet. Reviewers challenge assumptions; they rarely re-check transcription.
+- **Broker math flatters, and late-2026 Dubai makes it expensive.** Rents are falling in the main mid-market areas, RERA's bands cap how fast under-rented units can rise at renewal, and a single-title owner carries costs (district cooling in chiller-free buildings, the 4% DLD fee) that broker yields leave out.
 
 ## What it does, and who decides
 
-| Automated (code or model, then verified by code) | Assisted (the screen proposes, the analyst decides) | Left to people |
+| Automated, then verified by code | Proposed by the screen, decided by the analyst | Left to people |
 |---|---|---|
-| Extracting every field with its page and quote, and checking the quote is really there | Which source to rely on when documents disagree, with the reason shown | Whether to proceed to full diligence |
-| Re-summing the rent roll and recategorising the operating statement | Each discrepancy: accept, override or request more information | Anything the screen marks unverified |
-| The underwriting arithmetic, mandate tests and walk-away price | The assumptions that fill gaps in the seller's data | Title, nationality restrictions and other legal questions |
+| Extraction with page and quote; quotes checked on the page | Which source to rely on when documents disagree, with the reason | Whether to proceed to diligence |
+| Re-summing the rent roll; recategorising the statement | Each discrepancy: accept, override with a reason, or request information | Anything unverified; title, eligibility and other legal questions |
+| Underwriting, mandate tests, walk-away price | Assumptions that fill gaps in the seller's data | Price negotiation |
 
-## Design decisions
+**Design choices.** The model reads and judges; a deterministic engine computes. Code checks every quote against its page and every memo number against a fact; a memo with an unsupported number is withheld. The firm's mandate, house view and Dubai rules are versioned data. The memo leads with the verdict and the walk-away price, says which single assumption moves that price most, and labels returns as resting on the house view. Unknowns count against a deal; the screen blocks on title rather than deciding it.
 
-- **The model reads; code computes and verifies.** The model extracts, maps messy layouts and judges language. A deterministic engine does every calculation. Code checks each extracted quote against its source page, and checks every number in the memo against the fact sheet; a memo with an unsupported number fails.
-- **The firm's view is data, not code.** The mandate, underwriting assumptions, market view and Dubai rules live in versioned files. A different firm, or a rule change, is a data change.
-- **Lead with the decision.** The memo opens with the verdict and the walk-away price, then returns, then what would make the deal fail, which is the order an investment committee reads in.
-- **Show the gaps.** Unknown facts count against a deal, never for it. Defaults are labelled as defaults.
+## Evidence
 
-## How we know it works
+Twenty synthetic broker packages with known answers: twelve used during development and eight held out, generated later with new layouts and phrasings and run once, without tuning. Results for both sets, repeated-run stability and every miss with its cause and fix are in the [eval report](../evals/REPORT.md) and [failure log](../evals/FAILURES.md). The engine's arithmetic is tied out separately to an [independent Excel model](../evals/tieout/README.md).
 
-An evaluation set of synthetic deal packages with discrepancies planted the way brokers plant them, so the right answer is known by construction. It measures field-level extraction accuracy, discrepancy recall and false flags, underwriting accuracy against the true building, verdict agreement, and memo grounding.
+## Product metrics and targets
 
-**Results on twelve packages:** all 29 planted discrepancies caught with no false flags; verdicts matching the true building on 11 of 12; every OM field extracted correctly and 99% verified against its page by code; Year-1 NOI and walk-away price within 0.1% of the true building on average; all 835 memo numbers traced to a fact. Each deal costs about USD 0.45 and 95 seconds. The remaining misses are design choices (the screen never decides title, and it does not invent costs a seller left out) and one ambiguous cost line; the [failure log](../evals/FAILURES.md) traces every miss to its cause and fix.
-
-**Product metrics in use:** analyst review time per screened deal; deals screened per analyst per week; share of flags the analyst overrides (too high means noise, near zero on real deals means people stopped checking); deals the screen passed that later failed diligence.
+| Metric | Target |
+|---|---|
+| Analyst review time per screened deal | under 15 minutes, against 20 to 45 for reading the OM alone, before any reconciliation or modelling |
+| Planted-discrepancy recall on new packages | at least 95%, with under one false flag per deal |
+| Share of flags the analyst overrides | 5 to 20%: higher is noise, near zero means nobody is checking |
+| Deals the screen passed that later failed diligence for a reason in scope | none |
 
 ## Risks
 
-- **Over-trust.** A clean-looking memo invites less scrutiny. Mitigation: unverified fields cannot feed the engine, and the screen says what it did not check.
-- **Synthetic data is tidier than reality.** The packages vary layouts and include a scanned OM, but real data rooms are messier. The first real deals are the real test.
-- **Rules change.** RERA's index, fees and tax are versioned data with sources, reviewed when the rules move.
-- **Confidential documents.** Deal packages are sensitive; a production version runs in-region with no training on client data.
+- **Over-trust.** A clean memo invites less scrutiny; unverified fields cannot feed the engine, and the memo lists what it did not check.
+- **Unproven fit to how Dubai deals arrive.** Institutional whole-building deals are fewer and often off-market; whether packages arrive in this form, and whether first-pass screening is the bottleneck, needs practitioners to confirm. No interviews informed this version.
+- **Synthetic data is tidier than a data room.** The held-out set tests generalisation within the generator's range, not real-world mess.
+- **Rules and market view drift.** RERA, fees and tax are versioned with sources; the house view needs an owner.
+- **Confidential documents.** A production version runs in-region with no training on client data.
 
-## Deliberately out of scope
+## Out of scope
 
-Sourcing, legal and technical diligence, full asset-management models, and live DLD transaction data (it sits behind an interactive download with no stated licence, so the market reference here is labelled illustrative). No practitioner interviews informed this version; it is grounded in public practitioner sources, and the next step is putting it in front of analysts.
+Sourcing, legal and technical diligence, full asset-management models, and live DLD data (no bulk download or stated licence; the screen's reference rents are labelled a proxy).
 
-## Next
+## How it generalises
 
-Learn from analyst overrides and past investment-committee decisions, so the firm's judgement compounds. Connect real DLD and Ejari data for comps and lease verification. Export into the firm's own model template. Extend to other asset types where the same read-reconcile-underwrite loop applies.
+The loop is read, reconcile, underwrite, test against the mandate, cite. Market rules are data, so another regime (Abu Dhabi, Riyadh, London) is a new rules file, not new code; another asset class adds document types and engine modules. Agents extend it at both ends: chasing brokers for missing documents before the screen, and assembling the diligence pack after it. Analyst overrides and investment-committee outcomes, captured with reasons, become the firm's own benchmark and memory.
