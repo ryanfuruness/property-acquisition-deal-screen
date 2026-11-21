@@ -1,0 +1,509 @@
+{
+ "deal_id": "jvc-60-stress-variant",
+ "rent_roll_date": "2026-10-31",
+ "completion_year": 2010,
+ "price_aed": 40000000,
+ "area": "JVC",
+ "nsa_sqft": 41000,
+ "bua_sqft": 52000,
+ "units": [
+  {
+   "unit": "101",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 47000,
+   "lease_end": "2027-06-30"
+  },
+  {
+   "unit": "102",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 45000,
+   "lease_end": "2027-11-30"
+  },
+  {
+   "unit": "103",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 42500,
+   "lease_end": "2027-04-30"
+  },
+  {
+   "unit": "104",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 48000,
+   "lease_end": "2027-09-30"
+  },
+  {
+   "unit": "105",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 46000,
+   "lease_end": "2027-02-28"
+  },
+  {
+   "unit": "106",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 46500,
+   "lease_end": "2027-07-31"
+  },
+  {
+   "unit": "107",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 43500,
+   "lease_end": "2027-12-31"
+  },
+  {
+   "unit": "108",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "notice_served",
+   "annual_rent_aed": 40000,
+   "lease_end": "2027-05-31"
+  },
+  {
+   "unit": "109",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 47500,
+   "lease_end": "2027-10-31"
+  },
+  {
+   "unit": "110",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 50500,
+   "lease_end": "2027-03-31"
+  },
+  {
+   "unit": "111",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 47000,
+   "lease_end": "2027-08-31"
+  },
+  {
+   "unit": "112",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "vacant",
+   "annual_rent_aed": null,
+   "lease_end": null
+  },
+  {
+   "unit": "113",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 42500,
+   "lease_end": "2027-06-30"
+  },
+  {
+   "unit": "114",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 48000,
+   "lease_end": "2027-11-30"
+  },
+  {
+   "unit": "115",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 46000,
+   "lease_end": "2027-04-30"
+  },
+  {
+   "unit": "116",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 46500,
+   "lease_end": "2027-09-30"
+  },
+  {
+   "unit": "117",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 43500,
+   "lease_end": "2027-02-28"
+  },
+  {
+   "unit": "118",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 40000,
+   "lease_end": "2027-07-31"
+  },
+  {
+   "unit": "119",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 47500,
+   "lease_end": "2027-12-31"
+  },
+  {
+   "unit": "120",
+   "unit_type": "Studio",
+   "area_sqft": 420,
+   "status": "occupied",
+   "annual_rent_aed": 50500,
+   "lease_end": "2027-05-31"
+  },
+  {
+   "unit": "121",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 73500,
+   "lease_end": "2027-10-31"
+  },
+  {
+   "unit": "122",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 70500,
+   "lease_end": "2027-03-31"
+  },
+  {
+   "unit": "123",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 66500,
+   "lease_end": "2027-08-31"
+  },
+  {
+   "unit": "124",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 75000,
+   "lease_end": "2027-01-31"
+  },
+  {
+   "unit": "125",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 72000,
+   "lease_end": "2027-06-30"
+  },
+  {
+   "unit": "126",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 72500,
+   "lease_end": "2027-11-30"
+  },
+  {
+   "unit": "127",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 68000,
+   "lease_end": "2027-04-30"
+  },
+  {
+   "unit": "128",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 62000,
+   "lease_end": "2027-09-30"
+  },
+  {
+   "unit": "129",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 74000,
+   "lease_end": "2027-02-28"
+  },
+  {
+   "unit": "130",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 78500,
+   "lease_end": "2027-07-31"
+  },
+  {
+   "unit": "131",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 73500,
+   "lease_end": "2027-12-31"
+  },
+  {
+   "unit": "132",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 70500,
+   "lease_end": "2027-05-31"
+  },
+  {
+   "unit": "133",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 66500,
+   "lease_end": "2027-10-31"
+  },
+  {
+   "unit": "134",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 75000,
+   "lease_end": "2027-03-31"
+  },
+  {
+   "unit": "135",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 72000,
+   "lease_end": "2027-08-31"
+  },
+  {
+   "unit": "136",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 72500,
+   "lease_end": "2027-01-31"
+  },
+  {
+   "unit": "137",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "vacant",
+   "annual_rent_aed": null,
+   "lease_end": null
+  },
+  {
+   "unit": "138",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 62000,
+   "lease_end": "2027-11-30"
+  },
+  {
+   "unit": "139",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 74000,
+   "lease_end": "2027-04-30"
+  },
+  {
+   "unit": "140",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 78500,
+   "lease_end": "2027-09-30"
+  },
+  {
+   "unit": "141",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 73500,
+   "lease_end": "2027-02-28"
+  },
+  {
+   "unit": "142",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 70500,
+   "lease_end": "2027-07-31"
+  },
+  {
+   "unit": "143",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 66500,
+   "lease_end": "2027-12-31"
+  },
+  {
+   "unit": "144",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 75000,
+   "lease_end": "2027-05-31"
+  },
+  {
+   "unit": "145",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 72000,
+   "lease_end": "2027-10-31"
+  },
+  {
+   "unit": "146",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 72500,
+   "lease_end": "2027-03-31"
+  },
+  {
+   "unit": "147",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 68000,
+   "lease_end": "2027-08-31"
+  },
+  {
+   "unit": "148",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 62000,
+   "lease_end": "2027-01-31"
+  },
+  {
+   "unit": "149",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 74000,
+   "lease_end": "2027-06-30"
+  },
+  {
+   "unit": "150",
+   "unit_type": "1BR",
+   "area_sqft": 720,
+   "status": "occupied",
+   "annual_rent_aed": 78500,
+   "lease_end": "2027-11-30"
+  },
+  {
+   "unit": "151",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 106500,
+   "lease_end": "2027-04-30"
+  },
+  {
+   "unit": "152",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 102000,
+   "lease_end": "2027-09-30"
+  },
+  {
+   "unit": "153",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 96500,
+   "lease_end": "2027-02-28"
+  },
+  {
+   "unit": "154",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 108500,
+   "lease_end": "2027-07-31"
+  },
+  {
+   "unit": "155",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "vacant",
+   "annual_rent_aed": null,
+   "lease_end": null
+  },
+  {
+   "unit": "156",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 105500,
+   "lease_end": "2027-05-31"
+  },
+  {
+   "unit": "157",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 99000,
+   "lease_end": "2027-10-31"
+  },
+  {
+   "unit": "158",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "under_renewal",
+   "annual_rent_aed": 90000,
+   "lease_end": "2027-03-31"
+  },
+  {
+   "unit": "159",
+   "unit_type": "2BR",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 107500,
+   "lease_end": "2027-12-20"
+  },
+  {
+   "unit": "160",
+   "unit_type": "Retail",
+   "area_sqft": 1100,
+   "status": "occupied",
+   "annual_rent_aed": 114000,
+   "lease_end": "2027-01-31"
+  }
+ ],
+ "opex_aed": {
+  "maintenance_repairs": 150000,
+  "insurance": 45000,
+  "security_cleaning": 135000,
+  "utilities_common": 90000,
+  "marketing_leasing": 30000
+ },
+ "other_income_aed": 60000,
+ "chiller_landlord_pays": null,
+ "om_stated": {
+  "annual_rent_aed": 4300000,
+  "yield": 0.0827,
+  "yield_basis": {
+   "measure": "net",
+   "on": "asking_price"
+  }
+ },
+ "collection_loss_override": 0.02
+}
